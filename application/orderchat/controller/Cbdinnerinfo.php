@@ -39,7 +39,7 @@ class Cbdinnerinfo extends BasicAdmin {
             ->join('canteen_sale_window_base_info s','a.dinner_machine_no = s.sale_window_no','left')
             ->join('cookbook_base_info i','a.cookbook_no = i.cookbook_no','left')
             ->field('a.*,canteen_name,cookbook_name,dinner_name,sale_window_name,emp_name')
-            ->where(['a.company_id'=>session('user.company_id')])
+            ->where(['a.company_id'=>session('user.company_id'),'Emp_Status'=>'1'])
             ->order('');
         // 应用搜索条件
         foreach (['canteen_name'] as $key) {

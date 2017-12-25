@@ -206,9 +206,9 @@ class Grant extends BasicAdmin {
     public function _form_filter(&$data) {
         if ($this->request->isPost()) {
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where('grant_no', $data['grant_no'])->find()) {
-                unset($data['grant_month']);
-            } elseif (isset($data['grant_month']) and Db::name($this->table)->where('grant_month', $data['grant_month'])->where('company_id', session('user.company_id'))->find()) {
-                $this->error('该月份已经存在，请使用其它月份！');
+                unset($data['grant_month']);unset($data['dept_id']);
+            } elseif (isset($data['grant_month']) and Db::name($this->table)->where(['grant_month'=>$data['grant_month'],'dept_id'=>$data['dept_id']])->where('company_id', session('user.company_id'))->find()) {
+                $this->error('该部门此月份已经存在，请使用其它月份！');
             }
         }else{
             $this->assign('dept_infos', Db::name("dept_info")->where('company_id',session('user.company_id'))->select());

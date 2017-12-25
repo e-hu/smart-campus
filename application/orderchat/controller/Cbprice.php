@@ -184,6 +184,7 @@ class CbPrice extends BasicAdmin
             ->join('cookbook_base_info i', 'a.cookbook_no = i.cookbook_no and a.company_id = i.company_id', 'left')
             ->join('emp_cookbook_dinner_info d', 'a.cookbook_no = d.cookbook_no and a.canteen_no = d.canteen_no and a.dinner_flag = d.dinner_flag and a.sale_datetime = d.dinner_datetime and a.company_id = d.company_id ', 'left')
             ->group('a.sale_datetime,a.canteen_no,a.cookbook_no,a.dinner_flag,canteen_name,cookbook_name,dinner_name,position_id,sale_window_name')
+            ->having('count(dinner_status)>0')
             ->where(['a.company_id' => session('user.company_id'), 'a.status' => '1'])
             ->order('sale_datetime desc,canteen_no,dinner_flag,dinner_count desc');
 
