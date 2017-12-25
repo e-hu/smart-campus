@@ -24,7 +24,7 @@
         <li class="hl50 F_ bbd bgf f12" v-for="item in rechargeGetList">
             <p class='pl10' v-if="item.get_account_degree > 0 " >{{item.create_date}}&nbsp;&nbsp;{{item.meal_name}}充值{{item.get_account_degree}}次和{{item.get_account_money}}元</p>
             <p class='pl10'v-else >{{item.create_date}}&nbsp;&nbsp;{{item.meal_name}}充值{{item.get_account_money}}元</p>
-            <p class='pr10 c9'>{{item.case_date}}</p>
+            <!--<p class='pr10 c9'>{{item.case_date}}</p>-->
         </li>
     </ul>
 </div>
@@ -38,7 +38,7 @@
     <ul>
         <li class="hl50 F_ bbd bgf f12" v-for="item in recordGetList" @click="order(item.day)">
             <p class='pl10'>{{item.dinner_datetime}}{{item.canteen_name}}{{item.dinner_name}}{{item.dinner_status}}{{item.cook_money}}元</p>
-            <p class='pr10 c9'>{{item.dinner_createtime}}</p>
+            <!--<p class='pr10 c9'>{{item.dinner_createtime}}</p>-->
         </li>
     </ul>
 </div>
