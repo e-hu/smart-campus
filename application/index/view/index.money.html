@@ -1,8 +1,9 @@
 {include file="common/header" title="我的余额" keywords="我的余额" description="" /}
 <div class="pr Sbg pr bgdefault">
     <div class="tc h80 lh20">
-        <div class="cf f16 W5 H pt20">￥{{account_remain_money}}<br/>可用金额</div>
-        <div class="cf f16 W5 H pt20">￥{{account_freeze_money}}<br/>冻结金额</div>
+        <div class="cf f16 C4 H pt20">￥{{account_remain_money}}<br/>累计余额</div>
+        <div class="cf f16 C4 H pt20">￥{{money_sum}}<br/>现金余额</div>
+        <div class="cf f16 C4 H pt20">￥{{account_freeze_money}}<br/>冻结金额</div>
     </div>
 </div>
 <ul class="tc bgf f12 SSorder clear bbe">
@@ -21,8 +22,8 @@
 <div v-else class="W scroll H" v-show="orderType =='0'">
     <ul>
         <li class="hl50 F_ bbd bgf f12" v-for="item in rechargeGetList">
-            <p class='pl10' v-if="item.get_account_degree > 0 " >{{item.create_date}}{{item.meal_name}}充值{{item.get_account_degree}}次和{{item.get_account_money}}元</p>
-            <p class='pl10'v-else >{{item.create_date}}{{item.meal_name}}充值{{item.get_account_money}}元</p>
+            <p class='pl10' v-if="item.get_account_degree > 0 " >{{item.create_date}}&nbsp;&nbsp;{{item.meal_name}}充值{{item.get_account_degree}}次和{{item.get_account_money}}元</p>
+            <p class='pl10'v-else >{{item.create_date}}&nbsp;&nbsp;{{item.meal_name}}充值{{item.get_account_money}}元</p>
             <p class='pr10 c9'>{{item.case_date}}</p>
         </li>
     </ul>
@@ -53,6 +54,7 @@
             recordGetList: [],
             account_remain_money: '0',
             account_freeze_money: '0',
+            money_sum:'0'
         };
         var V3 = new Vue({
             el: 'body',
@@ -67,9 +69,10 @@
                         error: function (XMLHttpRequest, textStatus, errorThrown) {
                             //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
                         },
-                        success: function (ret, status) {
-                            self.account_remain_money = ret.account_remain_money;
-                            self.account_freeze_money = ret.account_freeze_money;
+                        success: function (ret) {
+                            self.account_remain_money = ret[0].account_remain_money;
+                            self.account_freeze_money = ret[0].account_freeze_money;
+                            self.money_sum = ret[0].money_sum;
                         }
                     });
                 },

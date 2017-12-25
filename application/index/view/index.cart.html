@@ -26,7 +26,7 @@
                         <label class="weui-cells_checkbox W99 H">
                             <input type="radio" class="weui-check" name="radio"
                                    @click='changeCa(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
-                                   :checked="cart_priceId == item.canteen_no+item.cookbook_no ">
+                                   :checked="item.order_index == 1">
                             <i class="weui-icon-checked ptcheck"></i>
                         </label>
                     </div>
