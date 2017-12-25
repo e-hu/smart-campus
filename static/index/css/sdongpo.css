@@ -1,0 +1,403 @@
+/**全局默认设置**/
+html, body {
+    color: #222;
+    background: #fff;
+}
+
+/**默认设置**/
+.cdefault {
+    color: #55da71
+}
+
+.bgdefault {
+    background: #55da71
+}
+
+.bdefault {
+    border-color: #55da71;
+}
+
+.Sbgf6 {
+    background: #E6E5E5;
+}
+
+/**弹窗颜色设置**/
+.SStooltip .layui-layer-title {
+    background: #55da71;
+    color: #FFF;
+    padding: 0 40px 0 10px;
+}
+
+.SStooltip .layui-layer-setwin {
+    right: 10px;
+}
+
+/**颜色预设**/
+.SScwhite {
+    color: white;
+}
+
+.SScgreen {
+    color: #3cb035;
+}
+
+.SScblue {
+    color: #00aaee;
+}
+
+.SScorange {
+    color: #FF9501;
+}
+
+.SScmenu {
+    color: #14AF56;
+}
+
+/**头部预设class**/
+.SSheader {
+}
+
+/**底部预设class**/
+.SSfooter {
+}
+
+/**分类导航设置**/
+#SSclass1 li {
+    position: relative;
+    float: left;
+    width: auto;
+    padding: 0 15px;
+}
+
+#SSclass1 .SSactive:after {
+    content: "";
+    width: 100%;
+    height: 2px;
+    background: #55da71;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+}
+
+.SSclass2 {
+    background: #f2f2f2
+}
+
+.SSclass2 .SSactive {
+    background: #FFF;
+    position: relative;
+}
+
+.SSclass2 .SSactive:after {
+    content: "";
+    width: 2px;
+    height: 100%;
+    background: #55da71;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+/**banner设置**/
+.SSpagination {
+    position: absolute;
+    z-index: 20;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+
+.swiper-pagination-bullet {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 5px;
+    background: #fff;
+    margin: 0 2px;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.swiper-pagination-bullet-active {
+    background: #55da71;
+}
+
+/**我的订单**/
+.SSorder .SSactive {
+    position: relative;
+    color: #55da71;
+}
+
+.SSorder .SSactive:after {
+    content: "";
+    width: 100%;
+    height: 2px;
+    background: #55da71;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+}
+
+.SSorder .Spactive {
+    position: relative;
+    color: #55da71;
+}
+
+.SSorder .Spactive:after {
+    content: "";
+    width: 100%;
+    height: 2px;
+    background: #55da71;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+}
+
+/**
+*动画样式
+*/
+
+/**底部购物车抖动动画**/
+.animated {
+    -webkit-animation-duration: 300ms;
+    animation-duration: 300ms;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both
+}
+
+@-webkit-keyframes shake {
+    0%, 100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0)
+    }
+    10%, 30%, 50%, 70%, 90% {
+        -webkit-transform: translate3d(-5px, 0, 0);
+        transform: translate3d(-5px, 0, 0)
+    }
+    20%, 40%, 60%, 80% {
+        -webkit-transform: translate3d(5px, 0, 0);
+        transform: translate3d(5px, 0, 0)
+    }
+}
+
+@keyframes shake {
+    0%, 100% {
+        -webkit-transform: translate3d(0, 0, 0);
+        -ms-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0)
+    }
+    10%, 30%, 50%, 70%, 90% {
+        -webkit-transform: translate3d(-5px, 0, 0);
+        -ms-transform: translate3d(-5px, 0, 0);
+        transform: translate3d(-5px, 0, 0)
+    }
+    20%, 40%, 60%, 80% {
+        -webkit-transform: translate3d(5px, 0, 0);
+        -ms-transform: translate3d(5px, 0, 0);
+        transform: translate3d(5px, 0, 0)
+    }
+}
+
+.shake {
+    -webkit-animation-name: shake;
+    animation-name: shake
+}
+
+/**首页添加物品放大动画**/
+@-webkit-keyframes pulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1)
+    }
+    50% {
+        -webkit-transform: scale3d(1.4, 1.4, 1.4);
+        transform: scale3d(1.4, 1.4, 1.4)
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1)
+    }
+}
+
+@keyframes pulse {
+    0% {
+        -webkit-transform: scale3d(1, 1, 1);
+        -ms-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1)
+    }
+    50% {
+        -webkit-transform: scale3d(1.4, 1.4, 1.4);
+        -ms-transform: scale3d(1.4, 1.4, 1.4);
+        transform: scale3d(1.4, 1.4, 1.4)
+    }
+    100% {
+        -webkit-transform: scale3d(1, 1, 1);
+        -ms-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1)
+    }
+}
+
+.pulse {
+    -webkit-animation-name: pulse;
+    animation-name: pulse
+}
+
+/*公共样式*/
+.m05 {
+    margin: .5rem;
+}
+
+.fr6 {
+    font-size: .6rem;
+}
+
+.W15 {
+    width: 15%;
+    float: left;
+}
+
+.W99 {
+    width: 99%;
+    float: left;
+}
+
+.H86{
+    height:86%;
+}
+
+.H92{
+    height:92%;
+}
+
+.mlr3 {
+    margin-left: 3rem;
+}
+
+.lh1 {
+    line-height: 1rem
+}
+
+.hr11 {
+    height: 11rem;
+}
+
+.ptcheck {
+    padding-top: 45%;
+}
+
+.pr05 {
+    padding: .5rem;
+}
+
+.ptcheckinfo {
+    padding: 10% 0;
+    line-height:120%;
+}
+
+.ptinfo {
+    padding: 1%;
+}
+
+.mlbutton {
+    margin-left: 40%;
+}
+
+.Ml5 {
+    margin-left: 5%;
+}
+
+/*首页样式*/
+.month {
+    width: 100%;
+    background: #FFFFFF;
+    position: fixed;
+    height: 3rem;
+}
+
+.month ul {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.year-month {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.arrow {
+    padding: 20px;
+}
+
+.active {
+    background: #89C997;
+    color: white;
+    height: 3rem;
+}
+
+.month ul li {
+    color: black;
+    font-size: .8rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-family: Arial;
+}
+
+.weekdays {
+    margin-top: 3.1rem;
+    padding: .5rem 0;
+    background: #FFFFFF;
+    display: flex;
+    flex-wrap: wrap;
+    color: #AFAFAE;
+    justify-content: space-around;
+    font-size: .7rem;
+}
+
+.weekdays li {
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+}
+
+.days {
+    background: #FFFFFF;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding-bottom: .5rem;
+}
+
+.li_c {
+    list-style-type: none;
+    display: inline-block;
+    width: 14.2%;
+    text-align: center;
+    font-size: .7rem;
+    color: #6E828A;
+    line-height: 3rem;
+    height: 3rem;
+}
+
+.tips {
+    margin-top: .1rem;
+    background: #FFFFFF;
+    flex-wrap: wrap;
+    color: #D4D2D2;
+    justify-content: space-around;
+    font-size: .7rem;
+}
+
+.tips li {
+    height: 1.5rem;
+    line-height: 1.5rem;
+    color: #AFAFAE;
+}
+
+.ring {
+    height: .5rem;
+    width: .5rem;
+}

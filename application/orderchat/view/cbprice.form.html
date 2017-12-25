@@ -1,0 +1,226 @@
+<style>
+    .none {
+        display: none
+    }
+
+    .selected {
+        background-image: url("__PUBLIC__/static/theme/default/img/selected.png");
+        background-repeat: no-repeat;
+        background-size: 40px 40px;
+        background-position: center;
+
+    }
+
+    .selecte {
+        background-image: url("__PUBLIC__/static/theme/default/img/selecte.png");
+        background-repeat: no-repeat;
+        background-size: 40px 40px;
+        background-position: center;
+    }
+</style>
+
+<form class="layui-form layui-box" onsubmit="return false;" style='padding:25px 30px 20px 0'>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">餐厅名称</label>
+        <div class="layui-input-block">
+            <select name="canteen_no" id="canteen_no" required title="请选择餐厅">
+                <option value="0">请选择</option>
+                {foreach $canteens as $canteen}
+                <option value="{$canteen.canteen_no}">{$canteen.canteen_name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择日期</label>
+        <div class="layui-input-block">
+            <input class="layui-input" required title="请选择时间" name="date_str" id="date_str"
+                   onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">餐次信息</label>
+        <div class="layui-input-block">
+            <select name="dinner_flag" id="dinner_flag" required title="请选择餐次">
+                <option value="0">请选择</option>
+                {foreach $dinnerbases as $dinnerbase}
+                <option value="{$dinnerbase.dinner_flag}">{$dinnerbase.dinner_name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit' onclick="generate()">生成数据</button>
+    </div>
+
+    <script>window.form.render();</script>
+
+    <!-- 表单搜索 开始 -->
+    <div class="row none">
+        <div class="col-xs-2">
+            <div class="form-group" style="
+    margin-left: 20px;
+">
+                <input type="text" name="cookbook_name" id="cookbook_name" value="" placeholder="菜品名称"
+                       class="input-sm form-control" style="
+    height: 25px;
+">
+            </div>
+        </div>
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" style="height: 24px;padding-left: 20px;padding-right: 20px;" onclick="generate()"
+                        class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索
+                </button>
+            </div>
+        </div>
+    </div>
+    <!-- 表单搜索 结束 -->
+
+    <div id="list" class="none" style="overflow-x: auto; overflow-y: auto; height: auto; width:auto;margin-left:20px;">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class='text-center'>菜品名称</th>
+                <th class='text-center'>菜品价格</th>
+                <th class='text-center'>状态</th>
+            </tr>
+            </thead>
+            <tbody id="content">
+            </tbody>
+        </table>
+    </div>
+</form>
+
+
+<script>
+    function generate() {
+        if ($('#canteen_no').val() === '0') {
+            layer.msg('请重新选择正确餐厅');
+            return;
+        }
+        if ($('#dinner_flag').val() === '0') {
+            layer.msg('请重新选择正确餐次');
+            return;
+        }
+        $.ajax({
+            type: 'POST',
+            url: "{:url('cbprice/generate')}",  //生成数据
+            data: {
+                'canteen_no': $('#canteen_no').val(),
+                'date_str': $('#date_str').val(),
+                'dinner_flag': $('#dinner_flag').val(),
+                'cookbook_name': $('#cookbook_name').val()
+            },
+            async: false,
+            success: function (data) {
+                if (data.flag == '1') {
+                    layer.msg('生成数据成功');
+                    $('#list').removeClass('none');
+                    $('.row').removeClass('none');
+                    var result = data.list;
+                    var html = '';
+                    $.each(result, function (k, v) {
+                        html += '<tr><td class="text-center">' + v.cookbook_name + '</td>';
+                        if (v.price_flag > 0) {
+                            html += '<td class="text-center"><input class="layui-input layui-input-inline title-input" name="' + v.price_id + '" value="' + v.cookbook_price + '" style="width: 72px;height: 32px;"/></td>';
+                        } else {
+                            html += '<td class="text-center">' + v.cookbook_price + '</td>';
+                        }
+                        if (v.status > 0) {
+                            html += '<td class="text-center selected" ><span  value="' + v.price_id + '" ></span></td></td>';
+                        } else {
+                            html += '<td class="text-center selecte" ><span value="' + v.price_id + '"></span></td></tr>';
+                        }
+                        $('#content').html(html);
+                    });
+                } else if (data.flag == '2') {
+                    layer.msg('商品不存在');
+                } else {
+                    layer.msg('生成数据失败');
+                }
+            }
+        });
+    }
+
+    $("#list").on("click", ".selecte", function () {
+        var a = $(this);
+        var id = a.children("span").attr("value");
+        $.ajax({
+            type: 'POST',
+            url: "{:url('cbprice/save')}",  //启用
+            data: {
+                'price_id': id,
+                'status': '1'
+            },
+            async: false,
+            success: function (data) {
+                if (data.flag = 1) {
+                    a.removeClass("selecte").addClass("selected");
+                    layer.msg('状态修改成功');
+                } else {
+                    layer.msg('状态修改失败');
+                }
+
+            }
+        });
+    });
+    $("#list").on("click", ".selected", function () {
+        var a = $(this);
+        var id = a.children("span").attr("value");
+        $.ajax({
+            type: 'POST',
+            url: "{:url('cbprice/save')}",  //启用
+            data: {
+                'price_id': id,
+                'status': '0'
+            },
+            async: false,
+            success: function (data) {
+                if (data.flag = 1) {
+                    a.removeClass("selected").addClass("selecte");
+                    layer.msg('状态修改成功');
+
+                } else {
+                    layer.msg('状态修改失败');
+                }
+
+            }
+        });
+    });
+    $("#list").on('blur', ".title-input", function () {
+        var id = this.name;
+        var price = this.value;
+        $.ajax({
+            type: 'POST',
+            url: "{:url('cbprice/save')}",  //保存
+            data: {
+                'price_id': id,
+                'cookbook_price': price
+            },
+            async: false,
+            success: function (data) {
+                if (data.flag = 1) {
+                    layer.msg('价格修改成功');
+
+                } else {
+                    layer.msg('价格修改失败');
+                }
+
+            }
+        });
+
+    });
+    layui.use(['form', 'laydate'], function () {
+        var form = layui.form();
+        form.verify({
+            //我们既支持上述函数式的方式，也支持下述数组的形式
+            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+        });
+    });
+
+</script>

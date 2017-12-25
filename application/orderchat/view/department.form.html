@@ -1,0 +1,37 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">部门名称</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.dept_name)}
+            <input type="text"  name="dept_name" value='{$vo.dept_name|default=""}'
+                   required="required" title="请输入2位及以上的字符" placeholder="请输入部门名称" class="layui-input disabled">
+            {else}
+            <input type="text" name="dept_name" value='' pattern="^\S{2,}$"
+                   title="请输入2位及以上的字符" required="required" placeholder="请输入部门名称" class="layui-input">
+            {/if}
+        </div>
+    </div>
+    <!--{if isset($company_type)}-->
+    <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label label-required">部门类型</label>-->
+        <!--<div class="layui-input-block">-->
+            <!--{foreach $company_type as $types}-->
+            <!--{if isset($vo.type) and $vo.type == $types.type_id}-->
+                <!--<input type="radio" checked  name="type" value="{$types.type_id}" title="{$types.type_name}">-->
+            <!--{else}-->
+                <!--<input type="radio" name="type" value="{$types.type_id}" title="{$types.type_name}">-->
+            <!--{/if}-->
+            <!--{/foreach}-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--{/if}-->
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['dept_no'])}<input type='hidden' value='{$vo.dept_no}' name='dept_no'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>

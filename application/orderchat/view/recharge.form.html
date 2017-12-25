@@ -1,0 +1,103 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">员工名称</label>
+        <div class="layui-input-block">
+            <input type="text"  name="Emp_Name" disabled="disabled"   value="{$vo.Emp_Name}" title="员工名称" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">员工编号</label>
+        <div class="layui-input-block">
+            <input type="text"  name="v" disabled="disabled"  value="{$vo.Emp_Id}" title="员工编号" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属部门</label>
+        <div class="layui-input-block">
+            <input type="text"  name="dept_name" disabled="disabled"  value="{$vo.dept_name}" title="所属部门" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">IC卡编号</label>
+        <div class="layui-input-block">
+            <input type="text" name="Ic_Card" disabled="disabled"  value="{$vo.Ic_Card}" title="IC卡编号" class="layui-input">
+        </div>
+    </div>
+
+    <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label">充值类型</label>-->
+        <!--<div class="layui-input-block">-->
+            <!--<select name="account_from" id="account_from" required="required" title="充值来源" lay-filter="pageFilter">-->
+            <!--{foreach $tags as $tag}-->
+                <!--<option value="{$tag.meal_flag}" id="{$tag.meal_base_price}"> {$tag.meal_name}</option>-->
+            <!--{/foreach}-->
+            <!--</select>-->
+        <!--</div>-->
+    <!--</div>-->
+
+    {if isset($tags)}
+    <div class="layui-form-item">
+        <label class="layui-form-label label-required">充值类型</label>
+        <div class="layui-input-block">
+            {foreach $tags as $tag}
+            <input type="radio" name="account_from" value="{$tag.meal_id}" id="{$tag.meal_base_price}" alt="{$tag.meal_flag}" title="{$tag.meal_name}" lay-filter="filter">
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+
+
+    <div class="layui-form-item"  id="account_remain" style="display:none;">
+        <label class="layui-form-label">充值次数</label>
+        <div class="layui-input-block">
+            <input type="text"   pattern="^([1-9]{1,1}[0-9]{0,})$" name="account_remain" value=""
+                   title="请输入1位及以上的数量值" required="required" placeholder="请输入充值次数" class="layui-input remain">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">充值金额</label>
+        <div class="layui-input-block">
+            <input type="text"   pattern="^([1-9]{1,1}[0-9]{0,})$" name="get_account_money" value=""
+                   title="请输入1位及以上的数量值" required="required" placeholder="请输入充值金额" class="layui-input">
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['Emp_Id'])}<input type='hidden' value='{$vo.Emp_Id}' name='Emp_Id'/>{/if}
+        <button class="layui-btn" type='submit'>开始充值</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消充值吗？" data-close>取消充值</button>
+    </div>
+    <script>
+        var meal_base_price = '';
+        form.on('radio(filter)', function(data){
+            console.log(data.elem.id); //得到radio原始DOM对象
+            console.log(data.elem.alt); //得到radio原始DOM对象
+            console.log(data.value); //被点击的radio的value值
+            meal_base_price = data.elem.id;
+            if(data.elem.alt == '0'){
+                $("#account_remain").show();
+                $('input[name=get_account_money]').attr("readonly","readonly");
+                $('input[name=account_remain]').val('');
+                $('input[name=get_account_money]').val('');
+            }else{
+                $("#account_remain").hide();
+                $('input[name=get_account_money]').removeAttr("readonly");
+                $('input[name=account_remain]').val('');
+                $('input[name=get_account_money]').val('');
+            }
+        });
+        $("#account_remain").on('blur', ".remain", function () {
+            var price = this.value;
+            $('input[name=get_account_money]').val(price * meal_base_price);
+        });
+    </script>
+    <script>window.form.render();</script>
+</form>

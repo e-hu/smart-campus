@@ -1,0 +1,61 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择部门</label>
+        <div class="layui-input-block">
+            {foreach $dept_infos as $dept_info}
+            {if isset($vo.dept_id) and $vo.dept_id == $dept_info.dept_no}
+            <input type="radio" checked  name="dept_id" value="{$dept_info.dept_no}" title="{$dept_info.dept_name}">
+            {else}
+            <input type="radio" name="dept_id" value="{$dept_info.dept_no}" title="{$dept_info.dept_name}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">选择月份</label>
+        <div class="layui-input-block">
+            <input class="layui-input" required title="请选择月份" name="grant_month" id="grant_month" value='{$vo.grant_month|default=""}'
+                   onclick="layui.laydate({elem: this, istime: false, format: 'YYYY-MM'})">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">补贴金额</label>
+        <div class="layui-input-block">
+            <input type="text" pattern="^([1-9]{1,1}[0-9]{0,})$" name="grant_money" value='{$vo.grant_money|default=""}'
+                   title="请输入1位及以上的数量值" required="required" placeholder="请输入补贴金额" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">补贴说明</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.memo)}
+            <input type="text" name="memo" value='{$vo.memo|default=""}' title="请输入补贴说明" placeholder="请输入补贴说明" class="layui-input disabled">
+            {else}
+            <input type="text" name="memo" value='{$vo.memo|default=""}' pattern="^\S{2,}$" title="请输入2位及以上的字符"  placeholder="请输入补贴说明" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['grant_no'])}<input type='hidden' value='{$vo.grant_no}' name='grant_no'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var form = layui.form();
+        form.verify({
+            //我们既支持上述函数式的方式，也支持下述数组的形式
+            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+        });
+    });
+</script>

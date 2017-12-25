@@ -1,0 +1,72 @@
+{extend name='extra@admin/content'}
+
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+    <div class="row">
+        <div class="col-xs-2">
+            <div class="form-group" style="line-height: 1em;padding-top:10px;">
+              补贴部门: {$info.dept_name}
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group" style="line-height: 1em;padding-top:10px;">
+               补贴月份:{$info.grant_month}
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group" style="line-height: 1em;padding-top:10px;">
+               补贴说明:{$info.memo}
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="emp_name" value="{$Think.get.emp_name|default=''}" placeholder="人员名称" class="input-sm form-control">
+            </div>
+        </div>
+
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script>window.form.render();</script>
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class='text-center'>人员名称</th>
+                <th class='text-center'>补贴金额</th>
+                <th class='text-center'>发放时间</th>
+                <th class='text-center'>补贴状态</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='text-center'>{$vo.emp_name}</td>
+                <td class='text-center'>{$vo.grant_money}</td>
+                <td class='text-center'>{$vo.grant_datetime}</td>
+                <td class='text-center nowrap'>
+                    {if isset($vo.check_status) and $vo.check_status eq '0'}
+                    <a href="javascript:void(0)"><img src="__PUBLIC__/static/theme/default/img/selecte.png" style="height:50px;width:50px;"></a>
+                    {else if isset($vo.check_status)}
+                    <a href="javascript:void(0)"><img src="__PUBLIC__/static/theme/default/img/selected.png" style="height:50px;width:50px;"></a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+            {if empty($list)}
+            <tr><td colspan="4" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+{/block}

@@ -1,0 +1,107 @@
+{extend name='extra@admin/content'}
+
+{block name="content"}
+
+<!-- 表单搜索 开始-->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input class="layui-input" title="请选择时间" value="{$Think.get.sale_datetime|default=''}"
+                       placeholder="请选择时间" name="sale_datetime" id="sale_datetime"
+                       onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" style="
+    height: 30px;
+">
+            </div>
+        </div>
+
+        <div class="col-xs-3">
+            <div class="form-group">
+                <select name="canteen_no" class="input-sm form-control">
+                    <option value="">- 餐厅列表 -</option>
+                    <!--{foreach $canteens as $key=>$canteen}-->
+                    <!--{if $Think.get.canteen_no eq $key}-->
+                    <option selected value="{$key}">{$canteen.canteen_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$canteen.canteen_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <select name="dinner_flag" class="input-sm form-control">
+                    <option value="">- 餐次列表 -</option>
+                    <!--{foreach $dinnerbases as $key=>$dinnerbase}-->
+                    <!--{if $Think.get.dinner_flag eq $key}-->
+                    <option selected value="{$key}">{$dinnerbase.dinner_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$dinnerbase.dinner_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 表单搜索 结束-->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class='text-center'>日期</th>
+            <th class='text-center'>餐厅名称</th>
+            <th class='text-center'>餐次</th>
+            <th class='text-center'>菜品名称</th>
+            <th class='text-center'>窗口名称</th>
+            <th class='text-center'>餐台位置号</th>
+            <th class='text-center'>下单人数</th>
+            <th class='text-center'>操作</th>
+        </tr>
+        </thead>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center'>{:date('Y-m-d',strtotime($vo['sale_datetime']))}</td>
+            <td class='text-center'>{$vo.canteen_name}</td>
+            <td class='text-center'>{$vo.dinner_name}</td>
+            <td class='text-center'>{$vo.cookbook_name}</td>
+            <td class='text-center'>{$vo.sale_window_name|default="<span style='color:#ccc'>无</span>"}</td>
+            <td class='text-center'>{$vo.position_id|default="<span style='color:#ccc'>无</span>"}</td>
+            <td class='text-center'>{$vo.dinner_count}</td>
+            <td class='text-center nowrap'>
+                {if auth("$classuri/position")}
+                <span class="text-explode">|</span>
+                <a data-modal='{:url("$classuri/position")}?canteen_no={$vo.canteen_no}&cookbook_no={$vo.cookbook_no}&dinner_flag={$vo.dinner_flag}&sale_datetime={$vo.sale_datetime}' href="javascript:void(0)">售卖</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        {if empty($list)}
+        <tr>
+            <td colspan="7" style="text-align:center">没 有 记 录 了 哦 !</td>
+        </tr>
+        {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+<script>
+    layui.use(['form', 'laydate'], function () {
+        var form = layui.form();
+        form.verify({
+            //我们既支持上述函数式的方式，也支持下述数组的形式
+            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+        });
+    });
+</script>
+{/block}

@@ -1,0 +1,197 @@
+{include file="common/header" title="菜谱详情" keywords="菜谱详情" description="" /}
+<div class="f fr6 scroll H">
+    <ul class="bgf clear">
+        <li class="hl50 F_ bbd bgf">
+            <p class='f pl10'>{{date}}</p>
+        </li>
+    </ul>
+    <ul class="tc bgf SSorder bgf clear bbe">
+        <li v-for="item in dinnerBaseList" class="h40 lh40 "
+            :class="[dinnerBaseCount,{'Spactive': dinner_type == item.dinner_flag}]" @click='changeSp(item.dinner_flag)'
+            value="{{item.dinner_flag}}">
+            <div>{{item.dinner_name}}</div>
+        </li>
+    </ul>
+    <div class="tc pt50" v-if="cartGetCount == '0'">
+        <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
+        <p class="c9 mb15">今日菜谱空空如也！</p>
+        <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
+    </div>
+    <div v-else class="W scroll H86">
+        <ul class="tc clear H5 ">
+            <li class="H W5 ptinfo fl" v-for="item in cartProductList">
+                <img src="{{item.cookbook_image}}?imageslim" class="H7 W">
+                <div class="bgf H3 W">
+                    <div class="tl W3 fl tr H">
+                        <label class="weui-cells_checkbox W99 H">
+                            <input type="radio" class="weui-check" name="radio"
+                                   @click='changeCa(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
+                                   :checked="cart_priceId == item.canteen_no+item.cookbook_no ">
+                            <i class="weui-icon-checked ptcheck"></i>
+                        </label>
+                    </div>
+                    <div class="ptcheckinfo W7 H tc">
+                        <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- 底部导航栏 -->
+<div class="bgf btd tc f12 c9 h60 SSfooter">
+    <div class="W15 h60 tr c0 Cz"><span>合计：</span></div>
+    <div class="W2 h60 lh25 pt10 tl"><span class="Pn">{{price_num}}</span> 个菜品</span><br/><span class="Pr">{{price_total}}</span>元
+    </div>
+</div>
+{include file="common/footer" /}
+<script type="text/javascript">
+    window.onload = function () {
+        document.title = '菜谱详情';
+        var data = {
+            day: getUrlParam('day'),
+            cartProductList: [],
+            cartGetCount: '0',
+            date: '',
+            dinnerBaseList: [],
+            dinnerBaseCount: [],
+            dinner_type: '',
+            cart_priceId: '',
+            price_total: '',
+            price_num: ''
+        };
+        var V3 = new Vue({
+                el: 'body',
+                data: data,
+                methods: {
+                    initClassObj: function () {
+                        var self = this;
+                        $.ajax({
+                            url: SCapiDic.cartProductList,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                day: self.day
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    self.date = ret.data.date;
+                                } else {
+                                    self.date = ret.date;
+                                    self.dinnerBaseList = ret.dinnerBaseList;
+                                    self.dinnerBaseCount = ret.dinnerBaseCount;
+                                    self.price_total = ret.price_total;
+                                    self.price_num = ret.price_num;
+                                    self.dinner_type = ret.dinnerBaseList[0]['dinner_flag'];
+                                    self.initCartObj(self.dinner_type);
+                                }
+                            }
+                        });
+                    },
+                    initCartObj: function (dinner) {
+                        var self = this;
+                        $.ajax({
+                            url: SCapiDic.cartList,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                dinner: dinner,
+                                day: self.day
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    self.date = ret.data.date;
+                                } else {
+                                    self.cartProductList = ret.cartList;
+                                    self.cartGetCount = ret.cartCount;
+                                    self.cart_priceId = ret.cart_priceId;
+                                }
+                            }
+                        });
+                    },
+                    changeSp: function (Sp) {
+                        var self = this;
+                        self.dinner_type = Sp;
+                        self.cartProductList = [];
+                        self.initCartObj(Sp);
+                    },
+                    changeCa: function (Tn, Df, Cn, Pi, Cp, $event) {
+                        var self = this;
+                        if ($event.target.defaultChecked) {
+                            $.ajax({ //删除商品
+                                url: SCapiDic.delCart,
+                                type: "POST",
+                                dataType: "json",
+                                data: {
+                                    canteen_no: Tn,
+                                    dinner_flag: Df,
+                                    cookbook_no: Cn,
+                                    price_id: Pi,
+                                    cookbook_price: Cp,
+                                    day: self.day
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                                },
+                                success: function (ret) {
+                                    if (ret.code == '0') {
+                                        $.alert(ret.msg);
+                                    } else {
+                                        $('input:radio[name="radio"]').removeAttr('checked');
+                                        $event.target.checked = false;
+                                        $event.target.defaultChecked = false;
+                                        self.price_total = ret.data.price_total;
+                                        self.price_num = ret.data.price_num;
+                                    }
+                                }
+                            });
+                        } else {
+                            $.ajax({ //增加商品
+                                url: SCapiDic.addCart,
+                                type: "POST",
+                                dataType: "json",
+                                data: {
+                                    canteen_no: Tn,
+                                    dinner_flag: Df,
+                                    cookbook_no: Cn,
+                                    price_id: Pi,
+                                    cookbook_price: Cp,
+                                    day: self.day
+                                },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                                },
+                                success: function (ret) {
+                                    if (ret.code == '0') {
+                                        $.alert(ret.msg);
+                                        $event.target.checked = false;
+                                        $event.target.defaultChecked = false;
+                                    } else {
+                                        $('input:radio[name="radio"]').removeAttr('checked');
+                                        $event.target.checked = true;
+                                        $event.target.defaultChecked = true;
+                                        self.price_total = ret.data.price_total;
+                                        self.price_num = ret.data.price_num;
+                                    }
+                                }
+                            });
+                        }
+
+                    }
+                },
+                ready: function () {
+                    this.initClassObj();
+                }
+            })
+        ;
+    };
+</script>
+
+
+

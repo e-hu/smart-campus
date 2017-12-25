@@ -1,0 +1,55 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">套餐名称</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.meal_name)}
+            <input type="text" readonly="" disabled="" name="meal_name" value='{$vo.meal_name|default=""}'
+                   required="required" title="请输入套餐名称" placeholder="请输入套餐名称" class="layui-input disabled">
+            {else}
+            <input type="text" name="meal_name" value='{$vo.meal_name|default=""}' pattern="^\S{2,}$"
+                   title="请输入2位及以上的字符" required="required" placeholder="请输入套餐名称" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">套餐价格</label>
+        <div class="layui-input-inline">
+            {if $vo and isset($vo.meal_base_price)}
+            <input type="text" required name="meal_base_price" value='{$vo.meal_base_price|default=""}'
+                   pattern="^\d+(\.\d+)?$" title="请输入正确的数字" placeholder="请输入价格" class="layui-input">
+            {else}
+            <input type="text" required name="meal_base_price" value='' pattern="^\d+(\.\d+)?$" title="请输入正确的数字"
+                   placeholder="请输入价格" class="layui-input">
+            {/if}
+        </div>
+        <div class="layui-form-mid layui-word-aux">单位为元</div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">计费模式</label>
+        <div class="layui-input-inline">
+            {if isset($vo.meal_flag) and $vo.meal_flag == '0'}
+            <input type="radio" checked name="meal_flag" value="0" title="按次计费">
+            <input type="radio" name="meal_flag" value="1" title="金额计费">
+            {elseif isset($vo.meal_flag) and $vo.meal_flag == '1'}
+            <input type="radio" name="meal_flag" value="0" title="按次计费">
+            <input type="radio" checked name="meal_flag" value="1" title="金额计费">
+            {else}
+            <input type="radio" name="meal_flag" value="0" title="按次计费">
+            <input type="radio" name="meal_flag" value="1" title="金额计费">
+            {/if}
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['meal_id'])}<input type='hidden' value='{$vo.meal_id}' name='meal_id'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>

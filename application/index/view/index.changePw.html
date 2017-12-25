@@ -1,0 +1,83 @@
+{include file="common/header" title="密码修改" keywords="密码修改" description="" /}
+<div class="f H scroll p10">
+    <div class="bgf p20-10 bbe F_">
+        <span>旧密码：</span>
+        <span class="f ml20">
+				<input type="password" class="W bn" placeholder="请输入旧密码" v-model="opassword"/>
+			</span>
+    </div>
+    <div class="bgf p20-10 bbe F_">
+        <span>新密码：</span>
+        <span class="f ml20">
+				<input type="password" class="W bn" placeholder="请输入新密码" v-model="npassword"/>
+			</span>
+    </div>
+    <div class="bgf p20-10 bbe F_">
+        <span>确认密码：</span>
+        <span class="f ml20">
+				<input type="password" class="W bn" placeholder="请输入确认密码" v-model="qpassword"/>
+			</span>
+    </div>
+    <!-- 登录 -->
+    <div class="pt40">
+        <button class="bgdefault W r2 cf p10 f16" @click="confirm">确认</button>
+    </div>
+</div>
+{include file="common/footer" /}
+<script type="text/javascript">
+    window.onload = function () {
+        document.title = '密码修改';
+        var data = {
+            opassword: '',
+            npassword: '',
+            qpassword: '',
+        };
+        var V3 = new Vue({
+            el: 'body',
+            data: data,
+            methods: {
+                confirm: function () {
+                    var self = this;
+                    if (self.opassword == '' ||self.npassword == '' || self.qpassword == '') {
+                        $.alert('密码不能为空');
+                        return false;
+                    }
+                    if (self.npassword != self.qpassword) {
+                        $.alert('新旧密码不相同,请重新输入');
+                        return false;
+                    }
+                    if (self.npassword == self.opassword) {
+                        $.alert('新密码不能与旧密码相同,请重新输入');
+                        return false;
+                    }
+                    $.ajax({
+                        url: SCapiDic.changePw,
+                        type: "POST",
+                        data:{
+                            opassword: self.opassword,
+                            npassword: self.npassword,
+                            qpassword: self.qpassword,
+                        },
+                        dataType: "json",
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                        },
+                        success: function (ret, status) {
+                            if(ret.code = '0'){
+                                $.alert(ret.msg);
+                            }else{
+                                $.alert(ret.msg, function() {
+                                    openWin(ret.url, {});
+                                });
+                            }
+                        }
+                    });
+                },
+            },
+        });
+    }
+
+</script>
+
+
+

@@ -1,0 +1,47 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+
+
+{/block}
+
+{block name="content"}
+
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class='text-center'>员工名称</th>
+                <th class='text-center'>充值类型</th>
+                <th class='text-center'>预缴计次</th>
+                <th class='text-center'>充值金额</th>
+                <th class='text-center'>操作日期</th>
+                <th class='text-center'>操作人员</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='text-center'>{$vo.Emp_Name}</td>
+                <td class='text-center'>{$vo.meal_name}</td>
+                <td class='text-center'>{$vo.get_account_degree}</td>
+                <td class='text-center'>{$vo.get_account_money}</td>
+                {if $vo.case_date}
+                <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['case_date']))}</td>
+                {else}
+                <td class='text-center'><span style='color:#ccc'>无</span></td>
+                {/if}
+                <td class='text-center'>{$vo.operator_name}</td>
+            </tr>
+            {/foreach}
+            {if empty($list)}
+            <tr><td colspan="7" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+{/block}

@@ -1,0 +1,110 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+<div class="nowrap pull-right" style="margin-top:10px">
+    <!--<button data-modal='{:url("$classuri/add")}' data-title="添加设备" class='layui-btn layui-btn-small'><i-->
+            <!--class='fa fa-plus'></i> 添加设备-->
+    <!--</button>-->
+    <!--<button data-update data-field='delete' data-action='{:url("$classuri/del")}'-->
+            <!--class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除设备-->
+    <!--</button>-->
+</div>
+{/block}
+
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+
+        <!--<div class="col-xs-3">-->
+            <!--<div class="form-group">-->
+                <!--<input type="text" name="Emp_Name" value="{$Think.get.Emp_Name|default=''}" placeholder="设备名称" class="input-sm form-control">-->
+            <!--</div>-->
+        <!--</div>-->
+
+
+        <!--<div class="col-xs-1">-->
+            <!--<div class="form-group">-->
+                <!--<button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+</form>
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class='list-table-check-td'>
+                    <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+                </th>
+                <th class='text-center'>设备序列号</th>
+                {if $Think.session.company_id == '0' }
+                <th class='text-center'>公司名称</th>
+                {/if}
+                <th class='text-center'>餐厅名称</th>
+                <th class='text-center'>窗口号</th>
+                <th class='text-center'>设备用途</th>
+                <th class='text-center'>设备状态</th>
+                <th class='text-center'>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td'>
+                    <input class="list-check-box" value='{$vo.machine_id}' type='checkbox'/>
+                </td>
+                <td class='text-center'>{$vo.machine_sn|default="<span style='color:#ccc'>无</span>"}</td>
+                {if $Think.session.company_id == '0' }
+                <td class='text-center'>{$vo.company_name|default="<span style='color:#ccc'>平台自建</span>"}</td>
+                {/if}
+                <td class='text-center'>{$vo.canteen_name|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.sale_window_name|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>
+                    {if $vo.machine_type eq 1}
+                    <span>套餐取餐</span>
+                    {elseif $vo.machine_type eq 2}
+                    <span style="color:#090">现金取餐</span>
+                    {elseif $vo.machine_type eq 3}
+                    <span style="color:#090">自动查询机</span>
+                    {else}
+                    <span style="color:#ccc">无</span>
+                    {/if}
+                </td>
+                <td class='text-center'>
+                    {if $vo.machine_status eq 0}
+                    <span>已禁用</span>
+                    {elseif $vo.machine_status eq 1}
+                    <span style="color:#090">使用中</span>
+                    {/if}
+                </td>
+                <td class='text-center nowrap'>
+                    {if $Think.session.company_id == '0'}
+                    <span class="text-explode">|</span>
+                    <a data-modal='{:url("$classuri/edit")}?machine_id={$vo.machine_id}' href="javascript:void(0)">设备管理</a>
+                    {/if}
+                    {if $vo.machine_status eq 1 and auth("$classuri/forbid")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.machine_id}" data-field='machine_status' data-value='0' data-action='{:url("$classuri/forbid")}'
+                       href="javascript:void(0)">禁用</a>
+                    {elseif auth("$classuri/resume")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.machine_id}" data-field='machine_status' data-value='1' data-action='{:url("$classuri/resume")}'
+                       href="javascript:void(0)">启用</a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+            {if empty($list)}
+            <tr><td colspan="7" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+{/block}

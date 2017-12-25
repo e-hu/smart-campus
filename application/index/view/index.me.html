@@ -1,0 +1,159 @@
+{include file="common/header" title="个人中心" keywords="个人中心" description="" /}
+<div class="f H scroll">
+    <div class="pr pt50  Sbg h200 pr bgdefault">
+        <div class="tc ">
+            <div class="dib r f0 p7 Sbgf">
+                <img src="{{image}}" class="max r h80 w80"/>
+            </div>
+            <div class="cf f18 mt20" style="padding: 0px 30px;">{{name}}</div>
+        </div>
+        <div class="R15 T15 cf" @click="loginOut">退出</div>
+    </div>
+    <ul>
+
+        <li class="hl50 F_ bbd bgf" onclick="openWin('/index/index/myInfo',{})">
+            <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/info.png" class="h20 lh20 mt15"></i>
+            <p class='f pl10'>个人信息</p>
+            <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
+        </li>
+
+        <li class="hl50 F_ bbd bgf" onclick="openWin('/index/index/changePw',{})">
+            <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/pw.png"
+                                                    class="h20 lh20 mt15"></i>
+            <p class='f pl10'>密码修改</p>
+            <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
+        </li>
+
+        <li class="hl50 F_ bbd bgf" onclick="openWin('/index/index/money',{})">
+            <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/余额.png"
+                                                    class="h20 lh20 mt15"></i>
+            <p class='f pl10'>我的余额</p>
+            <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
+        </li>
+
+        <li class="hl50 F_ bbd bgf" onclick="openWin('/index/index/orderList',{})">
+            <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/记录.png"
+                                                    class="h20 lh20 mt15"></i>
+            <p class='f pl10'>用餐记录</p>
+            <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
+        </li>
+        <li class="W h10 bge"></li>
+        <li class="hl50 F_ bbd bgf" @click="aboutus()">
+            <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/声音.png"
+                                                    class="h20 lh20 mt15"></i>
+            <p class='f pl10'>系统通知</p>
+            <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
+        </li>
+        <li class="hl50 F_ bbd bgf" @click="aboutus()">
+            <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/意见.png"
+                                                    class="h20 lh20 mt15"></i>
+            <p class='f pl10'>意见反馈</p>
+            <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
+        </li>
+        <li class="hl50 F_ bbd bgf" @click="aboutus()">
+            <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/使用说明.png" class="h20 lh20 mt15"></i>
+            <p class='f pl10'>使用说明</p>
+            <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
+        </li>
+        <li class="hl50 F_ bbd bgf" @click="aboutus()">
+            <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/关于我们.png" class="h20 lh20 mt15"></i>
+            <p class='f pl10'>关于我们</p>
+            <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
+        </li>
+
+    </ul>
+</div>
+<!-- 底部导航栏 -->
+<div class="bgf btd tc f12 c9 h60 SSfooter">
+    <div class="C4" onclick="window.location.href='/index/index/index'">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/home.png" class="h30 lh30">
+        </div>
+        <div class=" h24 lh20">首页</div>
+    </div>
+    <div class="C4" onclick="window.location.href='/index/index/menu'">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/menu.png" class="h30 lh30">
+        </div>
+        <div class="h24 lh20">今日菜谱</div>
+    </div>
+    <div class="C4" onclick="window.location.href='/index/index/me'">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/me-g.png" class="h30 lh30">
+        </div>
+        <div class="h24 lh20 SScmenu">个人中心</div>
+    </div>
+</div>
+{include file="common/footer" /}
+<script type="text/javascript">
+    window.onload = function () {
+        document.title = '个人中心';
+        var data = {
+            name: '',
+            image:'',
+        };
+        var V3 = new Vue({
+            el: 'body',
+            data: data,
+            methods: {
+                configInfo: function () {
+                    var self = this;
+                    $.ajax({
+                        url: SCapiDic.getmyinfo,
+                        type: "GET",
+                        dataType: "json",
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                        },
+                        success: function (ret, status) {
+                            if (ret.code == '0') {
+                                $.alert(ret.msg);
+                            } else {
+                                self.name = ret.Emp_Name;
+                                if(ret.Emp_image){
+                                    self.image = ret.Emp_image;
+                                }else{
+                                    self.image = '__PUBLIC__/static/index/images/header.jpg';
+                                }
+                            }
+                        }
+                    });
+                },
+                aboutus: function () {
+                    var self = this;
+                    $.alert('暂未开放')
+                },
+                loginOut: function () {
+                    $.confirm({
+                        title: '提示',
+                        text: '确定退出登录?',
+                        onOK: function () {
+                            $.ajax({
+                                url: SCapiDic.logout,
+                                type: "GET",
+                                dataType: "json",
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                                },
+                                success: function (ret, status) {
+                                    $.alert(ret.msg, function() {
+                                        openWin(ret.url,{company_id:ret.data.company_id});
+                                    });
+                                }
+                            });
+                        },
+                        onCancel: function () {
+                        }
+                    });
+                }
+            },
+            ready: function () {
+                this.configInfo();
+            }
+        });
+    }
+
+</script>
+
+
+

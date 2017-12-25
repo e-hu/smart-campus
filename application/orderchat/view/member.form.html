@@ -1,0 +1,84 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">真实姓名</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.Emp_Name)}
+            <input type="text" readonly="" disabled="" name="Emp_Name" value='{$vo.Emp_Name|default=""}'
+                   required="required" title="请输入真实姓名" placeholder="请输入真实姓名" class="layui-input disabled">
+            {else}
+            <input type="text" name="Emp_Name" value='{$vo.Emp_Name|default=""}' pattern="^\S{2,}$"
+                   title="请输入2位及以上的字符" required="required" placeholder="请输入真实姓名" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属部门</label>
+        <div class="layui-input-block">
+            {foreach $dept_infos as $dept_info}
+            {if isset($vo.Dept_Id) and $vo.Dept_Id == $dept_info.dept_no}
+            <input type="radio" checked  name="Dept_Id" value="{$dept_info.dept_no}" title="{$dept_info.dept_name}">
+            {else}
+            <input type="radio" name="Dept_Id" value="{$dept_info.dept_no}" title="{$dept_info.dept_name}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系电话</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.Default_Tel)}
+            <input type="tel" autofocus name="Default_Tel" value='{$vo.Default_Tel|default=""}' pattern="^1[3-9][0-9]{9}$"
+                   title="请输入正确的手机号码" placeholder="请输入联系手机" class="layui-input">
+            {else}
+            <input type="tel" autofocus name="Default_Tel" value='' pattern="^1[3-9][0-9]{9}$"
+                   title="请输入正确的手机号码" placeholder="请输入联系手机" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">ID卡编号</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.Ic_Card) and !empty($vo.Ic_Card)}
+            <input type="text" disabled="" name="Ic_Card" value='{$vo.Ic_Card|default=""}'
+                   required="required" title="请输入ID卡编号" placeholder="请输入ID卡编号" class="layui-input disabled">
+            {else}
+            <input type="text" name="Ic_Card" value='{$vo.Ic_Card|default=""}' pattern="^\S{8,}$"
+                   title="请输入8位及以上的字符" required="required" placeholder="请输入ID卡编号" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号名称</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.Emp_MircoMsg_Uid) and !empty($vo.Emp_MircoMsg_Uid)}
+            <input type="text" readonly="" disabled="" name="Emp_MircoMsg_Uid" value='{$vo.Emp_MircoMsg_Uid|default=""}'
+                   required="required" title="请输入账号名称" placeholder="请输入账号名称" class="layui-input disabled">
+            {else}
+            <input type="text" name="Emp_MircoMsg_Uid" value='{$vo.Emp_MircoMsg_Uid|default=""}' pattern="^\S{6,}$"
+                   title="请输入6位及以上的字符" required="required" placeholder="请输入账号名称" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">账号密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="Emp_MircoMsg_Upwd" value='' pattern="^\S{6,}$"
+                   title="请输入6位及以上的字符" required="" placeholder="请输入账号密码" class="layui-input">
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['Emp_Id'])}<input type='hidden' value='{$vo.Emp_Id}' name='Emp_Id'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>

@@ -1,0 +1,41 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+    <input name="canteen_no" value="{$data.canteen_no}" type="hidden">
+    <input name="cookbook_no" value="{$data.cookbook_no}" type="hidden">
+    <input name="dinner_flag" value="{$data.dinner_flag}" type="hidden">
+    <input name="sale_datetime" value="{$data.sale_datetime}" type="hidden">
+    <div class="layui-form-item">
+        <label class="layui-form-label label-required">窗口选择</label>
+        <div class="layui-input-block">
+            {foreach $windowbases as $windowbase}
+            {if isset($info.windows_no) and $info.windows_no == $windowbase.sale_window_no}
+            <input type="radio" checked name="windows_no" value="{$windowbase.sale_window_no}"
+                   title="{$windowbase.sale_window_name}">
+            {else}
+            <input type="radio" name="windows_no" value="{$windowbase.sale_window_no}"
+                   title="{$windowbase.sale_window_name}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">餐台位置号</label>
+        <div class="layui-input-block">
+            {if $info and isset($info.position_id)}
+            <input type="text" name="position_id" value='{$info.position_id|default=""}'
+                   required="required" title="请输入1位及以上的字符" placeholder="请输入餐台位置号" class="layui-input disabled">
+            {else}
+            <input type="text" name="position_id" value='' pattern="^\S{1,}$"
+                   title="请输入1位及以上的字符" required="required" placeholder="请输入餐台位置号" class="layui-input">
+            {/if}
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($info['id'])}<input type='hidden' value='{$info.id}' name='id'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>

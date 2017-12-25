@@ -1,0 +1,66 @@
+{include file="common/header" title="用户登录" keywords="用户登录" description="" /}
+<div class="W H3">
+    <img src="__PUBLIC__/static/index/images/loginLogo.png" class="W H">
+</div>
+<!-- 账号密码 -->
+<div class="f H scroll bgf ">
+    <div class="bgf p20-10 bbe F_">
+        <span>账号：</span>
+        <span class="f ml20">
+				<input type="text" class="W bn" placeholder="请输入账号" v-model="username"/>
+			</span>
+    </div>
+    <div class="bgf p20-10 bbe F_">
+        <span>密码：</span>
+        <span class="f ml20">
+				<input type="password" class="W bn" placeholder="请输入密码" v-model="password"/>
+			</span>
+    </div>
+    <!-- 登录 -->
+    <div class="pt40">
+        <button class="bgdefault W9 r2 cf p10 f16 Ml5" @click="login">立即登录</button>
+    </div>
+</div>
+{include file="common/footer" /}
+<script type="text/javascript">
+    window.onload = function () {
+        var data = {
+            username: '',
+            password: '',
+        };
+        var V3 = new Vue({
+            el: 'body',
+            data: data,
+            methods: {
+                login: function () {
+                    var self = this;
+                    if (self.username == '' || self.password == '') {
+                        $.alert('账号或密码不能为空');
+                        return false;
+                    }
+                    $.ajax({
+                        url: "/index/login/login",
+                        type: "POST",
+                        data: {
+                            username: self.username,
+                            password: self.password,
+                        },
+                        dataType: "json",
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                        },
+                        success: function (ret) {
+                            if (ret.code == '1') {
+                                openWin(ret.url, {});
+                            } else {
+                                $.alert(ret.msg);
+                                self.username = '';
+                                self.password = '';
+                            }
+                        }
+                    });
+                },
+            }
+        });
+    }
+</script>

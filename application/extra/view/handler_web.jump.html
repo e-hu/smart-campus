@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>跳转提示</title>
+    <meta name="keywords" content="[keywords]" />
+    <meta name="description" content="[description]"/>
+
+    <link rel="stylesheet" href="__PUBLIC__/static/index/lib/weui.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/static/index/css/jquery-weui.css">
+    <link rel="stylesheet" href="__PUBLIC__/static/index/css/demos.css">
+
+</head>
+<style>
+    body{background-color: #EEEEEE}
+</style>
+<body ontouchstart>
+<div class="weui-msg">
+    <?php switch ($code) {?>
+    <?php case 1:?>
+    <div class="weui-msg__icon-area"><i class="weui-icon-success weui-icon_msg"></i></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">操作成功</h2>
+        <p class="weui-msg__desc"><?php echo(strip_tags($msg));?></p>
+    </div>
+    <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+            <a href="<?php echo($url);?>" class="weui-btn weui-btn_primary">确定</a>
+            <!--<a id="href" href="<?php echo($url);?>" class="weui-btn weui-btn_primary">页面自动跳转 等待时间： <b id="wait"><?php echo($wait);?></b></a>-->
+        </p>
+    </div>
+    <?php break;?>
+    <?php case 0:?>
+    <div class="weui-msg__icon-area"><i class="weui-icon-warn weui-icon_msg"></i></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">操作失败</h2>
+        <p class="weui-msg__desc"><?php echo(strip_tags($msg));?></p>
+    </div>
+    <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+            <a href="<?php echo($url);?>" class="weui-btn weui-btn_primary">确定</a>
+        </p>
+    </div>
+    <?php break;?>
+    <?php } ?>
+    <div class="weui-msg__extra-area">
+        <div class="weui-footer">
+            <p class="weui-footer__links">
+                <a href="javascript:void(0);" class="weui-footer__link">浙农茂阳配送有限公司</a>
+            </p>
+            <p class="weui-footer__text">Copyright © 2017-2020 浙农茂阳配送有限公司</p>
+        </div>
+    </div>
+</div>
+        <script src="__PUBLIC__/static/index/lib/jquery-2.1.4.js"></script>
+        <script src="__PUBLIC__/static/index/lib/fastclick.js"></script>
+        <script>
+            $(function() {
+                FastClick.attach(document.body);
+            });
+        </script>
+        <script src="__PUBLIC__/static/index/js/jquery-weui.js"></script>
+</body>
+</html>

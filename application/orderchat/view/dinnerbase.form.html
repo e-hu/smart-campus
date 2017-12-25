@@ -1,0 +1,76 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">餐次编号</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.dinner_flag)}
+            <input type="text" name="dinner_flag" value='{$vo.dinner_flag|default=""}'
+                   required="required" title="请输入餐次编号" placeholder="请输入餐次编号" class="layui-input disabled">
+            {else}
+            <input type="text" name="dinner_flag" value='{$vo.dinner_flag|default=""}' pattern="^\S{1,}$"
+                   title="请输入1位及以上的字符" required="required" placeholder="请输入餐次编号" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">餐次名称</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.dinner_name)}
+            <input type="text" readonly="" disabled="" name="dinner_name" value='{$vo.dinner_name|default=""}'
+                   required="required" title="请输入餐次名称" placeholder="请输入餐次名称" class="layui-input disabled">
+            {else}
+            <input type="text" name="dinner_name" value='{$vo.dinner_name|default=""}' pattern="^\S{2,}$"
+                   title="请输入2位及以上的字符" required="required" placeholder="请输入餐次名称" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">开始时间</label>
+            {if $vo and isset($vo.dinner_starttime) and isset($vo.dinner_endtime)}
+            <div class="layui-input-block">
+                <input class="layui-input"  id="din_beg" placeholder="开始时间"   title="请输入正确的时间格式，如11:11" required="required" value="{$vo.dinner_starttime}" name="dinner_starttime" pattern="^(0?[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[1-5][0-9])$">
+            </div>
+            {else/}
+            <div class="layui-input-block">
+                <input class="layui-input"  id="din_beg" placeholder="开始时间" title="请输入正确的时间格式，如11:11" required="required"  name="dinner_starttime" pattern="^(0?[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[1-5][0-9])$" >
+            </div>
+            {/if}
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">截止时间</label>
+            {if $vo and isset($vo.dinner_starttime) and isset($vo.dinner_endtime)}
+            <div class="layui-input-block">
+                <input class="layui-input" id="din_end" placeholder="截止时间"   title="请输入正确的时间格式，如11:11" required="required"  value="{$vo.dinner_endtime}" name="dinner_endtime" pattern="^(0?[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[1-5][0-9])$">
+            </div>
+            {else/}
+            <div class="layui-input-block">
+                <input class="layui-input"  id="din_end"  placeholder="截止时间"  title="请输入正确的时间格式，如11:11" required="required" name="dinner_endtime" pattern="^(0?[0-9]|1[0-9]|2[0-3]):(0?[0-9]|[1-5][0-9])$">
+            </div>
+            {/if}
+
+        </div>
+
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['dinner_no'])}<input type='hidden' value='{$vo.dinner_no}' name='dinner_no'/>{/if}
+
+        <button class="layui-btn" type='submit'  id="btn-sub">保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>
+<script>
+     $('#btn-sub').click(function () {
+         var beg_time=parseInt(document.getElementById('din_beg').value.replace(":",''));
+         var end_time= parseInt(document.getElementById('din_end').value.replace(":",''));
+         if(end_time<beg_time){
+             alert('时间范围设定错误，开始时间滞后于截止时间');
+             return false;
+         }
+     })
+</script>

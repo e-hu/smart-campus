@@ -1,0 +1,81 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+<div class="nowrap pull-right" style="margin-top:10px">
+    <button data-modal='{:url("$classuri/add")}' data-title="添加餐次" class='layui-btn layui-btn-small'><i
+            class='fa fa-plus'></i> 添加餐次
+    </button>
+    <button data-update data-field='delete' data-action='{:url("$classuri/del")}'
+            class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除餐次
+    </button>
+</div>
+
+{/block}
+
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="dinner_name" value="{$Think.get.dinner_name|default=''}" placeholder="餐次名称" class="input-sm form-control">
+            </div>
+        </div>
+
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class='list-table-check-td'>
+                    <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+                </th>
+                <th class='text-center'>餐次编号</th>
+                <th class='text-center'>餐次名称</th>
+                <th class='text-center'>开始时间</th>
+                <th class='text-center'>结束时间</th>
+                <th class='text-center'>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td'>
+                    <input class="list-check-box" value='{$vo.dinner_no}' type='checkbox'/>
+                </td>
+                <td class='text-center'>{$vo.dinner_flag}</td>
+                <td class='text-center'>{$vo.dinner_name}</td>
+                <td class='text-center'>{$vo.dinner_starttime}</td>
+                <td class='text-center'>{$vo.dinner_endtime}</td>
+                <td class='text-center nowrap'>
+                    {if auth("$classuri/edit")}
+                    <span class="text-explode">|</span>
+                    <a data-modal='{:url("$classuri/edit")}?dinner_no={$vo.dinner_no}' href="javascript:void(0)">编辑</a>
+                    {/if}
+                    {if auth("$classuri/del")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.dinner_no}" data-field='delete' data-action='{:url("$classuri/del")}'
+                       href="javascript:void(0)">删除</a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+            {if empty($list)}
+            <tr><td colspan="7" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+{/block}

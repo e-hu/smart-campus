@@ -1,0 +1,131 @@
+{include file="common/header" title="我的余额" keywords="我的余额" description="" /}
+<div class="pr Sbg pr bgdefault">
+    <div class="tc h80 lh20">
+        <div class="cf f16 W5 H pt20">￥{{account_remain_money}}<br/>可用金额</div>
+        <div class="cf f16 W5 H pt20">￥{{account_freeze_money}}<br/>冻结金额</div>
+    </div>
+</div>
+<ul class="tc bgf f12 SSorder clear bbe">
+    <li class="C6 h40 lh40" :class="orderType == '0' ? 'SSactive' : '' " @click='rechargeList()'>
+        <div>充值记录</div>
+    </li>
+    <li class="C6 h40 lh40" :class="orderType == '1' ? 'SSactive' : '' " @click='recordList()'>
+        <div>消费记录</div>
+    </li>
+</ul>
+<div class="tc pt50" v-show="orderType =='0'" v-if="rechargeGetCount == '0'">
+    <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
+    <p class="c9 mb15">充值记录空空如也！</p>
+    <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
+</div>
+<div v-else class="W scroll H" v-show="orderType =='0'">
+    <ul>
+        <li class="hl50 F_ bbd bgf f12" v-for="item in rechargeGetList">
+            <p class='pl10' v-if="item.get_account_degree > 0 " >{{item.create_date}}{{item.meal_name}}充值{{item.get_account_degree}}次和{{item.get_account_money}}元</p>
+            <p class='pl10'v-else >{{item.create_date}}{{item.meal_name}}充值{{item.get_account_money}}元</p>
+            <p class='pr10 c9'>{{item.case_date}}</p>
+        </li>
+    </ul>
+</div>
+
+<div class="tc pt50" v-show="orderType =='1'" v-if="recordGetCount == '0'">
+    <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
+    <p class="c9 mb15">消费记录空空如也！</p>
+    <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
+</div>
+<div v-else class="W scroll H" v-show="orderType =='1'">
+    <ul>
+        <li class="hl50 F_ bbd bgf f12" v-for="item in recordGetList" @click="order(item.day)">
+            <p class='pl10'>{{item.dinner_datetime}}{{item.canteen_name}}{{item.dinner_name}}{{item.dinner_status}}{{item.cook_money}}元</p>
+            <p class='pr10 c9'>{{item.dinner_createtime}}</p>
+        </li>
+    </ul>
+</div>
+{include file="common/footer" /}
+<script type="text/javascript">
+    window.onload = function () {
+        document.title = '我的余额';
+        var data = {
+            orderType: '0',
+            rechargeGetCount: '',
+            rechargeGetList: [],
+            recordGetCount: '',
+            recordGetList: [],
+            account_remain_money: '0',
+            account_freeze_money: '0',
+        };
+        var V3 = new Vue({
+            el: 'body',
+            data: data,
+            methods: {
+                configInfo: function () {
+                    var self = this;
+                    $.ajax({
+                        url: SCapiDic.getmymoney,
+                        type: "GET",
+                        dataType: "json",
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                        },
+                        success: function (ret, status) {
+                            self.account_remain_money = ret.account_remain_money;
+                            self.account_freeze_money = ret.account_freeze_money;
+                        }
+                    });
+                },
+                rechargeList: function () {
+                    var self = this;
+                    self.orderType = 0;
+                    $.ajax({
+                        url: SCapiDic.getRechargeList,
+                        type: "GET",
+                        dataType: "json",
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                        },
+                        success: function (ret, status) {
+                            if (ret.code == '0') {
+                                self.rechargeGetCount = '0';
+                                console.log(self)
+                            } else {
+                                self.rechargeGetList = ret.list;
+                                self.rechargeGetCount = ret.count;
+                            }
+                        }
+                    });
+                },
+                recordList: function () {
+                    var self = this;
+                    self.orderType = 1;
+                    $.ajax({
+                        url: SCapiDic.getRecordList,
+                        type: "GET",
+                        dataType: "json",
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                        },
+                        success: function (ret, status) {
+                            if (ret.code == '0') {
+                                self.recordGetCount = 0;
+                            } else {
+                                self.recordGetList = ret.list;
+                                self.recordGetCount = ret.count;
+                            }
+                        }
+                    });
+                },
+                order: function (day) {  //跳转函数
+                    openWin('/index/index/orderInfo', {day: day});
+                },
+            },
+            ready: function () {
+                this.configInfo();
+                this.rechargeList();
+            }
+        });
+    }
+
+</script>
+
+
+

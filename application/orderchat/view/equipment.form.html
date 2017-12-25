@@ -1,0 +1,23 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label label-required">绑定公司</label>
+        <div class="layui-input-block">
+            {foreach $company_lists as $company_list}
+            {if isset($vo.company_id) and $vo.company_id == $company_list.company_id}
+            <input type="radio" checked  name="company_id" value="{$company_list.company_id}" title="{$company_list.Company_Name}">
+            {else}
+            <input type="radio" name="company_id" value="{$company_list.company_id}" title="{$company_list.Company_Name}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['machine_id'])}<input type='hidden' value='{$vo.machine_id}' name='machine_id'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>

@@ -1,0 +1,137 @@
+{extend name='extra@admin/content'}
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="company_id" class="input-sm form-control">
+                    <option value="">- 公司列表 -</option>
+                    <!--{foreach $company_lists as $key=>$company_list}-->
+                    <!--{if $Think.get.company_id eq $key}-->
+                    <option selected value="{$key}">{$company_list.Company_Name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$company_list.Company_Name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="tag" class="input-sm form-control">
+                    <option value="">- 类别列表 -</option>
+                    <!--{foreach $tags as $key=>$tag}-->
+                    <!--{if $Think.get.tag eq $key}-->
+                    <option selected value="{$key}">{$tag.cookbook_typename}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$tag.cookbook_typename}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="status" class="input-sm form-control">
+                    <option value="">- 推送状态 -</option>
+                    <!--{if $Think.get.status eq '0'}-->
+                    <option selected value="0">未推送</option>
+                    <option value="{$Think.get.company_id}">已推送</option>
+                    <!--{elseif $Think.get.status eq '' }-->
+                    <option value="0">未推送</option>
+                    <option value="{$Think.get.company_id}">已推送</option>
+                    <!--{else}-->
+                    <option value="0">未推送</option>
+                    <option selected value="{$Think.get.company_id}">已推送</option>
+                    <!--{/if}-->
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="cookbook_name" value="{$Think.get.cookbook_name|default=''}" placeholder="菜品名"
+                       class="input-sm form-control">
+            </div>
+        </div>
+
+
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 表单搜索 结束 -->
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class='list-table-check-td'>
+                <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+            </th>
+            <th class='text-center'>所属公司</th>
+            <th class='text-center'>菜品名称</th>
+            <th class='text-center'>菜品价格</th>
+            <th class='text-center'>是否允许修改价格</th>
+            <th class='text-center'>开始日期</th>
+            <th class='text-center'>菜品图片</th>
+            <th class='text-center'>菜品类型</th>
+            <th class='text-center'>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td'>
+                <input class="list-check-box" value='{$vo.cookbook_no}' type='checkbox'/>
+            </td>
+            <td class='text-center'>{$vo.company_name|default="<span style='color:#ccc'>平台自建</span>"}</td>
+            <td class='text-center'>{$vo.cookbook_name|default="<span style='color:#ccc'>还没有设置菜品名称</span>"}</td>
+            <td class='text-center'>{$vo.price|default="<span style='color:#ccc'>还没有设置菜品价格</span>"}元</td>
+            {if $vo.price_flag == '0'}
+            <td class='text-center'>不允许</td>
+            {else/}
+            <td class='text-center'>允许</td>
+            {/if}
+            <td class='text-center'>{:date('Y-m-d',strtotime($vo['start_datetime']))}</td>
+            {if !empty($vo.cookbook_image)}
+            <td class='text-center'><img data-tips-image src="{$vo.cookbook_image}" style="height: 60px;width: 60px;">
+            </td>
+            {else/}
+            <td class='text-center'>无</td>
+            {/if}
+            <td class='text-center'>{$vo.cookbook_typename|default="<span style='color:#ccc'>无</span>"}</td>
+            <td class='text-center nowrap'>
+                {if isset($vo.status) and $vo.status eq '0' and auth("$classuri/resume")}
+                <a data-modal='{:url("$classuri/resume",["company_id"=>$Think.get.company_id,"cookbook_no"=>$vo.cookbook_no])}'
+                   data-action='{:url("$classuri/resume",["company_id"=>$Think.get.company_id])}'
+                   href="javascript:void(0)"><img src="__PUBLIC__/static/theme/default/img/selecte.png"
+                                                  style="height:50px;width:50px;"></a>
+                {else if isset($vo.status) and auth("$classuri/forbid")}
+                <a data-update="{$vo.cookbook_no}" data-field='delete'
+                   data-action='{:url("$classuri/forbid",["company_id"=>$Think.get.company_id])}'
+                   href="javascript:void(0)"><img src="__PUBLIC__/static/theme/default/img/selected.png"
+                                                  style="height:50px;width:50px;"></a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        {if empty($list)}
+        <tr>
+            <td colspan="9" style="text-align:center">没 有 记 录 了 哦 !</td>
+        </tr>
+        {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+{/block}

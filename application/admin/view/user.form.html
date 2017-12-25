@@ -1,0 +1,94 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户账号</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.username)}
+            <input type="text" readonly="" disabled="" name="username" value='{$vo.username|default=""}'
+                   required="required" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input disabled">
+            {else}
+            <input type="text" name="username" value='{$vo.username|default=""}' pattern="^\S{4,}$"
+                   title="请输入4位及以上的字符" required="required" placeholder="请输入用户名称" class="layui-input">
+            {/if}
+        </div>
+    </div>
+    {if $vo and !isset($vo.password)}
+    <div class="layui-form-item">
+        <label class="layui-form-label">密码</label>
+        <div class="layui-input-block">
+            <input type="password" name="password" value='' pattern="^\S{4,}$"
+                   title="请输入4位及以上的字符" required="" placeholder="请输入密码" class="layui-input">
+        </div>
+    </div>
+    {/if}
+    {if isset($companys)}
+    <div class="layui-form-item">
+        <label class="layui-form-label">所属公司</label>
+        <div class="layui-input-block">
+            {foreach $companys as $company}
+            {if isset($vo.company_id) and $vo.company_id == $company.company_id}
+            <input type="radio" checked  name="company_id" value="{$company.company_id}" title="{$company.Company_Name}">
+            {else}
+            <input type="radio"  name="company_id" value="{$company.company_id}" title="{$company.Company_Name}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系手机</label>
+        <div class="layui-input-block">
+            <input type="tel" autofocus name="phone" value='{$vo.phone|default=""}' pattern="^1[3-9][0-9]{9}$"
+                   title="请输入正确的手机号码" placeholder="请输入联系手机" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">联系邮箱</label>
+        <div class="layui-input-block">
+            <input type="text" name="mail" pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$"
+                   value='{$vo.mail|default=""}' title="请输入正确的邮箱地址" placeholder="请输入联系邮箱" class="layui-input">
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">QQ</label>
+        <div class="layui-input-block">
+            <input type="text" autofocus name="qq" pattern="[1-9][0-9]{4,14}" value='{$vo.qq|default=""}' title="请输入正确的QQ号码"
+                   placeholder="请输入QQ" class="layui-input">
+        </div>
+    </div>
+
+    {if isset($authorizes) and !empty($authorizes)}
+    <div class="layui-form-item">
+        <label class="layui-form-label">访问授权</label>
+        <div class="layui-input-block">
+            {foreach $authorizes as $authorize}
+            {if in_array($authorize['id'],$vo['authorize'])}
+            <input type="checkbox" checked name="authorize[]" value="{$authorize.id}" title="{$authorize.title}">
+            {else}
+            <input type="checkbox" name="authorize[]" value="{$authorize.id}" title="{$authorize.title}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户描述</label>
+        <div class="layui-input-block">
+            <textarea placeholder="请输入用户描述" title="请输入用户描述" class="layui-textarea"
+                      name="desc">{$vo.desc|default=""}</textarea>
+        </div>
+    </div>
+
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['id'])}<input type='hidden' value='{$vo.id}' name='id'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>

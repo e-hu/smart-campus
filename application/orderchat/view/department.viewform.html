@@ -1,0 +1,57 @@
+<style>
+    .none {
+        display: none
+    }
+
+    .selected {
+        background-image: url("__PUBLIC__/static/theme/default/img/selected.png");
+        background-repeat: no-repeat;
+        background-size: 40px 40px;
+        background-position: center;
+
+    }
+
+    .selecte {
+        background-image: url("__PUBLIC__/static/theme/default/img/selecte.png");
+        background-repeat: no-repeat;
+        background-size: 40px 40px;
+        background-position: center;
+    }
+</style>
+
+<form class="layui-form layui-box" onsubmit="return false;" >
+
+    <div id="list" style="overflow-x: auto; overflow-y: auto; height: 300px; width:auto;">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class='text-center'>部门名称</th>
+                <th class='text-center'>操作</th>
+            </tr>
+            </thead>
+            <tbody id="content">
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='text-center'>{$vo.dept_name}</td>
+                <td class='text-center nowrap'>
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-modal='{:url("$classuri/edit")}?dept_no={$vo.dept_no}' href="javascript:void(0)">编辑</a>
+                {/if}
+                {if auth("$classuri/del")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.dept_no}" data-field='delete' data-action='{:url("$classuri/del")}'
+                   href="javascript:void(0)">删除</a>
+                {/if}
+                </td>
+            </tr>
+            {/foreach}
+            {if empty($list)}
+            <tr>
+                <td colspan="7" style="text-align:center">没 有 记 录 了 哦 !</td>
+            </tr>
+            {/if}
+            </tbody>
+        </table>
+    </div>
+</form>

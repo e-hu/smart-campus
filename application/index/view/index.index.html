@@ -1,0 +1,232 @@
+{include file="common/header" title="首页" keywords="首页" description="" /}
+<div class="f H scroll">
+    <!-- 年份 月份 -->
+    <div class="month SSheader pr">
+        <ul>
+            <!--点击会触发pickpre函数，重新刷新当前日期 @click(vue v-on:click缩写) -->
+            <li class="arrow" @click="pickPre(currentYear,currentMonth)"><i> <img
+                    src="__PUBLIC__/static/index/images/back_w.png" class="h20 lh20"></i></li>
+            <li class="year-month">
+                <span style=" font-size:1rem;">{{ currentYear }}年{{ currentMonth }}月</span>
+            </li>
+            <li class="arrow" @click="pickNext(currentYear,currentMonth)"><i> <img
+                    src="__PUBLIC__/static/index/images/go.png" class="h20 lh20"></i></li>
+        </ul>
+    </div>
+    <!-- 星期 -->
+    <ul class="weekdays">
+        <li>一</li>
+        <li>二</li>
+        <li>三</li>
+        <li>四</li>
+        <li>五</li>
+        <li>六</li>
+        <li>日</li>
+    </ul>
+    <ul class="days">
+        <li class="li_c" v-for="dayobject in days">
+            <template v-if="dayobject.day.getMonth()+1 == currentMonth" v-for="(index,leftobject) in leftobj">
+                <div v-if="index == dayobject.day.getDate()" @click="cart(leftobject[0].date_str)"
+                     :class=" dayobject.day.getFullYear() == new Date().getFullYear() && dayobject.day.getMonth() == new Date().getMonth() && dayobject.day.getDate() == new Date().getDate() ? 'active' : 'months'">
+                    <div>{{ dayobject.day.getDate() }}</div>
+                    <div class="W9 H" style="position:relative;top: -2rem;left: 5%;">
+                        <ul>
+                            <li class="H2" :class="dinnerBaseCount" v-for=" item in leftobject">
+                                <image v-if="item.dinner_status == '1'" src="__PUBLIC__/static/index/images/yh_z.png"
+                                       class="ring">
+
+                                    <image v-if="item.dinner_status == '2'"
+                                           src="__PUBLIC__/static/index/images/y_z.png" class="ring">
+
+                                        <image v-if="item.dinner_status == '3'"
+                                               src="__PUBLIC__/static/index/images/yh_j.png" class="ring">
+
+                                            <image v-if="item.dinner_status == '4'"
+                                                   src="__PUBLIC__/static/index/images/y_j.png" class="ring">
+
+                                                <image v-if="item.dinner_status == '5'"
+                                                       src="__PUBLIC__/static/index/images/y_h.png" class="ring">
+
+                                                    <image v-if="item.dinner_status == '6'"
+                                                           src="__PUBLIC__/static/index/images/y_g.png"
+                                                           class="ring">
+
+                                                        <image v-if="item.dinner_status == '7'"
+                                                               src="__PUBLIC__/static/index/images/y_j.png"
+                                                               class="ring">
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </template>
+        </li>
+    </ul>
+    <!-- 提示 -->
+    <ul class="tips">
+        <li class="tc">
+            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_j.png" class="h10  mt5"></i>已订餐</span>
+            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_g.png" class="h10  mt5"></i>待订餐</span>
+            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_z.png" class="h10  mt5"></i>历史订餐</span>
+            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_h.png" class="h10  mt5"></i>拒绝订餐</span>
+        </li>
+        <li class="ml20">请注意订餐或者取餐的时间</li>
+        <li class="ml20" v-for="item in dinnerBaseList">{{item.dinner_name}}: 订餐当日 {{item.dinner_starttime}}-{{item.dinner_endtime}}
+            取餐
+        </li>
+    </ul>
+    <ul class="weui-loadmore" v-show="doing == '1'" style="position: relative;top: -18rem;">
+        <i class="weui-loading"></i>
+        <span class="weui-loadmore__tips">正在加载</span>
+    </ul>
+</div>
+<div class="bgf btd tc f12 c9 h60 SSfooter">
+    <div class="C4" onclick="window.location.href='/index/index/index'">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/home-g.png" class="h30 lh30">
+        </div>
+        <div class=" h24 lh20 SScmenu">首页</div>
+    </div>
+    <div class="C4" onclick="window.location.href='/index/index/menu'">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/menu.png" class="h30 lh30">
+        </div>
+        <div class="h24 lh20">今日菜谱</div>
+    </div>
+    <div class="C4" onclick="window.location.href='/index/index/me'">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/me.png" class="h30 lh30">
+        </div>
+        <div class="h24 lh20">个人中心</div>
+    </div>
+</div>
+{include file="common/footer" /}
+<script>
+    window.onload = function () {
+        document.title = '首页';
+        var data = {
+            currentDay: 1,
+            currentMonth: 1,
+            currentYear: 2017,
+            currentWeek: 1,
+            days: [],
+            leftobj: [],
+            dinnerBaseList: [],
+            dinnerBaseCount:'',
+            doing: '0'
+        };
+        var V3 = new Vue({
+            el: 'body',
+            data: data,
+            methods: {
+                cart: function (day) {  //下单
+                    openWin('/index/index/cart', {day: day});
+                },
+                initData: function (cur) {
+                    var date;
+                    var self = this;
+                    self.doing = '1';
+                    self.leftobj = [];
+                    if (cur) {
+                        date = new Date(cur);
+                    } else {
+                        var now = new Date();
+                        var d = new Date(this.formatDate(now.getFullYear(), now.getMonth(), 1));
+                        d.setDate(35);
+                        date = new Date(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                    }
+                    this.currentDay = date.getDate();
+                    this.currentYear = date.getFullYear();
+                    this.currentMonth = date.getMonth() + 1;
+
+                    this.currentWeek = date.getDay(); // 1...6,0
+                    if (this.currentWeek == 0) {
+                        this.currentWeek = 7;
+                    }
+                    var str = this.formatDate(this.currentYear, this.currentMonth, this.currentDay);
+                    this.days.length = 0;
+                    // 今天是周日，放在第一行第7个位置，前面6个
+                    //初始化本周
+                    for (var i = this.currentWeek - 1; i >= 0; i--) {
+                        var d = new Date(str);
+                        d.setDate(d.getDate() - i);
+
+                        var dayobject = {};
+                        dayobject.day = d;
+                        this.days.push(dayobject);//将日期放入data 中的days数组 供页面渲染使用
+                    }
+                    //其他周
+                    for (var i = 1; i <= 35 - this.currentWeek; i++) {
+                        var d = new Date(str);
+                        d.setDate(d.getDate() + i);
+                        var dayobject = {};
+                        dayobject.day = d;
+                        this.days.push(dayobject);
+                    }
+                    $.ajax({
+                        url: SCapiDic.gethomedata, //日历
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            time: str
+                        },
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                        },
+                        success: function (ret, status) {
+                            if (ret.code == '0') {
+                                $.alert(ret.msg);
+                            } else {
+                                self.leftobj = ret;
+                                self.$nextTick(function () {
+                                    self.doing = '0';
+                                })
+                            }
+                        }
+                    });
+                },
+                pickPre: function (year, month) {
+                    var d = new Date(this.formatDate(year, month, 1));
+                    d.setDate(0);
+                    this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                },
+                pickNext: function (year, month) {
+                    var d = new Date(this.formatDate(year, month, 1));
+                    d.setDate(35);
+                    this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
+                },
+                // 返回 类似 2016-01-02 格式的字符串
+                formatDate: function (year, month, day) {
+                    var y = year;
+                    var m = month;
+                    if (m < 10) m = "0" + m;
+                    var d = day;
+                    if (d < 10) d = "0" + d;
+                    return y + "-" + m + "-" + d
+                },
+                getDinnerBase: function () {
+                    var self = this;
+                    $.ajax({
+                        url: SCapiDic.getdinnerbase, //餐次
+                        type: "POST",
+                        dataType: "json",
+                        error: function (XMLHttpRequest, textStatus, errorThrown) {
+                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                        },
+                        success: function (ret) {
+                            if (ret.code == '0') {
+                                $.alert(ret.msg);
+                            } else {
+                                self.dinnerBaseList = ret.dinnerBaseList;
+                                self.dinnerBaseCount = ret.dinnerBaseCount;
+                            }
+                        }
+                    });
+                }
+            },
+            ready: function () {  //在vue初始化时调用
+                this.getDinnerBase();
+                this.initData(null);
+            }
+        });
+    }
+</script>

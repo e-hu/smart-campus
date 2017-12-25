@@ -1,0 +1,98 @@
+{extend name='extra@admin/content'}
+
+
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="Emp_Name" value="{$Think.get.Emp_Name|default=''}" placeholder="员工名称" class="input-sm form-control">
+            </div>
+        </div>
+
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class='text-center'>操作人员</th>
+                <th class='text-center'>上报状态</th>
+                <th class='text-center'>上报时间</th>
+                <th class='text-center'>上报批次号</th>
+                <th class='text-center'>审核操作员</th>
+                <th class='text-center'>审核时间</th>
+                <th class='text-center'>上报总金额</th>
+                <th class='text-center'>操作</th>
+            </tr>
+        </thead>
+        <tbody id="list">
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='text-center'>{$vo.username}</td>
+                {if $vo.upload_flag == '0'}
+                <td class='text-center'>未上报</td>
+                {elseif $vo.upload_flag == '1'}
+                <td class='text-center'>生成上报单</td>
+                {else}
+                <td class='text-center'>已接收</td>
+                {/if}
+                <td class='text-center'>{$vo.upload_datetime|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.upload_no|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.check_operator|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.check_datetime|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.money_count}</td>
+                <td class='text-center nowrap'>
+                    {if $vo.upload_flag eq 1 and auth("$classuri/aduit_push")}
+                    <span class="text-explode">|</span>
+                    <a href="javascript:void(0)" value="{$vo.upload_no}" class="aduit">审核</a>
+                    {/if}
+                    {if auth("$classuri/view")}
+                    <span class="text-explode">|</span>
+                    <a data-modal='{:url("$classuri/view")}?upload_no={$vo.upload_no}' href="javascript:void(0)">查看</a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+            {if empty($list)}
+            <tr><td colspan="12" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+    <script>
+        $("#list").on("click", ".aduit", function () {
+            var id = $(this).attr("value");
+            layer.msg('审核上报', {
+                time: 0 //不自动关闭
+                ,btn: ['通过', '拒绝']
+                ,yes: function(index){
+                    $.ajax({
+                        type: 'POST',
+                        url: "{:url('recharge/aduit_push')}",  //保存
+                        data:{upload_no:id},
+                        async: false,
+                        success: function (data) {
+                            layer.close(index);
+                            layer.msg(data.msg, function() {
+                                history.go();
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</form>
+{/block}

@@ -1,0 +1,111 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品名称</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.cookbook_name)}
+            <input type="text"  name="cookbook_name" value='{$vo.cookbook_name|default=""}'
+                   required="required" title="请输入2位及以上的字符" placeholder="请输入菜品名称" class="layui-input disabled">
+            {else}
+            <input type="text" name="cookbook_name" value='' pattern="^\S{2,}$"
+                   title="请输入2位及以上的字符" required="required" placeholder="请输入菜品名称" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">价格</label>
+        <div class="layui-input-inline">
+            {if $vo and isset($vo.price)}
+            <input type="text" required name="price" value='{$vo.price|default=""}' pattern="^\d+(\.\d+)?$" title="请输入正确的数字"  placeholder="请输入价格" class="layui-input">
+            {else}
+            <input type="text" required name="price" value='' pattern="^\d+(\.\d+)?$" title="请输入正确的数字" placeholder="请输入价格" class="layui-input">
+            {/if}
+        </div>
+        <div class="layui-form-mid layui-word-aux">单位为元</div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">是否允许修改价格</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.price_flag)}
+            {if $vo.price_flag == '0'}
+            <input type="radio"  checked   name="price_flag" value="0" title="不允许">
+            <input type="radio"     name="price_flag" value="1" title="允许">
+             {else/}
+            <input type="radio"  name="price_flag" value="0" title="不允许">
+            <input type="radio" checked  name="price_flag" value="1" title="允许">
+            {/if}
+            {else/}
+            <input type="radio"   name="price_flag" value="0" title="不允许">
+            <input type="radio"   name="price_flag" value="1" title="允许">
+            {/if}
+        </div>
+    </div>
+
+    {if isset($cookbook_types)}
+    <div class="layui-form-item">
+        <label class="layui-form-label label-required">菜品类别</label>
+        <div class="layui-input-block">
+            {foreach $cookbook_types as $cookbook_type}
+            {if isset($vo.cookbook_type) and $vo.cookbook_type == $cookbook_type.cookbook_typeid}
+            <input type="radio" checked  name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">
+            {else}
+            <input type="radio" name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+
+    <div class="layui-form-item">
+        <label class="layui-form-label label-required">开始时间</label>
+        <div class="layui-inline">
+            {if $vo and isset($vo.start_datetime)}
+            <input class="layui-input" required  title="请输入开始时间" name="start_datetime" value="{$vo.start_datetime}" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})">
+            {else}
+            <input class="layui-input" required  title="请输入开始时间" name="start_datetime" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})">
+            {/if}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">菜品图片</label>
+        <div class="layui-input-block">
+            <img data-tips-image style="height:auto;max-height:100px;min-width:100px" src='{$vo.cookbook_image|default=""}'/>
+            <input type="hidden" name="cookbook_image" onchange="$(this).prev('img').attr('src', this.value)"
+                   value="{$vo.cookbook_image|default=''}" class="layui-input">
+            <a class="btn btn-link" data-file="one" data-type="jpg,jpeg,png" data-field="cookbook_image">上传图片</a>
+        </div>
+    </div>
+    {if isset($cookbook_meal_types) && auth("orderchat/mealtype/index")}
+    <div class="layui-form-item">
+        <label class="layui-form-label label-required">套餐指定</label>
+        <div class="layui-input-block">
+            {foreach $cookbook_meal_types as $cookbook_meal_type}
+            {if isset($vo.meal_id) and $vo.meal_id == $cookbook_meal_type.meal_id}
+            <input type="radio" checked  name="meal_id" value="{$cookbook_meal_type.meal_id}" title="{$cookbook_meal_type.meal_name}">
+            {else}
+            <input type="radio" name="meal_id" value="{$cookbook_meal_type.meal_id}" title="{$cookbook_meal_type.meal_name}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['cookbook_no'])}<input type='hidden' value='{$vo.cookbook_no}' name='cookbook_no'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>
+<script>
+    layui.use(['form','laydate'], function(){
+        var form = layui.form();
+        form.verify({
+            //我们既支持上述函数式的方式，也支持下述数组的形式
+            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
+        });
+    });
+</script>

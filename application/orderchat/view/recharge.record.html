@@ -1,0 +1,106 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+
+<div class="nowrap pull-right" style="margin-top:10px">
+    {if auth("$classuri/push")}
+    <button onclick="aduit()" data-title="上报记录" class='layui-btn layui-btn-small'>上报记录</button>
+    {/if}
+</div>
+
+{/block}
+
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="Emp_Name" value="{$Think.get.Emp_Name|default=''}" placeholder="员工名称" class="input-sm form-control">
+            </div>
+        </div>
+
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class='text-center'>员工名称</th>
+                <th class='text-center'>充值类型</th>
+                <th class='text-center'>预缴计次</th>
+                <th class='text-center'>充值金额</th>
+                <th class='text-center'>操作日期</th>
+                <th class='text-center'>操作人员</th>
+                <th class='text-center'>上报状态</th>
+                <!--<th class='text-center'>上报时间</th>-->
+                <!--<th class='text-center'>上报批次号</th>-->
+                <!--<th class='text-center'>审核操作员</th>-->
+                <!--<th class='text-center'>审核时间</th>-->
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='text-center'>{$vo.Emp_Name}</td>
+                <td class='text-center'>{$vo.meal_name}</td>
+                <td class='text-center'>{$vo.get_account_degree}</td>
+                <td class='text-center'>{$vo.get_account_money}</td>
+                {if $vo.case_date}
+                <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['case_date']))}</td>
+                {else}
+                <td class='text-center'><span style='color:#ccc'>无</span></td>
+                {/if}
+                <td class='text-center'>{$vo.operator_name}</td>
+                {if $vo.upload_flag == '0'}
+                <td class='text-center'>未上报</td>
+                {elseif $vo.upload_flag == '1'}
+                <td class='text-center'>生成上报单</td>
+                {else}
+                <td class='text-center'>已接收</td>
+                {/if}
+                <!--<td class='text-center'>{$vo.upload_datetime|default="<span style='color:#ccc'>无</span>"}</td>-->
+                <!--<td class='text-center'>{$vo.upload_no|default="<span style='color:#ccc'>无</span>"}</td>-->
+                <!--<td class='text-center'>{$vo.check_operator|default="<span style='color:#ccc'>无</span>"}</td>-->
+                <!--<td class='text-center'>{$vo.check_datetime|default="<span style='color:#ccc'>无</span>"}</td>-->
+            </tr>
+            {/foreach}
+            {if empty($list)}
+            <tr><td colspan="12" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+<script>
+    function aduit(){
+        layer.msg('是否提交上报记录', {
+            time: 0 //不自动关闭
+            ,btn: ['是', '否']
+            ,yes: function(index){
+                $.ajax({
+                    type: 'POST',
+                    url: "{:url('recharge/push')}",  //保存
+                    async: false,
+                    success: function (data) {
+                        layer.close(index);
+                        layer.msg(data.msg, function() {
+                            history.go();
+                        });
+                    }
+                });
+            }
+        });
+    }
+</script>
+{/block}
