@@ -36,8 +36,8 @@ class Cbdinnerinfo extends BasicAdmin {
             ->join('Employee_list e','a.emp_id = e.emp_id and a.company_id = e.company_id','left')
             ->join('canteen_base_info c','a.canteen_no = c.canteen_no and a.company_id = c.company_id','left')
             ->join('dinner_base_info b','a.dinner_flag = b.dinner_flag and a.company_id=b.company_id','left')
-            ->join('canteen_sale_window_base_info s','a.dinner_machine_no = s.sale_window_no','left')
-            ->join('cookbook_base_info i','a.cookbook_no = i.cookbook_no','left')
+            ->join('canteen_sale_window_base_info s','a.dinner_machine_no = s.sale_window_no and a.company_id=s.company_id','left')
+            ->join('cookbook_base_info i','a.cookbook_no = i.cookbook_no and a.company_id=i.company_id','left')
             ->field('a.*,canteen_name,cookbook_name,dinner_name,sale_window_name,emp_name')
             ->where(['a.company_id'=>session('user.company_id'),'Emp_Status'=>'1'])
             ->order('');
