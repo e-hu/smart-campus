@@ -1,5 +1,5 @@
 {include file="common/header" title="首页" keywords="首页" description="" /}
-<div class="f H scroll">
+<div id="cart" class="f H scroll v-cloak">
     <!-- 年份 月份 -->
     <div class="month SSheader pr">
         <ul>
@@ -25,7 +25,7 @@
     </ul>
     <ul class="days">
         <li class="li_c" v-for="dayobject in days">
-            <template v-if="dayobject.day.getMonth()+1 == currentMonth" v-for="(index,leftobject) in leftobj">
+            <template v-if="dayobject.day.getMonth()+1 == currentMonth" v-for="(leftobject,index) in leftobj">
                 <div v-if="index == dayobject.day.getDate()" @click="cart(leftobject[0].date_str)"
                      :class=" dayobject.day.getFullYear() == new Date().getFullYear() && dayobject.day.getMonth() == new Date().getMonth() && dayobject.day.getDate() == new Date().getDate() ? 'active' : 'months'">
                     <div>{{ dayobject.day.getDate() }}</div>
@@ -100,6 +100,7 @@
     </div>
 </div>
 {include file="common/footer" /}
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 <script>
     window.onload = function () {
         document.title = '首页';
@@ -115,7 +116,7 @@
             doing: '0'
         };
         var V3 = new Vue({
-            el: 'body',
+            el: '#cart',
             data: data,
             methods: {
                 cart: function (day) {  //下单
@@ -223,9 +224,12 @@
                     });
                 }
             },
-            ready: function () {  //在vue初始化时调用
-                this.getDinnerBase();
-                this.initData(null);
+            mounted: function () {
+                this.$nextTick(function () {
+                    // 代码保证 this.$el 在 document 中
+                    this.getDinnerBase();
+                    this.initData(null);
+                })
             }
         });
     }
