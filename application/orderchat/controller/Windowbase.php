@@ -91,11 +91,11 @@ class WindowBase extends BasicAdmin
                 $this->error('窗口名称已经存在，请使用其它窗口名称！');
             }
         } else {
-            $db = Db::name('canteen_base_info')->where('company_id', session('user.company_id'))->select();
+            $db = Db::name('canteen_base_info')->where('company_id', session('user.company_id'));
             if (session('user.create_by') != '10001') {
                 $db->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
             }
-            $this->assign('canteens', $db);  //餐厅列表
+            $this->assign('canteens', $db->select());  //餐厅列表
         }
     }
 

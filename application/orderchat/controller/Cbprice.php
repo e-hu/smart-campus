@@ -70,11 +70,11 @@ class CbPrice extends BasicAdmin
      */
     protected function _data_filter(&$list)
     {
-        $canteens = Db::name('canteen_base_info')->where('company_id', session('company_id'))->column('canteen_no,canteen_name');
+        $canteens = Db::name('canteen_base_info')->where('company_id', session('company_id'));
         if (session('user.create_by') != '10001') {
             $canteens->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }
-        $this->assign('canteens', $canteens);
+        $this->assign('canteens', $canteens->column('canteen_no,canteen_name'));
 
         $dinnerbases = Db::name('dinner_base_info')->where('company_id', session('company_id'))->column('dinner_flag,dinner_name');
         $this->assign('dinnerbases', $dinnerbases);
@@ -157,9 +157,11 @@ class CbPrice extends BasicAdmin
                     ->select();
                 $data['list'] = $db;
             }
-            $canteen_info = Db::name('canteen_base_info')->where(['canteen_no' => $get['canteen_no'], 'company_id' => session('user.company_id')])->find();
+            $canteen_info = Db::name('canteen_base_info')->where(['canteen_no' => $get['canteen_no'], 'company_id' => session('user.company_id')]);
             if (session('user.create_by') != '10001') {
-                $canteen_info->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
+                $canteen_info = $canteen_info->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')])->find();
+            }else{
+                $canteen_info = $canteen_info->find();
             }
             $dinner_info = Db::name('dinner_base_info')->where(['dinner_flag' => $get['dinner_flag'], 'company_id' => session('user.company_id')])->find();
             $info['canteen_name'] = $canteen_info['canteen_name'];
@@ -249,11 +251,11 @@ class CbPrice extends BasicAdmin
      */
     public function _form_filter(&$data)
     {
-        $db = Db::name('canteen_base_info')->where('company_id', session('user.company_id'))->select();
+        $db = Db::name('canteen_base_info')->where('company_id', session('user.company_id'));
         if (session('user.create_by') != '10001') {
             $db->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }
-        $this->assign('canteens', $db);  //餐厅列表
+        $this->assign('canteens', $db->select());  //餐厅列表
         $this->assign('dinnerbases', Db::name('dinner_base_info')->where('company_id', session('user.company_id'))->select()); //菜谱列表
         if (isset($_GET['canteen_no'])) {
             $this->assign('windowbases', Db::name('canteen_sale_window_base_info')->where('company_id', session('user.company_id'))->where('canteen_no', $_GET['canteen_no'])->select());//窗口列表
