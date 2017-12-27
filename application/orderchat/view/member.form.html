@@ -43,11 +43,11 @@
         <label class="layui-form-label">ID卡编号</label>
         <div class="layui-input-block">
             {if $vo and isset($vo.Ic_Card) and !empty($vo.Ic_Card)}
-            <input type="text" disabled="" name="Ic_Card" value='{$vo.Ic_Card|default=""}'
-                   required="required" title="请输入ID卡编号" placeholder="请输入ID卡编号" class="layui-input disabled">
+            <input type="text" name="Ic_Card" value='{$vo.Ic_Card|default=""}'
+                  title="请输入ID卡编号" placeholder="请输入ID卡编号" class="layui-input disabled">
             {else}
             <input type="text" name="Ic_Card" value='{$vo.Ic_Card|default=""}' pattern="^\S{8,}$"
-                   title="请输入8位及以上的字符" required="required" placeholder="请输入ID卡编号" class="layui-input">
+                   title="请输入8位及以上的字符" placeholder="请输入ID卡编号" class="layui-input">
             {/if}
         </div>
     </div>
@@ -56,11 +56,11 @@
         <label class="layui-form-label">账号名称</label>
         <div class="layui-input-block">
             {if $vo and isset($vo.Emp_MircoMsg_Uid) and !empty($vo.Emp_MircoMsg_Uid)}
-            <input type="text" readonly="" disabled="" name="Emp_MircoMsg_Uid" value='{$vo.Emp_MircoMsg_Uid|default=""}'
-                   required="required" title="请输入账号名称" placeholder="请输入账号名称" class="layui-input disabled">
+            <input type="text" disabled="" name="Emp_MircoMsg_Uid" value='{$vo.Emp_MircoMsg_Uid|default=""}'
+                   title="请输入账号名称" placeholder="请输入账号名称" class="layui-input disabled">
             {else}
             <input type="text" name="Emp_MircoMsg_Uid" value='{$vo.Emp_MircoMsg_Uid|default=""}' pattern="^\S{6,}$"
-                   title="请输入6位及以上的字符" required="required" placeholder="请输入账号名称" class="layui-input">
+                   title="请输入6位及以上的字符"  placeholder="请输入账号名称" class="layui-input">
             {/if}
         </div>
     </div>
@@ -69,7 +69,7 @@
         <label class="layui-form-label">账号密码</label>
         <div class="layui-input-block">
             <input type="password" name="Emp_MircoMsg_Upwd" value='' pattern="^\S{6,}$"
-                   title="请输入6位及以上的字符" required="" placeholder="请输入账号密码" class="layui-input">
+                   title="请输入6位及以上的字符"  placeholder="请输入账号密码" class="layui-input">
         </div>
     </div>
     <div class="hr-line-dashed"></div>
