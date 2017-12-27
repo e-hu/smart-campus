@@ -74,7 +74,7 @@ class Member extends BasicAdmin
     public function auth()
     {
         LogService::write('订餐管理', '执行人员授权操作');
-        return $this->_form($this->table, 'auth','Emp_Id');
+        return $this->_form($this->table, 'auth', 'Emp_Id');
     }
 
     /**
@@ -128,7 +128,7 @@ class Member extends BasicAdmin
                     Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dept'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdept']);
                 }
                 unset($data['dept']);
-            }else{
+            } else {
                 Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdept'])->delete();
             }
 
@@ -142,13 +142,10 @@ class Member extends BasicAdmin
         } else {
             $this->assign('dept_infos', Db::name("dept_info")->where('company_id', session('user.company_id'))->select());
 
-            $list = Db::name('t_user_manager_dept_id')->where(['company_id'=>session('user.company_id'),'u_id'=>$_GET['Emp_Id']] )->select();
+            $list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id']])->select();
             $dept_ids = array_column($list, 'dept_id');
             $this->assign('manager', $dept_ids);
             $db = Db::name('dept_info')->where('company_id', session('user.company_id'))->select();
-            if (session('user.create_by') != '10001') {
-                $db->where('exists (select 1 from t_user_manager_dept_id b where dept_info.dept_no=b.dept_id and dept_info.company_id=b.company_id and u_id=:emp_id and dept_type=:dept_type)')->bind(['emp_id' => session('user.id'),'dept_type' => 'userdept']);
-            }
             $this->assign('depts', $db);
         }
     }
