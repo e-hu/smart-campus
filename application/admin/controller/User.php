@@ -138,6 +138,8 @@ class User extends BasicAdmin
         if ($this->request->isPost()) {
             if (isset($data['authorize']) && is_array($data['authorize'])) {
                 $data['authorize'] = join(',', $data['authorize']);
+            }else{
+                $data['authorize'] = '';
             }
             if (isset($data['canteen']) && is_array($data['canteen'])) {
                 Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['id'], 'dept_type' => 'canteen'])->delete();
@@ -145,6 +147,8 @@ class User extends BasicAdmin
                     Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['id'], 'dept_id' => $data['canteen'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'canteen']);
                 }
                 unset($data['canteen']);
+            }else{
+                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['id'], 'dept_type' => 'canteen'])->delete();
             }
             if (isset($data['id'])) {
                 unset($data['username']);
@@ -158,7 +162,7 @@ class User extends BasicAdmin
                 $this->assign('companys', Db::name('Company_list')->where('status', 1)->select());
             }
             if (session('user.company_id') != '0') {     //不是超级管理员才能选择数据权限列表
-                $list = Db::name('t_user_manager_dept_id')->where('company_id', session('user.company_id'))->select();
+                $list = Db::name('t_user_manager_dept_id')->where(['company_id'=>session('user.company_id'),'u_id'=>$_GET['id']] )->select();
                 $dept_ids = array_column($list, 'dept_id');
                 $this->assign('manager', $dept_ids);
                 $db = Db::name('canteen_base_info')->where('company_id', session('user.company_id'))->select();

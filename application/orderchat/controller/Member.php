@@ -14,7 +14,8 @@ use think\Db;
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Member extends BasicAdmin {
+class Member extends BasicAdmin
+{
 
     /**
      * 指定当前数据表
@@ -25,7 +26,8 @@ class Member extends BasicAdmin {
     /**
      * 人员列表
      */
-    public function index() {
+    public function index()
+    {
         // 设置页面标题
         $this->title = '人员信息管理';
         // 获取到所有GET参数
@@ -34,8 +36,8 @@ class Member extends BasicAdmin {
         $db = Db::name($this->table)
             ->alias('a')
             ->field('a.*,dept_name')
-            ->join('dept_info c', 'a.Dept_Id = c.dept_no','left')
-            ->where('a.company_id',session('user.company_id'));
+            ->join('dept_info c', 'a.Dept_Id = c.dept_no', 'left')
+            ->where('a.company_id', session('user.company_id'));
         // 应用搜索条件ss
         foreach (['Emp_Name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
@@ -59,15 +61,27 @@ class Member extends BasicAdmin {
      * 列表数据处理
      * @param type $list
      */
-    protected function _data_filter(&$list) {
+    protected function _data_filter(&$list)
+    {
         $tags = Db::name('dept_info')->where('company_id', session('company_id'))->column('dept_no,dept_name');
         $this->assign('tags', $tags);
     }
 
     /**
+     * 授权管理
+     * @return array|string
+     */
+    public function auth()
+    {
+        LogService::write('订餐管理', '执行人员授权操作');
+        return $this->_form($this->table, 'auth','Emp_Id');
+    }
+
+    /**
      * 人员添加
      */
-    public function add() {
+    public function add()
+    {
         LogService::write('订餐管理', '执行人员添加操作');
         $extendData = [];
         if ($this->request->isPost()) {
@@ -77,43 +91,65 @@ class Member extends BasicAdmin {
             $extendData['company_id'] = session('user.company_id');
             $extendData['Emp_Status'] = 1;
             $data = $this->request->post();
-            if($data['Emp_MircoMsg_Upwd']){
+            if ($data['Emp_MircoMsg_Upwd']) {
                 $extendData['Emp_MircoMsg_Upwd'] = md5($data['Emp_MircoMsg_Upwd']);
             }
         }
-        return $this->_form($this->table, 'form','Emp_Id','',$extendData);
+        return $this->_form($this->table, 'form', 'Emp_Id', '', $extendData);
     }
 
     /**
      * 人员编辑
      */
-    public function edit() {
+    public function edit()
+    {
         LogService::write('订餐管理', '执行人员编辑操作');
         $extendData = [];
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            if($data['Emp_MircoMsg_Upwd']){
+            if ($data['Emp_MircoMsg_Upwd']) {
                 $extendData['Emp_MircoMsg_Upwd'] = md5($data['Emp_MircoMsg_Upwd']);
             }
         }
-        return $this->_form($this->table, 'form','Emp_Id','',$extendData);
+        return $this->_form($this->table, 'form', 'Emp_Id', '', $extendData);
     }
 
     /**
      * 表单数据默认处理
      * @param array $data
      */
-    public function _form_filter(&$data) {
+    public function _form_filter(&$data)
+    {
         if ($this->request->isPost()) {
-            if (Db::name($this->table)->where('company_id', session('user.company_id'))->where(['Emp_Id'=>$data['Emp_Id'],'Emp_MircoMsg_Uid'=>array('neq','')])->find()) {
+
+            if (isset($data['dept']) && is_array($data['dept'])) {
+                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdept'])->delete();
+                foreach ($data['dept'] as $key => $val) {
+                    Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dept'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdept']);
+                }
+                unset($data['dept']);
+            }else{
+                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdept'])->delete();
+            }
+
+            if (Db::name($this->table)->where('company_id', session('user.company_id'))->where(['Emp_Id' => $data['Emp_Id'], 'Emp_MircoMsg_Uid' => array('neq', '')])->find()) {
                 unset($data['Emp_MircoMsg_Uid']);
             } elseif (isset($data['Emp_MircoMsg_Uid']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Emp_MircoMsg_Uid', $data['Emp_MircoMsg_Uid'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('账号名称已经存在，请使用其它账号名称！');
-            }elseif (isset($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
+            } elseif (isset($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('ID卡编号已经存在，请使用其它ID卡编号！');
             }
-        }else{
-            $this->assign('dept_infos', Db::name("dept_info")->where('company_id',session('user.company_id'))->select());
+        } else {
+            $this->assign('dept_infos', Db::name("dept_info")->where('company_id', session('user.company_id'))->select());
+
+            $list = Db::name('t_user_manager_dept_id')->where(['company_id'=>session('user.company_id'),'u_id'=>$_GET['Emp_Id']] )->select();
+            $dept_ids = array_column($list, 'dept_id');
+            $this->assign('manager', $dept_ids);
+            $db = Db::name('dept_info')->where('company_id', session('user.company_id'))->select();
+            if (session('user.create_by') != '10001') {
+                $db->where('exists (select 1 from t_user_manager_dept_id b where dept_info.dept_no=b.dept_id and dept_info.company_id=b.company_id and u_id=:emp_id and dept_type=:dept_type)')->bind(['emp_id' => session('user.id'),'dept_type' => 'userdept']);
+            }
+            $this->assign('depts', $db);
         }
     }
 
@@ -130,9 +166,10 @@ class Member extends BasicAdmin {
     /**
      * 人员禁用
      */
-    public function forbid() {
+    public function forbid()
+    {
         LogService::write('订餐管理', '执行人员禁用操作');
-        if (DataService::update($this->table,'','Emp_Id')) {
+        if (DataService::update($this->table, '', 'Emp_Id')) {
             $this->success("人员禁用成功！", '');
         }
         $this->error("人员禁用失败，请稍候再试！");
@@ -141,9 +178,10 @@ class Member extends BasicAdmin {
     /**
      * 人员启用
      */
-    public function resume() {
+    public function resume()
+    {
         LogService::write('订餐管理', '执行人员启用操作');
-        if (DataService::update($this->table,'','Emp_Id')) {
+        if (DataService::update($this->table, '', 'Emp_Id')) {
             $this->success("人员启用成功！", '');
         }
         $this->error("人员启用失败，请稍候再试！");
