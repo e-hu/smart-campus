@@ -10,7 +10,12 @@
         <div class="R15 T15 cf" @click="loginOut">退出</div>
     </div>
     <ul>
-
+        <li class="hl50 F_ bbd bgf" @click="aboutus()" v-show="dept_type == 'userdept'">
+            <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/部门.png"
+                                                    class="h20 lh20 mt15"></i>
+            <p class='f pl10'>部门管理</p>
+            <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
+        </li>
         <li class="hl50 F_ bbd bgf " onclick="openWin('/index/index/myInfo',{})">
             <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/info.png" class="h20 lh20 mt15"></i>
             <p class='f pl10'>个人信息</p>
@@ -91,6 +96,7 @@
         var data = {
             name: '',
             image:'',
+            dept_type:''
         };
         var V3 = new Vue({
             el: 'body',
@@ -110,6 +116,7 @@
                                 $.alert(ret.msg);
                             } else {
                                 self.name = ret.Emp_Name;
+                                self.dept_type = ret.dept_type;
                                 if(ret.Emp_image){
                                     self.image = ret.Emp_image;
                                 }else{
