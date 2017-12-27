@@ -3,10 +3,34 @@
 <script src="__PUBLIC__/static/index/js/vue.min.js"></script>
 <script src="__PUBLIC__/static/index/js/common.js"></script>
 <script src="__PUBLIC__/static/index/lib/fastclick.js"></script>
+<script src="__PUBLIC__/static/index/js/animsition.min.js"></script>
 <script>
     $(function() {
         FastClick.attach(document.body);
     });
+</script>
+<script type="text/javascript">
+    var $animsition = $('.animsition');
+
+    $(document).ready(function() {
+        $animsition.animsition({
+            onLoadEvent: false
+        })
+    });
+
+    $(window).on('load', function() {
+        $animsition.each(function(i){
+            $(this).animsition('in');
+        });
+    });
+
+    $(document).on('click', '.foo', function(event){
+        event.preventDefault();
+        var $elem = $(this);
+        var url = $elem.attr('href');
+        $animsition.animsition('out', $elem, url);
+    });
+
 </script>
 </body>
 </html>

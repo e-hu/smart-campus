@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="__PUBLIC__/static/index/css/demos.css">
     <link rel="stylesheet" href="__PUBLIC__/static/index/css/default.css">
     <link rel="stylesheet" href="__PUBLIC__/static/index/css/sdongpo.css">
+    <link rel="stylesheet" href="__PUBLIC__/static/index/css/animsition.min.css">
 </head>
 <style>
     /*消除VUE渲染过程*/
@@ -20,7 +21,7 @@
     }
 </style>
 <body class="F oh Sbgf6">
-<div id="cart" class="f H scroll" v-cloak>
+<div id="cart" class="f H scroll animsition" v-cloak>
     <!-- 年份 月份 -->
     <div class="month SSheader pr">
         <ul>
@@ -100,20 +101,20 @@
         <span class="weui-loadmore__tips">正在加载</span>
     </ul>
 </div>
-<div class="bgf btd tc f12 c9 h60 SSfooter">
-    <div class="C4" onclick="window.location.href='/index/index/index'">
+<div class="bgf btd tc f12 c9 h60 SSfooter animsition">
+    <div class="C4 foo" onclick="window.location.href='/index/index/index'">
         <div class="h30 lh30 mt5">
             <img src="__PUBLIC__/static/index/images/home-g.png" class="h30 lh30">
         </div>
         <div class=" h24 lh20 SScmenu">首页</div>
     </div>
-    <div class="C4" onclick="window.location.href='/index/index/menu'">
+    <div class="C4 foo" onclick="window.location.href='/index/index/menu'">
         <div class="h30 lh30 mt5">
             <img src="__PUBLIC__/static/index/images/menu.png" class="h30 lh30">
         </div>
         <div class="h24 lh20">今日菜谱</div>
     </div>
-    <div class="C4" onclick="window.location.href='/index/index/me'">
+    <div class="C4 foo" onclick="window.location.href='/index/index/me'">
         <div class="h30 lh30 mt5">
             <img src="__PUBLIC__/static/index/images/me.png" class="h30 lh30">
         </div>
@@ -129,9 +130,33 @@
         FastClick.attach(document.body);
     });
 </script>
+<script type="text/javascript">
+    var $animsition = $('.animsition');
+
+    $(document).ready(function() {
+        $animsition.animsition({
+            onLoadEvent: false
+        })
+    });
+
+    $(window).on('load', function() {
+        $animsition.each(function(i){
+            $(this).animsition('in');
+        });
+    });
+
+    $(document).on('click', '.foo', function(event){
+        event.preventDefault();
+        var $elem = $(this);
+        var url = $elem.attr('href');
+        $animsition.animsition('out', $elem, url);
+    });
+
+</script>
 </body>
 </html>
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="__PUBLIC__/static/index/js/animsition.min.js"></script>
 <script>
     window.onload = function () {
         document.title = '首页';
@@ -146,7 +171,7 @@
             dinnerBaseCount:'',
             doing: '0'
         };
-        var V3 = new Vue({
+        new Vue({
             el: '#cart',
             data: data,
             methods: {
@@ -265,3 +290,4 @@
         });
     }
 </script>
+
