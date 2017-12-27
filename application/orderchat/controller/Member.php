@@ -140,11 +140,12 @@ class Member extends BasicAdmin
                 $this->error('ID卡编号已经存在，请使用其它ID卡编号！');
             }
         } else {
+            if(isset( $_GET['Emp_Id'])){
+                $list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id']])->select();
+                $dept_ids = array_column($list, 'dept_id');
+                $this->assign('manager', $dept_ids);
+            }
             $this->assign('dept_infos', Db::name("dept_info")->where('company_id', session('user.company_id'))->select());
-
-            $list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id']])->select();
-            $dept_ids = array_column($list, 'dept_id');
-            $this->assign('manager', $dept_ids);
             $db = Db::name('dept_info')->where('company_id', session('user.company_id'))->select();
             $this->assign('depts', $db);
         }

@@ -44,9 +44,23 @@ class Cbdinnerinfo extends BasicAdmin
             ->where(['a.company_id' => session('user.company_id'), 'Emp_Status' => '1'])
             ->order('');
         // 应用搜索条件
-        foreach (['canteen_name'] as $key) {
+        foreach (['sale_datetime'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
-                $db->where($key, 'like', "%{$get[$key]}%");
+                $db->where('a.sale_datetime', $get[$key]);
+            }
+        }
+        if (isset($get['canteen_no']) && $get['canteen_no'] !== '') {
+            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
+            $db->where("',' +''+a.canteen_no+''+',' like :canteen_no", ['canteen_no' => "%,{$get['canteen_no']},%"]);
+        }
+        if (isset($get['dinner_flag']) && $get['dinner_flag'] !== '') {
+            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
+            $db->where('a.dinner_flag', $get['dinner_flag']);
+        }
+
+        foreach (['cookbook_name'] as $key) {
+            if (isset($get[$key]) && $get[$key] !== '') {
+                $db->where('i.cookbook_name', $get[$key]);
             }
         }
         if (session('user.create_by') != '10001') {
@@ -57,6 +71,22 @@ class Cbdinnerinfo extends BasicAdmin
     }
 
 
+    /**
+     * 列表数据处理
+     * @param type $list
+     */
+    protected function _data_filter(&$list)
+    {
+        $canteens = Db::name('canteen_base_info')->where('company_id', session('company_id'));
+        if (session('user.create_by') != '10001') {
+            $canteens->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
+        }
+        $this->assign('canteens', $canteens->column('canteen_no,canteen_name'));
+
+        $dinnerbases = Db::name('dinner_base_info')->where('company_id', session('company_id'))->column('dinner_flag,dinner_name');
+        $this->assign('dinnerbases', $dinnerbases);
+
+    }
 
 //    /**
 //     * 订单添加
