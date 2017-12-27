@@ -56,6 +56,9 @@ class CbPrice extends BasicAdmin
             //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
             $db->where('a.dinner_flag', $get['dinner_flag']);
         }
+        if (session('user.create_by') != '10001') {
+            $db->where(' exists (select 1 from t_user_manager_dept_id b where a.canteen_no=b.dept_id and a.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
+        }
         // 实例化并显示
         return parent::_list($db);
     }
@@ -68,6 +71,9 @@ class CbPrice extends BasicAdmin
     protected function _data_filter(&$list)
     {
         $canteens = Db::name('canteen_base_info')->where('company_id', session('company_id'))->column('canteen_no,canteen_name');
+        if (session('user.create_by') != '10001') {
+            $canteens->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
+        }
         $this->assign('canteens', $canteens);
 
         $dinnerbases = Db::name('dinner_base_info')->where('company_id', session('company_id'))->column('dinner_flag,dinner_name');
@@ -152,6 +158,9 @@ class CbPrice extends BasicAdmin
                 $data['list'] = $db;
             }
             $canteen_info = Db::name('canteen_base_info')->where(['canteen_no' => $get['canteen_no'], 'company_id' => session('user.company_id')])->find();
+            if (session('user.create_by') != '10001') {
+                $canteen_info->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
+            }
             $dinner_info = Db::name('dinner_base_info')->where(['dinner_flag' => $get['dinner_flag'], 'company_id' => session('user.company_id')])->find();
             $info['canteen_name'] = $canteen_info['canteen_name'];
             $info['dinner_name'] = $dinner_info['dinner_name'];
@@ -202,6 +211,9 @@ class CbPrice extends BasicAdmin
             //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
             $db->where('a.dinner_flag', $get['dinner_flag']);
         }
+        if (session('user.create_by') != '10001') {
+            $db->where(' exists (select 1 from t_user_manager_dept_id b where a.canteen_no=b.dept_id and a.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
+        }
         // 实例化并显示
         return parent::_list($db);
     }
@@ -237,11 +249,15 @@ class CbPrice extends BasicAdmin
      */
     public function _form_filter(&$data)
     {
-        $this->assign('canteens', Db::name('canteen_base_info')->where('company_id', session('user.company_id'))->select());  //餐厅列表
+        $db = Db::name('canteen_base_info')->where('company_id', session('user.company_id'))->select();
+        if (session('user.create_by') != '10001') {
+            $db->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
+        }
+        $this->assign('canteens', $db);  //餐厅列表
         $this->assign('dinnerbases', Db::name('dinner_base_info')->where('company_id', session('user.company_id'))->select()); //菜谱列表
-        if(isset($_GET['canteen_no'])){
+        if (isset($_GET['canteen_no'])) {
             $this->assign('windowbases', Db::name('canteen_sale_window_base_info')->where('company_id', session('user.company_id'))->where('canteen_no', $_GET['canteen_no'])->select());//窗口列表
-        }else{
+        } else {
             $this->assign('windowbases', Db::name('canteen_sale_window_base_info')->where('company_id', session('user.company_id'))->select());//窗口列表
 
         }

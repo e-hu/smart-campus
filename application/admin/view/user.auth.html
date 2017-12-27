@@ -4,9 +4,11 @@
         <label class="layui-form-label">用户账号</label>
         <div class="layui-input-block">
             {if $vo and $vo.username}
-            <input type="text" readonly="" disabled="" name="username" value='{$vo.username|default=""}' required="required" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input disabled">
+            <input type="text" readonly="" disabled="" name="username" value='{$vo.username|default=""}'
+                   required="required" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input disabled">
             {else}
-            <input type="text" name="username" value='{$vo.username|default=""}' required="required" title="请输入用户名称" placeholder="请输入用户名称" class="layui-input">
+            <input type="text" name="username" value='{$vo.username|default=""}' required="required" title="请输入用户名称"
+                   placeholder="请输入用户名称" class="layui-input">
             {/if}
         </div>
     </div>
@@ -23,6 +25,22 @@
             {/foreach}
         </div>
     </div>
+
+    {if $canteens}
+    <div class="layui-form-item">
+        <label class="layui-form-label">数据授权</label>
+        <div class="layui-input-block">
+            {foreach $canteens as $canteen}
+            {if in_array($canteen['canteen_no'],$manager)}
+            <input type="checkbox" checked name="canteen[]" value="{$canteen.canteen_no}"
+                   title="{$canteen.canteen_name}">
+            {else}
+            <input type="checkbox" name="canteen[]" value="{$canteen.canteen_no}" title="{$canteen.canteen_name}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    {/if}
 
     <div class="hr-line-dashed"></div>
 

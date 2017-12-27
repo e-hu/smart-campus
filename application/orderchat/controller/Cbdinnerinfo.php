@@ -14,7 +14,8 @@ use think\Db;
  * @author Anyon <zoujingli@qq.com>
  * @date 2017/02/15 18:12
  */
-class Cbdinnerinfo extends BasicAdmin {
+class Cbdinnerinfo extends BasicAdmin
+{
 
     /**
      * 指定当前数据表
@@ -25,7 +26,8 @@ class Cbdinnerinfo extends BasicAdmin {
     /**
      * 订单列表
      */
-    public function index() {
+    public function index()
+    {
         // 设置页面标题
         $this->title = '订单列表管理';
         // 获取到所有GET参数
@@ -33,19 +35,22 @@ class Cbdinnerinfo extends BasicAdmin {
         // 实例Query对象
         $db = Db::name($this->table)
             ->alias('a')
-            ->join('Employee_list e','a.emp_id = e.emp_id and a.company_id = e.company_id','left')
-            ->join('canteen_base_info c','a.canteen_no = c.canteen_no and a.company_id = c.company_id','left')
-            ->join('dinner_base_info b','a.dinner_flag = b.dinner_flag and a.company_id=b.company_id','left')
-            ->join('canteen_sale_window_base_info s','a.dinner_machine_no = s.sale_window_no and a.company_id=s.company_id','left')
-            ->join('cookbook_base_info i','a.cookbook_no = i.cookbook_no and a.company_id=i.company_id','left')
+            ->join('Employee_list e', 'a.emp_id = e.emp_id and a.company_id = e.company_id', 'left')
+            ->join('canteen_base_info c', 'a.canteen_no = c.canteen_no and a.company_id = c.company_id', 'left')
+            ->join('dinner_base_info b', 'a.dinner_flag = b.dinner_flag and a.company_id=b.company_id', 'left')
+            ->join('canteen_sale_window_base_info s', 'a.dinner_machine_no = s.sale_window_no and a.company_id=s.company_id', 'left')
+            ->join('cookbook_base_info i', 'a.cookbook_no = i.cookbook_no and a.company_id=i.company_id', 'left')
             ->field('a.*,canteen_name,cookbook_name,dinner_name,sale_window_name,emp_name')
-            ->where(['a.company_id'=>session('user.company_id'),'Emp_Status'=>'1'])
+            ->where(['a.company_id' => session('user.company_id'), 'Emp_Status' => '1'])
             ->order('');
         // 应用搜索条件
         foreach (['canteen_name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
                 $db->where($key, 'like', "%{$get[$key]}%");
             }
+        }
+        if (session('user.create_by') != '10001') {
+            $db->where(' exists (select 1 from t_user_manager_dept_id b where a.canteen_no=b.dept_id and a.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }
         // 实例化并显示
         return parent::_list($db);
