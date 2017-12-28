@@ -46,7 +46,7 @@ class Cbdinnerinfo extends BasicAdmin
         // 应用搜索条件
         foreach (['sale_datetime'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
-                $db->where('a.sale_datetime', $get[$key]);
+                $db->where('a.dinner_datetime', $get[$key]);
             }
         }
         if (isset($get['canteen_no']) && $get['canteen_no'] !== '') {
