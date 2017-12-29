@@ -18,7 +18,7 @@
     <div v-else class="W H scroll">
         <ul class="bgf clear" v-for="item in orderDeptList">
             <li class="hl50 F_ bbd bgf tc fr6" @click="deptMember(item.sale_datetime,item.dinner_flag,item.dept_id)">
-                <p class="f C2">{{item.sale_datetime}}</p>
+                <p class="f C2">{{item.datetime}}</p>
                 <p class="f C2">{{item.dinner_name}}</p>
                 <p class="f C2">{{item.dept_name}}</p>
                 <p class="f C2">{{item.emp_count}}</p>
