@@ -2,12 +2,12 @@
 <div class="f H oh animsition">
     <ul class="bgf clear">
         <li class="hl50 F_ bbd bgf tc bgdefault cf">
-            <p class='f pl10 C2'>日期</p>
-            <p class='f pl10 C2'>餐次</p>
-            <p class='f pl10 C2'>部门</p>
-            <p class='f pl10 C2'>总人数</p>
-            <p class='f pl10 C2'>已订人数</p>
-            <p class='f pl10 C2'>未订人数</p>
+            <p class='f C2'>日期</p>
+            <p class='f C2'>餐次</p>
+            <p class='f C2'>部门</p>
+            <p class='f C2'>总人数</p>
+            <p class='f C2'>已订人数</p>
+            <p class='f C2'>未订人数</p>
         </li>
     </ul>
     <div class="tc pt50" v-if="orderGetCount == '0'">
@@ -17,13 +17,13 @@
     </div>
     <div v-else class="W H scroll">
         <ul class="bgf clear" v-for="item in orderDeptList">
-            <li class="hl50 F_ bbd bgf tc fr5" @click="deptMember(item.sale_datetime,item.dinner_flag,item.dept_id)">
-                <p class="f pl10 C2">{{item.datetime}}</p>
-                <p class="f pl10 C2">{{item.dinner_name}}</p>
-                <p class="f pl10 C2">{{item.dept_name}}</p>
-                <p class="f pl10 C2">{{item.emp_count}}</p>
-                <p class="f pl10 C2">{{item.dinner_count}}</p>
-                <p class="f pl10 C2">{{item.dinner_remain_count}}</p>
+            <li class="hl50 F_ bbd bgf tc fr6" @click="deptMember(item.sale_datetime,item.dinner_flag,item.dept_id)">
+                <p class="f C2">{{item.datetime}}</p>
+                <p class="f C2">{{item.dinner_name}}</p>
+                <p class="f C2">{{item.dept_name}}</p>
+                <p class="f C2">{{item.emp_count}}</p>
+                <p class="f C2">{{item.dinner_count}}</p>
+                <p class="f C2">{{item.dinner_remain_count}}</p>
             </li>
         </ul>
     </div>
