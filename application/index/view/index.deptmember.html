@@ -19,7 +19,7 @@
     </div>
     <div v-else class="W H scroll">
         <ul class="bgf clear" v-for="item in memberDeptList">
-            <li class="hl50 F_ bbd bgf tc" @click="memberCart(item.sale_datetime,item.emp_id)">
+            <li class="hl50 F_ bbd bgf tc fr5" @click="memberCart(item.sale_datetime,item.emp_id)">
                 <p class="f pl10 C2">{{item.emp_name}}</p>
                 <p class="f pl10 C2">{{item.default_tel}}</p>
                 <p class="f pl10 C2">{{item.account_remain_money}}</p>
