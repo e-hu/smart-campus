@@ -42,10 +42,9 @@ class CbPrice extends BasicAdmin
             ->where('a.company_id', session('user.company_id'))
             ->order('sale_datetime desc');
 
-        foreach (['sale_datetime'] as $key) {
-            if (isset($get[$key]) && $get[$key] !== '') {
-                $db->where('a.sale_datetime', $get[$key]);
-            }
+        if (isset($get['sale_datetime']) && $get['sale_datetime'] !== '') {
+            list($start, $end) = explode('-', str_replace(' ', '', $get['sale_datetime']));
+            $db->whereBetween('a.sale_datetime', ["{$start} 00:00:00", "{$end} 23:59:59"]);
         }
 
         if (isset($get['canteen_no']) && $get['canteen_no'] !== '') {
@@ -199,10 +198,9 @@ class CbPrice extends BasicAdmin
             ->where(['a.company_id' => session('user.company_id'), 'a.status' => '1'])
             ->order('sale_datetime desc,canteen_no,dinner_flag,dinner_count desc');
 
-        foreach (['sale_datetime'] as $key) {
-            if (isset($get[$key]) && $get[$key] !== '') {
-                $db->where('a.sale_datetime', $get[$key]);
-            }
+        if (isset($get['sale_datetime']) && $get['sale_datetime'] !== '') {
+            list($start, $end) = explode('-', str_replace(' ', '', $get['sale_datetime']));
+            $db->whereBetween('a.sale_datetime', ["{$start} 00:00:00", "{$end} 23:59:59"]);
         }
 
         if (isset($get['canteen_no']) && $get['canteen_no'] !== '') {

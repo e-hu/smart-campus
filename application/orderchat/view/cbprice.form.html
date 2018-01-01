@@ -35,8 +35,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">选择日期</label>
         <div class="layui-input-block">
-            <input class="layui-input" required title="请选择时间" name="date_str" id="date_str"
-                   onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})">
+            <input name="date_str" id="date_str"
+                   placeholder="请选择时间" title="请选择时间" class="layui-input" required>
         </div>
     </div>
     <div class="layui-form-item">
@@ -95,7 +95,9 @@
         </table>
     </div>
 </form>
-
+<script>
+    window.laydate.render({range: false, elem: '#date_str', format: 'yyyy/MM/dd'});
+</script>
 
 <script>
     function generate() {
@@ -105,6 +107,10 @@
         }
         if ($('#dinner_flag').val() === '0') {
             layer.msg('请重新选择正确餐次');
+            return;
+        }
+        if ($('#date_str').val() === '') {
+            layer.msg('请重新选择正确时间');
             return;
         }
         $.ajax({
@@ -215,12 +221,4 @@
         });
 
     });
-    layui.use(['form', 'laydate'], function () {
-        var form = layui.form();
-        form.verify({
-            //我们既支持上述函数式的方式，也支持下述数组的形式
-            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
-        });
-    });
-
 </script>

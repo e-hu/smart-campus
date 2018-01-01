@@ -14,11 +14,8 @@
         </div>
         <div class="col-xs-3">
             <div class="form-group">
-                <input class="layui-input" title="请选择时间" value="{$Think.get.sale_datetime|default=''}"
-                       placeholder="请选择时间" name="sale_datetime" id="sale_datetime"
-                       onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})" style="
-    height: 30px;
-">
+                <input name="dinner_datetime" id="dinner_datetime" value="{$Think.get.dinner_datetime|default=''}"
+                       placeholder="请选择时间" class="input-sm form-control">
             </div>
         </div>
         <div class="col-xs-3">
@@ -141,12 +138,6 @@
     {if isset($page)}<p>{$page}</p>{/if}
 </form>
 <script>
-    layui.use(['form', 'laydate'], function () {
-        var form = layui.form();
-        form.verify({
-            //我们既支持上述函数式的方式，也支持下述数组的形式
-            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
-        });
-    });
+    window.laydate.render({range: true, elem: '#dinner_datetime', format: 'yyyy/MM/dd'});
 </script>
 {/block}

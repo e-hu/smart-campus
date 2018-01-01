@@ -44,10 +44,9 @@ class Cbdinnerinfo extends BasicAdmin
             ->where(['a.company_id' => session('user.company_id'), 'Emp_Status' => '1'])
             ->order('');
         // 应用搜索条件
-        foreach (['sale_datetime'] as $key) {
-            if (isset($get[$key]) && $get[$key] !== '') {
-                $db->where('a.dinner_datetime', $get[$key]);
-            }
+        if (isset($get['dinner_datetime']) && $get['dinner_datetime'] !== '') {
+            list($start, $end) = explode('-', str_replace(' ', '', $get['dinner_datetime']));
+            $db->whereBetween('a.dinner_datetime', ["{$start} 00:00:00", "{$end} 23:59:59"]);
         }
         if (isset($get['canteen_no']) && $get['canteen_no'] !== '') {
             //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数

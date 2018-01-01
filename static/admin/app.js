@@ -64,16 +64,15 @@ require.config({
     urlArgs: "ver=" + (new Date()).getTime()
 });
 
-window.WEB_SOCKET_SWF_LOCATION = baseUrl + "../plugs/socket/WebSocketMain.swf";
-window.UEDITOR_HOME_URL = (window.ROOT_URL ? window.ROOT_URL + '/static/' : baseUrl) + 'plugs/ueditor/';
-window.LAYDATE_PATH = baseUrl + '../plugs/layui/laydate/';
-
 // UI框架初始化
-require(['pace', 'jquery', 'layui', 'bootstrap', 'jquery.cookies'], function () {
-    layui.config({dir: baseUrl + '../plugs/layui/'});
-    layui.use(['layer', 'form'], function () {
-        window.layer = layui.layer;
-        window.form = layui.form();
-        require(['admin.listen', 'ckeditor']);
+PageLayout.call(this);
+function PageLayout(callback, custom, basic) {
+    window.WEB_SOCKET_SWF_LOCATION = baseUrl + "../plugs/socket/WebSocketMain.swf";
+    require(basic || ['pace', 'jquery', 'layui', 'bootstrap'], function () {
+        layui.config({dir: baseUrl + '../plugs/layui/'});
+        layui.use(['layer', 'form', 'laydate'], function () {
+            window.layer = layui.layer, window.form = layui.form, window.laydate = layui.laydate;
+            require(custom || ['admin.listen', 'ckeditor'], callback || false);
+        });
     });
-});
+}
