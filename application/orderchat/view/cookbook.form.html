@@ -61,9 +61,11 @@
         <label class="layui-form-label label-required">开始时间</label>
         <div class="layui-inline">
             {if $vo and isset($vo.start_datetime)}
-            <input class="layui-input" required  title="请输入开始时间" name="start_datetime" value="{$vo.start_datetime}" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})">
+            <input name="start_datetime" id="start_datetime" value="{$vo.start_datetime}"
+                   placeholder="请选择时间" class="input-sm form-control">
             {else}
-            <input class="layui-input" required  title="请输入开始时间" name="start_datetime" onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD'})">
+            <input name="start_datetime" id="start_datetime"
+                   placeholder="请选择时间" class="input-sm form-control">
             {/if}
         </div>
     </div>
@@ -101,11 +103,5 @@
     <script>window.form.render();</script>
 </form>
 <script>
-    layui.use(['form','laydate'], function(){
-        var form = layui.form();
-        form.verify({
-            //我们既支持上述函数式的方式，也支持下述数组的形式
-            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
-        });
-    });
+    window.laydate.render({range: true, elem: '#start_datetime', format: 'yyyy/MM/dd'});
 </script>
