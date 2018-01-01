@@ -79,8 +79,7 @@
             <td class='text-center nowrap'>
                 {if auth("$classuri/editGenerate")}
                 <span class="text-explode">|</span>
-                <a data-open='{:url("$classuri/editGenerate")}?canteen_no={$vo.canteen_no}&dinner_flag={$vo.dinner_flag}&sale_datetime={:date('
-                   Y-m-d',strtotime($vo['sale_datetime']))}' href="javascript:void(0)">编辑</a>
+                <a data-open='{:url("$classuri/editGenerate")}?canteen_no={$vo.canteen_no}&dinner_flag={$vo.dinner_flag}&sale_datetime={:date('Y-m-d',strtotime($vo['sale_datetime']))}' href="javascript:void(0)">编辑</a>
                 {/if}
                 <!--{if auth("$classuri/savePosition")}-->
                 <!--<span class="text-explode">|</span>-->
