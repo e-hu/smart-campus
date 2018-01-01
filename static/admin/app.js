@@ -43,10 +43,11 @@ require.config({
         'zeroclipboard': ['../plugs/ueditor/third-party/zeroclipboard/ZeroClipboard.min'],
         'jquery.cookies': ['../plugs/jquery/jquery.cookie'],
         'jquery.masonry': ['../plugs/jquery/masonry.min'],
-
+        'ckeditor': ['../plugs/ckeditor/ckeditor'],
     },
     shim: {
         'layui': {deps: ['jquery']},
+        'ckeditor': {deps: ['jquery']},
         'laydate': {deps: ['jquery']},
         'bootstrap': {deps: ['jquery']},
         'pcasunzips': {deps: ['jquery']},
@@ -73,6 +74,6 @@ require(['pace', 'jquery', 'layui', 'bootstrap', 'jquery.cookies'], function () 
     layui.use(['layer', 'form'], function () {
         window.layer = layui.layer;
         window.form = layui.form();
-        require(['admin.listen']);
+        require(['admin.listen', 'ckeditor']);
     });
 });
