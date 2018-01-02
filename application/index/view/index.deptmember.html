@@ -2,7 +2,7 @@
 <div class="f H oh animsition">
     <ul class="bgf clear">
         <li class="hl50 F_ bbd bgf">
-            <p class='f pl10'>2017-11-12 信息部 早餐</p>
+            <p class='f pl10'>{{sale_datetime}} {{dept_name}} {{dinner_name}}</p>
         </li>
     </ul>
     <ul class="bgf clear">
@@ -34,7 +34,10 @@
         document.title = '部门人员管理';
         var data = {
             memberDeptList: [],
-            memberGetCount: '0'
+            memberGetCount: '0',
+            sale_datetime: getUrlParam('sale_datetime'),
+            dept_name: '',
+            dinner_name: ''
         };
         new Vue({
             el: 'body',
@@ -58,8 +61,10 @@
                             //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
                         },
                         success: function (ret) {
-                            self.memberDeptList = ret;
+                            self.memberDeptList = ret.memberDeptList;
                             self.memberGetCount = self.memberDeptList.length;
+                            self.dept_name = ret.dept_name;
+                            self.dinner_name = ret.dinner_name;
                         }
                     });
                 }
