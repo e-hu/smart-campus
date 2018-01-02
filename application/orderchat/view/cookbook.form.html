@@ -61,7 +61,7 @@
         <label class="layui-form-label label-required">开始时间</label>
         <div class="layui-inline">
             {if $vo and isset($vo.start_datetime)}
-            <input name="start_datetime" id="start_datetime" value="{$vo.start_datetime}"
+            <input name="start_datetime" id="start_datetime" value="{:date('Y-m-d',strtotime($vo['start_datetime']))}"
                    placeholder="请选择时间" class="input-sm form-control">
             {else}
             <input name="start_datetime" id="start_datetime"
@@ -103,5 +103,5 @@
     <script>window.form.render();</script>
 </form>
 <script>
-    window.laydate.render({range: false, elem: '#start_datetime', format: 'yyyy/MM/dd'});
+    window.laydate.render({range: false, elem: '#start_datetime', format: 'yyyy-MM-dd'});
 </script>
