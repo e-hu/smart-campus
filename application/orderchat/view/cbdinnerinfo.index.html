@@ -80,6 +80,8 @@
             <th class='text-center'>就餐窗机号</th>
             <th class='text-center'>订餐状态</th>
             <th class='text-center'>结算方式</th>
+            <th class='text-center'>取餐方式</th>
+            <th class='text-center'>下单方式</th>
             <!--<th class='text-center'>操作</th>-->
         </tr>
         </thead>
@@ -115,6 +117,22 @@
             {else}
             <td class='text-center'>无</td>
             {/if}
+            {if $vo.dinner_get_type == '0'}
+            <td class='text-center'>套餐取餐</td>
+            {elseif $vo.dinner_get_type == '1'}
+            <td class='text-center'>现金购买</td>
+            {else}
+            <td class='text-center'>无</td>
+            {/if}
+            {if $vo.dinner_start_type == '1'}
+            <td class='text-center'>自己订餐</td>
+            {elseif $vo.dinner_start_type == '2'}
+            <td class='text-center'>部门指定</td>
+            {elseif $vo.dinner_start_type == '3'}
+            <td class='text-center'>系统自动分配</td>
+            {else}
+            <td class='text-center'>无</td>
+            {/if}
             <!--<td class='text-center nowrap'>-->
             <!--{if auth("$classuri/edit")}-->
             <!--<span class="text-explode">|</span>-->
@@ -130,7 +148,7 @@
         {/foreach}
         {if empty($list)}
         <tr>
-            <td colspan="11" style="text-align:center">没 有 记 录 了 哦 !</td>
+            <td colspan="13" style="text-align:center">没 有 记 录 了 哦 !</td>
         </tr>
         {/if}
         </tbody>
