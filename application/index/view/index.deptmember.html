@@ -19,7 +19,7 @@
     </div>
     <div v-else class="W H scroll">
         <ul class="bgf clear" v-for="item in memberDeptList">
-            <li class="hl50 F_ bbd bgf tc fr5" @click="memberCart(item.sale_datetime,item.emp_id)">
+            <li class="hl50 F_ bbd bgf tc fr5" @click="deptCart(item.sale_datetime,item.emp_id)">
                 <p class="f C4">{{item.emp_name}}</p>
                 <p class="f C4">{{item.default_tel}}</p>
                 <p class="f C4">{{item.account_remain_money}}</p>
@@ -43,8 +43,8 @@
             el: 'body',
             data: data,
             methods: {
-                memberCart: function (sale_datetime,emp_id) {  //跳转函数
-                    openWin('/index/index/memberCart', {sale_datetime: sale_datetime,emp_id:emp_id});
+                deptCart: function (sale_datetime,emp_id) {  //跳转函数
+                    openWin('/index/index/deptCart', {sale_datetime: sale_datetime,emp_id:emp_id});
                 },
                 initDeptObj: function () {
                     var self = this;

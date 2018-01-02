@@ -10,6 +10,11 @@ var SCapiDic = {
     cartList: '/index/mallapi/cartList'+ran,
     addCart: '/index/mallapi/addCart'+ran,
     delCart: '/index/mallapi/delCart'+ran,
+    /*部门菜谱接口*/
+    deptCartProductList: '/index/mallapi/deptCartProductList'+ran,
+    deptCartList: '/index/mallapi/deptCartList'+ran,
+    deptAddCart: '/index/mallapi/deptAddCart'+ran,
+    deptDelCart: '/index/mallapi/deptDelCart'+ran,
     /*订单接口*/
     orderList: '/index/mallapi/orderList'+ran,
     orderProductList: '/index/mallapi/orderProductList'+ran,
