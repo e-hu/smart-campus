@@ -159,7 +159,7 @@ class CbPrice extends BasicAdmin
             $canteen_info = Db::name('canteen_base_info')->where(['canteen_no' => $get['canteen_no'], 'company_id' => session('user.company_id')]);
             if (session('user.create_by') != '10001') {
                 $canteen_info = $canteen_info->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')])->find();
-            }else{
+            } else {
                 $canteen_info = $canteen_info->find();
             }
             $dinner_info = Db::name('dinner_base_info')->where(['dinner_flag' => $get['dinner_flag'], 'company_id' => session('user.company_id')])->find();
@@ -195,7 +195,7 @@ class CbPrice extends BasicAdmin
             ->join('emp_cookbook_dinner_info d', 'a.cookbook_no = d.cookbook_no and a.canteen_no = d.canteen_no and a.dinner_flag = d.dinner_flag and a.sale_datetime = d.dinner_datetime and a.company_id = d.company_id ', 'left')
             ->group('a.sale_datetime,a.canteen_no,a.cookbook_no,a.dinner_flag,canteen_name,cookbook_name,dinner_name,position_id,sale_window_name')
             ->having('count(dinner_status)>0')
-            ->where(['a.company_id' => session('user.company_id'), 'a.status' => '1'])
+            ->where(['a.company_id' => session('user.company_id'), 'a.status' => '1','a.sale_datetime'=>array('egt',date("Y-m-d"))])
             ->order('sale_datetime desc,canteen_no,dinner_flag,dinner_count desc');
 
         if (isset($get['sale_datetime']) && $get['sale_datetime'] !== '') {
@@ -226,18 +226,32 @@ class CbPrice extends BasicAdmin
     {
         LogService::write('订餐管理', '执行售卖窗口绑定操作');
         if ($this->request->isPost()) {
-            $extendData = [];
-            $extendData['company_id'] = session('user.company_id');
-            $where = [];
-            if (isset($_POST['id'])) {
-                $where['id'] = $_POST['id'];
+            $data = [];
+            $data['canteen_no'] = $_POST['canteen_no'];
+            $data['cookbook_no'] = $_POST['cookbook_no'];
+            $data['dinner_flag'] = $_POST['dinner_flag'];
+            $data['sale_datetime'] = $_POST['sale_datetime'];
+            $data['company_id'] = session('user.company_id');
+            Db::name('canteen_cookbook_window_position')->where($data)->delete();
+            if (isset($_POST['windows_no']) && is_array($_POST['windows_no'])) {
+                foreach ($_POST['windows_no'] as $key => $val) {
+                    $data['windows_no'] =$val;
+                    $data['position_id'] =$_POST['position_id'][$val];
+                    Db::name('canteen_cookbook_window_position')->insert($data);
+                }
             }
-            return $this->_form('canteen_cookbook_window_position', 'form', 'id', $where, $extendData);
+            $this->success('恭喜, 数据保存成功!', '');
         }
         $get = $this->request->get();
-        $info = Db::name('canteen_cookbook_window_position')
+        $list = Db::name('canteen_cookbook_window_position')
             ->where(['canteen_no' => $get['canteen_no'], 'sale_datetime' => $get['sale_datetime'], 'dinner_flag' => $get['dinner_flag'], 'cookbook_no' => $get['cookbook_no']])
-            ->find();
+            ->select();
+        $info = [];
+        foreach ($list as $key => $val) {
+            $info['windows_no'][$val['windows_no']] = $val['windows_no'];
+            $info['position_id'][$val['windows_no']] = $val['position_id'];
+        }
+        //print_r($info);exit;
         $this->assign('info', $info);
         $this->assign('data', $get);
         return $this->_form('canteen_cookbook_window_position', 'positionform');
@@ -249,17 +263,22 @@ class CbPrice extends BasicAdmin
      */
     public function _form_filter(&$data)
     {
-        $db = Db::name('canteen_base_info')->where('company_id', session('user.company_id'));
+        $canteens = Db::name('canteen_base_info')->where('canteen_base_info.company_id', session('user.company_id'));
         if (session('user.create_by') != '10001') {
-            $db->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
+            $canteens->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }
-        $this->assign('canteens', $db->select());  //餐厅列表
-        $this->assign('dinnerbases', Db::name('dinner_base_info')->where('company_id', session('user.company_id'))->select()); //菜谱列表
-        if (isset($_GET['canteen_no'])) {
-            $this->assign('windowbases', Db::name('canteen_sale_window_base_info')->where('company_id', session('user.company_id'))->where('canteen_no', $_GET['canteen_no'])->select());//窗口列表
-        } else {
-            $this->assign('windowbases', Db::name('canteen_sale_window_base_info')->where('company_id', session('user.company_id'))->select());//窗口列表
+        $this->assign('canteens', $canteens->select());  //餐厅列表
 
+        $dinnerBases = Db::name('dinner_base_info')
+            ->where('company_id', session('user.company_id'));
+        $this->assign('dinnerbases', $dinnerBases->select()); //菜谱列表
+
+        $windowBases = Db::name('canteen_sale_window_base_info')
+            ->where('company_id', session('user.company_id'));
+        if (isset($_GET['canteen_no'])) {
+            $this->assign('windowbases', $windowBases->where('canteen_no', $_GET['canteen_no'])->select());//窗口列表
+        } else {
+            $this->assign('windowbases', $windowBases->select());//窗口列表
         }
     }
 

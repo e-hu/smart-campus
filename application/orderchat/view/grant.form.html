@@ -16,8 +16,8 @@
     <div class="layui-form-item">
         <label class="layui-form-label">选择月份</label>
         <div class="layui-input-block">
-            <input class="layui-input" required title="请选择月份" name="grant_month" id="grant_month" value='{$vo.grant_month|default=""}'
-                   onclick="layui.laydate({elem: this, istime: false, format: 'YYYY-MM'})">
+            <input name="grant_month" id="grant_month" value="{$vo.grant_month|default=''}"
+                   placeholder="请选择月份" class="layui-input" required>
         </div>
     </div>
 
@@ -49,13 +49,8 @@
     </div>
 
     <script>window.form.render();</script>
+    <script>
+        window.laydate.render({range: false, elem: '#grant_month', format: 'yyyy-MM'});
+    </script>
 </form>
-<script>
-    layui.use(['form', 'laydate'], function () {
-        var form = layui.form();
-        form.verify({
-            //我们既支持上述函数式的方式，也支持下述数组的形式
-            //数组的两个值分别代表：[正则匹配、匹配不符时的提示文字]
-        });
-    });
-</script>
+
