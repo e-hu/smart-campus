@@ -7,48 +7,22 @@
     <div class="row">
         <div class="col-xs-3">
             <div class="form-group">
-                <input type="text" name="canteen_name" value="{$Think.get.canteen_name|default=''}" placeholder="真实姓名"
-                       class="input-sm form-control">
+                <select name="report_id" class="input-sm form-control">
+                    <option value="">- 统计列表 -</option>
+                    <!--{foreach $reportTypes as $key=>$reportType}-->
+                    <!--{if $Think.get.report_id eq $key}-->
+                    <option selected value="{$key}">{$reportType.report_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$reportType.report_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
             </div>
         </div>
         <div class="col-xs-4">
             <div class="form-group">
                 <input name="dinner_datetime" id="dinner_datetime" value="{$Think.get.dinner_datetime|default=''}"
                        placeholder="请选择时间" class="input-sm form-control">
-            </div>
-        </div>
-        <div class="col-xs-3">
-            <div class="form-group">
-                <select name="canteen_no" class="input-sm form-control">
-                    <option value="">- 餐厅列表 -</option>
-                    <!--{foreach $canteens as $key=>$canteen}-->
-                    <!--{if $Think.get.canteen_no eq $key}-->
-                    <option selected value="{$key}">{$canteen.canteen_name}</option>
-                    <!--{else}-->
-                    <option value="{$key}">{$canteen.canteen_name}</option>
-                    <!--{/if}-->
-                    <!--{/foreach}-->
-                </select>
-            </div>
-        </div>
-        <div class="col-xs-3">
-            <div class="form-group">
-                <select name="dinner_flag" class="input-sm form-control">
-                    <option value="">- 餐次列表 -</option>
-                    <!--{foreach $dinnerbases as $key=>$dinnerbase}-->
-                    <!--{if $Think.get.dinner_flag eq $key}-->
-                    <option selected value="{$key}">{$dinnerbase.dinner_name}</option>
-                    <!--{else}-->
-                    <option value="{$key}">{$dinnerbase.dinner_name}</option>
-                    <!--{/if}-->
-                    <!--{/foreach}-->
-                </select>
-            </div>
-        </div>
-        <div class="col-xs-3">
-            <div class="form-group">
-                <input type="text" name="cookbook_name" value="{$Think.get.cookbook_name|default=''}" placeholder="菜品名称"
-                       class="input-sm form-control">
             </div>
         </div>
 
@@ -71,21 +45,17 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th class='text-center'>真实名称</th>
-            <th class='text-center'>就餐日期</th>
-            <th class='text-center'>餐厅名称</th>
-            <th class='text-center'>餐次</th>
-            <th class='text-center'>菜品名称</th>
+        {foreach $name as $key=>$vo}
+            <th class='text-center'>{$vo}</th>
+        {/foreach}
         </tr>
         </thead>
         <tbody>
         {foreach $list as $key=>$vo}
         <tr>
-            <td class='text-center'>{$vo.emp_name}</td>
-            <td class='text-center'>{:date('Y-m-d',strtotime($vo['dinner_datetime']))}</td>
-            <td class='text-center'>{$vo.canteen_name}</td>
-            <td class='text-center'>{$vo.dinner_name}</td>
-            <td class='text-center'>{$vo.cookbook_name}</td>
+            {foreach $name as $keyword=>$volist}
+            <td class='text-center'><?php echo $vo[$volist] ?></td>
+            {/foreach}
         </tr>
         {/foreach}
         {if empty($list)}
