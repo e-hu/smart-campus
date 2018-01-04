@@ -17,9 +17,10 @@
                 <div class="bgf H3 W">
                     <div class="H W tc" style="display:table;line-height: .8rem;">
                         <div class="W H ptcheckinfo">
-                        <span>{{item.canteen_name}}</span><span class="pl10">{{item.dinner_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span class="c9">￥<span class="SScorange">{{item.cook_money}}</span>元/份</span>
+                            <span>{{item.canteen_name}}</span><span class="pl10">{{item.dinner_name}}</span><br><span>{{item.cookbook_name}}</span><br/>
+                            <span class="c9">￥<span class="SScorange">{{item.cook_money}}</span>元/份</span>
                         </div>
-                        </div>
+                    </div>
                 </div>
             </li>
         </ul>
@@ -50,10 +51,10 @@
 <script type="text/javascript">
     window.onload = function () {
         document.title = '今日菜谱';
-        var d=new Date();
-        var day=d.getDate();
-        var month=d.getMonth() + 1;
-        var year=d.getFullYear();
+        var d = new Date();
+        var day = d.getDate();
+        var month = d.getMonth() + 1;
+        var year = d.getFullYear();
         var data = {
             day: year + "-" + month + "-" + day,
             cartProductList: [],
@@ -62,7 +63,7 @@
             cart_priceId: '',
             price_total: '',
             price_num: '',
-            dinner_status:''
+            dinner_status: ''
         };
         var V3 = new Vue({
                 el: 'body',

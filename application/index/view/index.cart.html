@@ -24,19 +24,20 @@
                 <div class="bgf H3 W">
                     <div class="tl W3 fl tr H">
                         <div class="weui-cells_checkbox W H ptcheck">
-                        <label class="weui-cell weui-check__label">
-                            <input type="checkbox" class="weui-check" name="radio"
-                                   @click='changeCa(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
-                                   :checked="item.order_index == 1">
-                            <i class="weui-icon-checked"></i>
-                        </label>
+                            <label class="weui-cell W H">
+                                <input type="checkbox" class="weui-check" name="radio"
+                                       @click='changeCa(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
+                                       :checked="item.order_index == 1">
+                                <i class="weui-icon-checked"></i>
+                            </label>
                         </div>
                     </div>
                     <div class="W7 H tc" style="display:table;line-height: .8rem;">
                         <div class="W H ptcheckinfo">
-                            <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
+                            <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span
+                                class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
                         </div>
-                     </div>
+                    </div>
                 </div>
             </li>
         </ul>

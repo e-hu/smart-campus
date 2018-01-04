@@ -15,11 +15,12 @@
             <li class="H W5 pr05 fl ptinfo" v-for="item in cartProductList">
                 <img src="{{item.cookbook_image}}?imageslim" class="H7 W">
                 <div class="bgf H3 W">
-                     <div class="H W tc" style="display:table;line-height: .8rem;">
-                         <div class="W H ptcheckinfo">
-                        <span>{{item.canteen_name}}</span><span class="pl10">{{item.dinner_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span class="c9">￥<span class="SScorange">{{item.cook_money}}</span>元/份</span>
-                         </div>
-                         </div>
+                    <div class="H W tc" style="display:table;line-height: .8rem;">
+                        <div class="W H ptcheckinfo">
+                            <span>{{item.canteen_name}}</span><span class="pl10">{{item.dinner_name}}</span><br><span>{{item.cookbook_name}}</span><br/>
+                            <span class="c9">￥<span class="SScorange">{{item.cook_money}}</span>元/份</span>
+                        </div>
+                    </div>
                 </div>
             </li>
         </ul>
@@ -32,9 +33,10 @@
     </div>
     <div class="W15 h60 Cz tl"><span>(已预定)</span></div>
     <div class="W5 h60 Cz">
-        <button class="bgdefault w90 mlbutton r5 SScwhite"  v-if="dinner_status == '0'" @click="takeus()">可取餐</button>
-        <button class="bgdefault w90 mlbutton r5 SScwhite"  v-if="dinner_status == '1'" @click="historyus()">历史订餐</button>
-        <button class="bgdefault w90 mlbutton r5 SScwhite"  v-if="dinner_status == '2'" @click="waitus()">等待取餐</button>
+        <button class="bgdefault w90 mlbutton r5 SScwhite" v-if="dinner_status == '0'" @click="takeus()">可取餐</button>
+        <button class="bgdefault w90 mlbutton r5 SScwhite" v-if="dinner_status == '1'" @click="historyus()">历史订餐
+        </button>
+        <button class="bgdefault w90 mlbutton r5 SScwhite" v-if="dinner_status == '2'" @click="waitus()">等待取餐</button>
     </div>
 </div>
 {include file="common/footer" /}
@@ -49,71 +51,71 @@
             cart_priceId: '',
             price_total: '0',
             price_num: '0',
-            dinner_status:''
+            dinner_status: ''
         };
         var V3 = new Vue({
-            el: 'body',
-            data: data,
-            methods: {
-                initClassObj: function () {
-                    var self = this;
-                    $.ajax({
-                        url: SCapiDic.orderProductList,
-                        type: "POST",
-                        dataType: "json",
-                        data: {
-                            day: self.day
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
-                        },
-                        success: function (ret) {
-                            if (ret.code == '0') {
-                                self.date = ret.data.date;
-                            } else {
-                                self.date = ret.date;
-                                self.price_total = ret.price_total;
-                                self.price_num = ret.price_num;
-                                self.dinner_status = ret.dinner_status;
-                                self.initCartObj();
+                el: 'body',
+                data: data,
+                methods: {
+                    initClassObj: function () {
+                        var self = this;
+                        $.ajax({
+                            url: SCapiDic.orderProductList,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                day: self.day
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    self.date = ret.data.date;
+                                } else {
+                                    self.date = ret.date;
+                                    self.price_total = ret.price_total;
+                                    self.price_num = ret.price_num;
+                                    self.dinner_status = ret.dinner_status;
+                                    self.initCartObj();
+                                }
                             }
-                        }
-                    });
-                },
-                initCartObj: function () {
-                    var self = this;
-                    $.ajax({
-                        url: SCapiDic.orderCartList,
-                        type: "POST",
-                        dataType: "json",
-                        data: {
-                            day: self.day
-                        },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
-                        },
-                        success: function (ret) {
-                            if (ret.code == '0') {
-                                self.date = ret.data.date;
-                            } else {
-                                self.cartGetCount = ret.cartCount;
-                                self.cartProductList = ret.cartList;
+                        });
+                    },
+                    initCartObj: function () {
+                        var self = this;
+                        $.ajax({
+                            url: SCapiDic.orderCartList,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                day: self.day
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    self.date = ret.data.date;
+                                } else {
+                                    self.cartGetCount = ret.cartCount;
+                                    self.cartProductList = ret.cartList;
+                                }
                             }
-                        }
-                    });
-                },
-                takeus: function () {
-                    var self = this;
-                    $.alert('不用看了,可以去取餐了!')
-                },
-                historyus:function () {
-                    var self = this;
-                    $.alert('不用看了,订单已经过期了!')
-                },
-                waitus:function () {
-                    var self = this;
-                    $.alert('慢慢等吧，还没可以取餐!')
-                }
+                        });
+                    },
+                    takeus: function () {
+                        var self = this;
+                        $.alert('不用看了,可以去取餐了!')
+                    },
+                    historyus: function () {
+                        var self = this;
+                        $.alert('不用看了,订单已经过期了!')
+                    },
+                    waitus: function () {
+                        var self = this;
+                        $.alert('慢慢等吧，还没可以取餐!')
+                    }
                 },
                 ready: function () {
                     this.initClassObj();
