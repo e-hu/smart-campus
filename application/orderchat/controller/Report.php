@@ -35,7 +35,7 @@ class Report extends BasicAdmin
         $company_id = session('company_id');
         $user_id = session('user.id');
 
-        $reportType = Db::name($this->table)->where(['company_id'=>$company_id,'report_type'=>'套餐统计报表'])->column('report_id,report_name');
+        $reportType = Db::name($this->table)->where(['company_id' => $company_id, 'report_type' => '套餐统计报表'])->column('report_id,report_name');
         $this->assign('reportTypes', $reportType);
 
         $canteens = Db::name('canteen_base_info')->where('company_id', $company_id);
@@ -47,46 +47,97 @@ class Report extends BasicAdmin
         $dinnerBases = Db::name('dinner_base_info')->where('company_id', $company_id)->column('dinner_flag,dinner_name');
         $this->assign('dinnerbases', $dinnerBases);
 
+        $list = [];
+        $name = [];
+        $param = ['start'=>'','end'=>'','report_id'=>'','keyword'=>''];
         // 应用搜索条件
-        if($this->request->get()&&isset($_GET['dinner_datetime'])&&isset($_GET['report_id'])){
+        if ($this->request->get() && isset($_GET['dinner_datetime']) && isset($_GET['report_id']) && isset($_GET['key'])) {
             if ($_GET['dinner_datetime'] !== '') {
                 list($start, $end) = explode('-', str_replace(' ', '', $_GET['dinner_datetime']));
-            }else{
+            } else {
                 $this->error('请选择时间区间');
             }
             if ($_GET['report_id'] !== '') {
                 $report_id = $_GET['report_id'];
-            }else{
+            } else {
                 $this->error('请选择时间区间');
             }
+            if ($_GET['key'] !== '') {
+                $key = $_GET['key'];
+            } else {
+                $key = ' ';
+            }
             $list = [];
-            $sqlStr = "exec [up_report] ?,?,?,?,?";
-            $data = Db::query($sqlStr, [$company_id,$start,$end,$report_id,$user_id]);
-            if(!empty($data)){
+            $sqlStr = "exec [up_report] ?,?,?,?,?,?";
+            $data = Db::query($sqlStr, [$company_id, $start, $end, $report_id, $user_id,$key]);
+            if (!empty($data[0])) {
                 $list = $data[0];
                 $name = array_keys($list[0]);
+                $param = ['start'=>$start,'end'=>$end,'report_id'=>$report_id,'keyword'=>$key];
             }
-        }else{
-            $list = [];
-            $name = [];
         }
         $this->assign('list', $list);
         $this->assign('name', $name);
+        $this->assign('param', $param);
         return $this->fetch();
     }
 
-    public function test(){
-        $path = dirname(__FILE__); //找到当前脚本所在路径
-        $PHPExcel = new PHPExcel(); //实例化PHPExcel类，类似于在桌面上新建一个Excel表格
-        $PHPSheet = $PHPExcel->getActiveSheet(); //获得当前活动sheet的操作对象
-        $PHPSheet->setTitle('demo'); //给当前活动sheet设置名称
-        $PHPSheet->setCellValue('A1','姓名')->setCellValue('B1','分数');//给当前活动sheet填充数据，数据填充是按顺序一行一行填充的，假如想给A1留空，可以直接setCellValue('A1','');
-        $PHPSheet->setCellValue('A2','张三')->setCellValue('B2','50');
-        $PHPWriter = PHPExcel_IOFactory::createWriter($PHPExcel,'Excel2007');//按照指定格式生成Excel文件，'Excel2007'表示生成2007版本的xlsx，'Excel5'表示生成2003版本Excel文件
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');//告诉浏览器输出07Excel文件
-        //header('Content-Type:application/vnd.ms-excel');//告诉浏览器将要输出Excel03版本文件
-        header('Content-Disposition: attachment;filename="统计报表.xlsx"');//告诉浏览器输出浏览器名称
-        header('Cache-Control: max-age=0');//禁止缓存
-        $PHPWriter->save("php://output");
+    public function export()
+    {
+        if (!isset($_GET['start']) && !isset($_GET['end'])&& !isset($_GET['report_id']) && !isset($_GET['keyword'])) {
+            $this->error('条件不正确');
+        }
+        $company_id = session('company_id');
+        $user_id = session('user.id');
+        $start = $_GET['start'];
+        $end = $_GET['end'];
+        $report_id = $_GET['report_id'];
+        $keyword = $_GET['keyword'];
+        $sqlStr = "exec [up_report] ?,?,?,?,?,?";
+        $data = Db::query($sqlStr, [$company_id, $start, $end, $report_id, $user_id,$keyword]);
+        $name = array_keys($data[0][0]);
+        $objPHPExcel=new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator('http://mywx.znmya.com')
+            ->setLastModifiedBy('http://mywx.znmya.com')
+            ->setTitle('Office 2007 XLSX Document')
+            ->setSubject('Office 2007 XLSX Document')
+            ->setDescription('Document for Office 2007 XLSX, generated using PHP classes.')
+            ->setKeywords('office 2007 openxml php')
+            ->setCategory('Result file');
+        $array=['0'=>'A','1'=>'B','2'=>'C','3'=>'D','4'=>'E','5'=>'F','6'=>'G','7'=>'H','8'=>'I','9'=>'J'];
+        foreach ($name as $key=>$val){
+            $objPHPExcel->setActiveSheetIndex(0)->setCellValue($array[$key].'1',$val);
+        }
+        $i=2;
+        foreach($data[0] as $k=>$v){
+            foreach ($name as$key=>$val) {
+                $objPHPExcel->setActiveSheetIndex(0)
+                    ->setCellValue($array[$key] . $i, $v[$val]);
+            }
+            $i++;
+        }
+        $objPHPExcel->getActiveSheet()->setTitle('报表统计');
+        $objPHPExcel->setActiveSheetIndex(0);
+        $report = Db::name($this->table)->where(['company_id' => $company_id, 'report_id'=>$_GET['report_id'],'report_type' => '套餐统计报表'])->find();
+        $filename=urlencode($report['report_name']).'_'.date('Y-m-d');
+
+
+        /*
+        *生成xlsx文件
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"');
+        header('Cache-Control: max-age=0');
+        $objWriter=PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+        */
+
+        //生成xls文件
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="'.$filename.'.xls"');
+        header('Cache-Control: max-age=0');
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+
+
+        $objWriter->save('php://output');
+        exit;
     }
 }

@@ -3,7 +3,6 @@
 {block name="content"}
 <!-- 表单搜索 开始 -->
 <form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
-
     <div class="row">
         <div class="col-xs-3">
             <div class="form-group">
@@ -26,19 +25,27 @@
             </div>
         </div>
 
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="key" value="{$Think.get.key|default=''}" placeholder="模糊查询" class="input-sm form-control">
+            </div>
+        </div>
+
         <div class="col-xs-2">
             <div class="form-group">
                 <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-glass"></i> 生成报表</button>
             </div>
         </div>
-        <div class="col-xs-1">
+
+        <div class="col-xs-2">
             <div class="form-group">
-                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-download"></i> 导出报表</button>
+                <button data-title="导出报表" data-href='{:url("$classuri/export")}?start={$param.start}&end={$param.end}&report_id={$param.report_id}&keyword={$param.keyword}' class='btn btn-sm btn-white' type="button"><i class='fa fa-download'></i> 导出报表
+                </button>
             </div>
         </div>
     </div>
 </form>
-<!-- 表单搜索 结束 -->
+
 
 <form onsubmit="return false;" data-auto="" method="POST">
     <input type="hidden" value="resort" name="action"/>
