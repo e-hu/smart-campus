@@ -33,10 +33,11 @@
     </div>
     <div class="W15 h60 Cz tl"><span>(已预定)</span></div>
     <div class="W5 h60 Cz">
-        <button class="bgdefault w90 mlbutton r5 SScwhite" v-if="dinner_status == '0'" @click="takeus()">可取餐</button>
-        <button class="bgdefault w90 mlbutton r5 SScwhite" v-if="dinner_status == '1'" @click="historyus()">历史订餐
-        </button>
-        <button class="bgdefault w90 mlbutton r5 SScwhite" v-if="dinner_status == '2'" @click="waitus()">等待取餐</button>
+        <div class="W H ptcheck">
+        <button class="bgdefault w90 r5 SScwhite" v-if="dinner_status == '0'" @click="takeus()">可取餐</button>
+        <button class="bgdefault w90 r5 SScwhite" v-if="dinner_status == '1'" @click="historyus()">历史订餐</button>
+        <button class="bgdefault w90 r5 SScwhite" v-if="dinner_status == '2'" @click="waitus()">等待取餐</button>
+        </div>
     </div>
 </div>
 {include file="common/footer" /}
