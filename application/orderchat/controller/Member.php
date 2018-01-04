@@ -136,7 +136,7 @@ class Member extends BasicAdmin
                 unset($data['Emp_MircoMsg_Uid']);
             } elseif (isset($data['Emp_MircoMsg_Uid']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Emp_MircoMsg_Uid', $data['Emp_MircoMsg_Uid'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('账号名称已经存在，请使用其它账号名称！');
-            } elseif (isset($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
+            } elseif (isset($data['Ic_Card'])  and !empty($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('ID卡编号已经存在，请使用其它ID卡编号！');
             }
         } else {
