@@ -282,7 +282,9 @@ html, body {
 }
 
 .ptcheck {
-    padding-top: 45%;
+    display: flex;
+    justify-content:center;
+    align-items:Center;
 }
 
 .pr05 {
@@ -290,8 +292,7 @@ html, body {
 }
 
 .ptcheckinfo {
-    padding: 10% 0;
-    line-height:120%;
+    display:table-cell; vertical-align:middle;
 }
 
 .ptinfo {
