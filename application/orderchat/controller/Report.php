@@ -60,7 +60,7 @@ class Report extends BasicAdmin
             if ($_GET['report_id'] !== '') {
                 $report_id = $_GET['report_id'];
             } else {
-                $this->error('请选择时间区间');
+                $this->error('请选择统计方式');
             }
             if ($_GET['key'] !== '') {
                 $key = $_GET['key'];
