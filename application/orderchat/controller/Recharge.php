@@ -41,7 +41,7 @@ class Recharge extends BasicAdmin {
             ->join('dept_info b','a.Dept_Id=b.dept_no and a.company_id = b.company_id','left')
             ->join('emp_account_remain c','a.Emp_Id=c.emp_id and a.company_id = c.company_id','left')
             ->join('cookbook_meal_type m' ,'c.account_typeid = m.meal_id and a.company_id=m.company_id','left')
-            ->field('a.Emp_Name,a.Emp_Id,b.dept_name,a.Ic_Card,c.account_remain_money,c.account_remain,c.account_freeze,c.account_freeze_money,c.account_typeflag,m.meal_name')
+            ->field('a.Emp_Name,a.Emp_Id,a.Emp_MircoMsg_Uid,b.dept_name,a.Ic_Card,c.account_remain_money,c.account_remain,c.account_freeze,c.account_freeze_money,c.account_typeflag,m.meal_name')
             ->where($where);
 
 
@@ -52,6 +52,9 @@ class Recharge extends BasicAdmin {
         }
         if (isset($get['Ic_Card']) && $get['Ic_Card'] !== '') {
             $db->where('Ic_Card', 'like', "%{$get['Ic_Card']}%");
+        }
+        if (isset($get['Emp_MircoMsg_Uid']) && $get['Emp_MircoMsg_Uid'] !== '') {
+            $db->where('Emp_MircoMsg_Uid', 'like', "%{$get['Emp_MircoMsg_Uid']}%");
         }
         if (isset($get['tag']) && $get['tag'] !== '') {
             //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
