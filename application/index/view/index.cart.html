@@ -31,7 +31,8 @@
                         </label>
                     </div>
                     <div class="ptcheckinfo W7 H tc">
-                        <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
+                        <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span class="c9">￥<span
+                            class="SScorange">{{item.cookbook_price}}</span>元/份</span>
                     </div>
                 </div>
             </li>
@@ -42,6 +43,11 @@
 <div class="bgf btd tc f12 c9 h60 SSfooter animsition">
     <div class="W15 h60 tr c0 Cz"><span>合计：</span></div>
     <div class="W2 h60 lh25 pt10 tl"><span class="Pn">{{price_num}}</span> 个菜品</span><br/><span class="Pr">{{price_total}}</span>元
+    </div>
+    <div class="W15 h60 Cz tl" v-if="price_num == '0'"><span>(未预定)</span></div>
+    <div class="W15 h60 Cz tl" v-else><span>(已预定)</span></div>
+    <div class="W5 h60 Cz">
+        <button class="bgdefault w100 mlbutton r5 SScwhite" @click="buttonus()">注意事项</button>
     </div>
 </div>
 {include file="common/footer" /}
@@ -183,6 +189,10 @@
                             });
                         }
 
+                    },
+                    buttonus: function () {
+                        var self = this;
+                        $.alert('不需要点我,给菜品打钩就成功下单了!')
                     }
                 },
                 ready: function () {

@@ -30,9 +30,9 @@
     </div>
     <div class="W15 h60 Cz tl"><span>(已预定)</span></div>
     <div class="W5 h60 Cz">
-        <button class="bgdefault w90 mlbutton r5 SScwhite"  v-if="dinner_status == '0'">可取餐</button>
-        <button class="bgdefault w90 mlbutton r5 SScwhite"  v-if="dinner_status == '1'">历史订餐</button>
-        <button class="bgdefault w90 mlbutton r5 SScwhite"  v-if="dinner_status == '2'">等待取餐</button>
+        <button class="bgdefault w90 mlbutton r5 SScwhite"  v-if="dinner_status == '0'" @click="takeus()">可取餐</button>
+        <button class="bgdefault w90 mlbutton r5 SScwhite"  v-if="dinner_status == '1'" @click="historyus()">历史订餐</button>
+        <button class="bgdefault w90 mlbutton r5 SScwhite"  v-if="dinner_status == '2'" @click="waitus()">等待取餐</button>
     </div>
 </div>
 {include file="common/footer" /}
@@ -99,6 +99,18 @@
                             }
                         }
                     });
+                },
+                takeus: function () {
+                    var self = this;
+                    $.alert('不用看了,可以去取餐了!')
+                },
+                historyus:function () {
+                    var self = this;
+                    $.alert('不用看了,订单已经过期了!')
+                },
+                waitus:function () {
+                    var self = this;
+                    $.alert('慢慢等吧，还没可以取餐!')
                 }
                 },
                 ready: function () {
