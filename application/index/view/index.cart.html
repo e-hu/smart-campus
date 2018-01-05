@@ -47,12 +47,10 @@
 <div class="bgf btd tc f12 c9 h60 SSfooter animsition">
     <div class="W15 h60 tr c0 Cz"><span>合计：</span></div>
     <div class="W2 h60 lh25 pt10 tl"><span class="Pn">{{price_num}}</span> 个菜品</span><br/><span class="Pr">{{price_total}}</span>元</div>
-    <div class="W15 h60 Cz tl" v-if="price_num == '0'"><span>(未预定)</span></div>
+    <div class="W15 h60 Cz tl" v-if="now_num == '0'"><span>(未预定)</span></div>
     <div class="W15 h60 Cz tl" v-else><span>(已预定)</span></div>
     <div class="W2 h60 Cz tl">
-        <div class="W H lh30"  v-if="now_num != '0' ">
-        <span>{{now_flag}}<span><br/><span>{{now_name}}</span>
-        </div>
+        <div class="W H lh30"  v-if="now_num != '0' "><span>{{now_flag}}<span><br/><span>{{now_name}}</span></div>
     </div>
     <div class="W3 h60 Cz">
         <div class="W H ptcheck">
@@ -134,6 +132,9 @@
                                     self.cartProductList = ret.cartList;
                                     self.cartGetCount = ret.cartCount;
                                     self.cart_priceId = ret.cart_priceId;
+                                    self.now_num = ret.dinner_name.length;
+                                    self.now_flag = ret.dinner_name;
+                                    self.now_name = ret.cookbook_name;
                                 }
                             }
                         });
@@ -171,7 +172,7 @@
                                         $event.target.defaultChecked = false;
                                         self.price_total = ret.data.price_total;
                                         self.price_num = ret.data.price_num;
-                                        self.now_num = '0';
+                                        self.now_num = ret.data.dinner_name.length;
                                         self.now_falg = '';
                                         self.now_name = '';
                                     }
@@ -204,7 +205,7 @@
                                         $event.target.defaultChecked = true;
                                         self.price_total = ret.data.price_total;
                                         self.price_num = ret.data.price_num;
-                                        self.now_num = '1';
+                                        self.now_num = ret.data.dinner_name.length;
                                         self.now_flag = ret.data.dinner_name;
                                         self.now_name = ret.data.cookbook_name;
                                     }

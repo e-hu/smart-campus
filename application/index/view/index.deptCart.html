@@ -23,15 +23,20 @@
                 <img src="{{item.cookbook_image}}?imageslim" class="H7 W">
                 <div class="bgf H3 W">
                     <div class="tl W3 fl tr H">
-                        <label class="weui-cells_checkbox W99 H">
-                            <input type="radio" class="weui-check" name="radio"
-                                   @click='changeCa(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
-                                   :checked="item.order_index == 1">
-                            <i class="weui-icon-checked ptcheck"></i>
-                        </label>
+                        <div class="weui-cells_checkbox W H ptcheck">
+                            <label class="weui-cell W H">
+                                <input type="checkbox" class="weui-check" name="radio"
+                                       @click='changeCa(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
+                                       :checked="item.order_index == 1">
+                                <i class="weui-icon-checked"></i>
+                            </label>
+                        </div>
                     </div>
-                    <div class="ptcheckinfo W7 H tc">
-                        <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
+                    <div class="W7 H tc" style="display:table;line-height: .8rem;">
+                        <div class="W H ptcheckinfo">
+                            <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span
+                                class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -41,7 +46,17 @@
 <!-- 底部导航栏 -->
 <div class="bgf btd tc f12 c9 h60 SSfooter animsition">
     <div class="W15 h60 tr c0 Cz"><span>合计：</span></div>
-    <div class="W2 h60 lh25 pt10 tl"><span class="Pn">{{price_num}}</span> 个菜品</span><br/><span class="Pr">{{price_total}}</span>元
+    <div class="W2 h60 lh25 pt10 tl"><span class="Pn">{{price_num}}</span> 个菜品</span><br/><span class="Pr">{{price_total}}</span>元</div>
+    <div class="W15 h60 Cz tl" v-if="now_num == '0'"><span>(未预定)</span></div>
+    <div class="W15 h60 Cz tl" v-else><span>(已预定)</span></div>
+    <div class="W2 h60 Cz tl">
+        <div class="W H lh30"  v-if="now_num != '0' "><span>{{now_flag}}<span><br/><span>{{now_name}}</span></div>
+    </div>
+    <div class="W3 h60 Cz">
+        <div class="W H ptcheck">
+            <button class="bgdefault w90 r5 SScwhite" @click="notice()">注意事项</button>
+        </div>
+
     </div>
 </div>
 {include file="common/footer" /}
@@ -58,7 +73,10 @@
             dinner_type: '',
             cart_priceId: '',
             price_total: '',
-            price_num: ''
+            price_num: '',
+            now_num:'0',
+            now_flag:'',
+            now_name:''
         };
         var V3 = new Vue({
                 el: 'body',
@@ -94,6 +112,9 @@
                     },
                     initCartObj: function (dinner) {
                         var self = this;
+                        self.now_num = '0';
+                        self.now_falg = '';
+                        self.now_name = '';
                         $.ajax({
                             url: SCapiDic.deptCartList,
                             type: "POST",
@@ -113,6 +134,9 @@
                                     self.cartProductList = ret.cartList;
                                     self.cartGetCount = ret.cartCount;
                                     self.cart_priceId = ret.cart_priceId;
+                                    self.now_num = ret.dinner_name.length;
+                                    self.now_flag = ret.dinner_name;
+                                    self.now_name = ret.cookbook_name;
                                 }
                             }
                         });
@@ -146,11 +170,14 @@
                                     if (ret.code == '0') {
                                         $.alert(ret.msg);
                                     } else {
-                                        $('input:radio[name="radio"]').removeAttr('checked');
+                                        $('input:checkbox[name="radio"]').removeAttr('checked');
                                         $event.target.checked = false;
                                         $event.target.defaultChecked = false;
                                         self.price_total = ret.data.price_total;
                                         self.price_num = ret.data.price_num;
+                                        self.now_num = ret.data.dinner_name.length;
+                                        self.now_falg = '';
+                                        self.now_name = '';
                                     }
                                 }
                             });
@@ -177,16 +204,21 @@
                                         $event.target.checked = false;
                                         $event.target.defaultChecked = false;
                                     } else {
-                                        $('input:radio[name="radio"]').removeAttr('checked');
+                                        $('input:checkbox[name="radio"]').removeAttr('checked');
                                         $event.target.checked = true;
                                         $event.target.defaultChecked = true;
                                         self.price_total = ret.data.price_total;
                                         self.price_num = ret.data.price_num;
+                                        self.now_num = ret.data.dinner_name.length;
+                                        self.now_flag = ret.data.dinner_name;
+                                        self.now_name = ret.data.cookbook_name;
                                     }
                                 }
                             });
                         }
-
+                    },
+                    notice:function () {
+                        $.alert("选中菜品即下单成功");
                     }
                 },
                 ready: function () {
