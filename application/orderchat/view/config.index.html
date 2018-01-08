@@ -1,0 +1,63 @@
+{extend name="extra@admin/content"}
+
+{block name="content"}
+<form onsubmit="return false;" action="__SELF__" data-auto="true" method="post" class='form-horizontal' style='padding-top:20px'>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">指纹库服务器地址</label>
+        <div class='col-sm-8'>
+            <input type="text" name="local_server"  title="请输入指纹库服务器地址" placeholder="请输入指纹库服务器地址" value="{:companyConf('local_server')}" class="layui-input">
+            <p class="help-block">指纹库服务器地址，部署需要</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">指纹库数据名称</label>
+        <div class='col-sm-8'>
+            <input type="text" name="local_database"  title="请输入指纹库数据名称" placeholder="请输入指纹库数据名称" value="{:companyConf('local_database')}" class="layui-input">
+            <p class="help-block">指纹库数据名称，部署需要</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">指纹库登录名</label>
+        <div class='col-sm-8'>
+            <input type="text" name="local_database_logid"  title="请输入指纹库登录名" placeholder="请输入指纹库登录名" value="{:companyConf('local_database_logid')}" class="layui-input">
+            <p class="help-block">指纹库登录名，部署需要</p>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">指纹库登录密码</label>
+        <div class='col-sm-8'>
+            <input type="text" name="local_database_logpsw"  title="请输入指纹库登录密码" placeholder="请输入指纹库登录密码" value="{:companyConf('local_database_logpsw')}" class="layui-input">
+            <p class="help-block">指纹库登录密码，部署需要</p>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">指纹库配置参数</label>
+        <div class='col-sm-8'>
+            <input type="text" name="local_database_type"  title="请输入指纹库配置参数" placeholder="请输入指纹库配置参数" value="{:companyConf('local_database_type')}" class="layui-input">
+            <p class="help-block">指纹库配置参数，部署需要</p> </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-2 control-label">套餐订餐相对当日截止天数</label>
+        <div class='col-sm-8'>
+            <input type="text" name="dinner_before_days" minlength="1" pattern="^[0-9a-z]$" title="请输入套餐订餐相对当日截止天数" placeholder="请输入套餐订餐相对当日截止天数" value="{:companyConf('dinner_before_days')}" class="layui-input">
+            <p class="help-block">套餐订餐相对当日截止天数，微信订餐需要</p> </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="col-sm-4 col-sm-offset-2">
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">保存配置</button>
+        </div>
+    </div>
+
+</form>
+
+{/block}

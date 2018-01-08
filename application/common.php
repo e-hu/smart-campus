@@ -168,3 +168,28 @@ function sysconf_name()
         return $info['Company_Name'];
     }
 }
+
+/**
+ * 设备或配置公司参数
+ * @param string $name 参数名称
+ * @param bool $value 默认是false为获取值，否则为更新
+ * @return string|bool
+ */
+function companyConf($name, $value = false)
+{
+    static $config = [];
+    if ($value !== false) {
+        $config = [];
+        $data = [$name => $value, 'company_id' => session('company_id')];
+        return DataService::save('Company_list', $data, 'company_id', ['company_id' => session('company_id')]);
+    }
+    if (empty($config)) {
+        $list = Db::name('Company_list')->where(['company_id' => session('company_id')])->find();
+        if(!empty($list)){
+            foreach ($list as $vo => $val) {
+                $config[$vo] = $val;
+            }
+        }
+    }
+    return isset($config[$name]) ? $config[$name] : '';
+}
