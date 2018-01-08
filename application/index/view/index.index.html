@@ -91,7 +91,11 @@
             <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_z.png" class="h10  mt5"></i>历史订餐</span>
             <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_h.png" class="h10  mt5"></i>拒绝订餐</span>
         </li>
+        {if companyConf('dinner_before_days') > 0}
+        <li class="ml20">请注意订餐或者取餐的时间,提前{:companyConf('dinner_before_days')}天订餐</li>
+        {else}
         <li class="ml20">请注意订餐或者取餐的时间</li>
+        {/if}
         <li class="ml20" v-for="item in dinnerBaseList">{{item.dinner_name}}: 订餐当日 {{item.dinner_starttime}}-{{item.dinner_endtime}}
             取餐
         </li>
