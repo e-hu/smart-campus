@@ -39,7 +39,7 @@ class CbPrice extends BasicAdmin
             ->join('canteen_base_info c', 'a.canteen_no = c.canteen_no', 'left')
             ->join('dinner_base_info b', 'a.dinner_flag = b.dinner_flag and a.company_id = b.company_id', 'left')
             ->group('a.sale_datetime,a.canteen_no,a.dinner_flag,canteen_name,dinner_name')
-            ->where('a.company_id', session('user.company_id'))
+            ->where(['a.company_id'=>session('user.company_id'),'a.sale_datetime'=>array('egt',date("Y-m-d"))])
             ->order('sale_datetime desc');
 
         if (isset($get['sale_datetime']) && $get['sale_datetime'] !== '') {
