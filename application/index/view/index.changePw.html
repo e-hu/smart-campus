@@ -1,5 +1,5 @@
 {include file="common/header" title="密码修改" keywords="密码修改" description="" /}
-<div class="f H scroll p10 animsition">
+<div id="app" class="f H scroll p10" v-cloak>
     <div class="bgf p20-10 bbe F_">
         <span>旧密码：</span>
         <span class="f ml20">
@@ -18,7 +18,6 @@
 				<input type="password" class="W bn" placeholder="请输入确认密码" v-model="qpassword"/>
 			</span>
     </div>
-    <!-- 登录 -->
     <div class="pt40">
         <button class="bgdefault W r2 cf p10 f16" @click="confirm">确认</button>
     </div>
@@ -26,19 +25,18 @@
 {include file="common/footer" /}
 <script type="text/javascript">
     window.onload = function () {
-        document.title = '密码修改';
         var data = {
             opassword: '',
             npassword: '',
-            qpassword: '',
+            qpassword: ''
         };
-        var V3 = new Vue({
-            el: 'body',
+        new Vue({
+            el: '#app',
             data: data,
             methods: {
                 confirm: function () {
                     var self = this;
-                    if (self.opassword == '' ||self.npassword == '' || self.qpassword == '') {
+                    if (self.opassword == '' || self.npassword == '' || self.qpassword == '') {
                         $.alert('密码不能为空');
                         return false;
                     }
@@ -53,27 +51,24 @@
                     $.ajax({
                         url: SCapiDic.changePw,
                         type: "POST",
-                        data:{
+                        data: {
                             opassword: self.opassword,
                             npassword: self.npassword,
-                            qpassword: self.qpassword,
+                            qpassword: self.qpassword
                         },
                         dataType: "json",
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
-                        },
-                        success: function (ret, status) {
-                            if(ret.code = '0'){
+                        success: function (ret) {
+                            if (ret.code = '0') {
                                 $.alert(ret.msg);
-                            }else{
-                                $.alert(ret.msg, function() {
+                            } else {
+                                $.alert(ret.msg, function () {
                                     openWin(ret.url, {});
                                 });
                             }
                         }
                     });
-                },
-            },
+                }
+            }
         });
     }
 

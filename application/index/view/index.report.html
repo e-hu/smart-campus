@@ -1,32 +1,12 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>营养报表</title>
-    <meta name="keywords" content="营养报表"/>
-    <meta name="description" content="营养报表"/>
-    <link rel="stylesheet" href="__PUBLIC__/static/index/lib/weui.min.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/demos.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/default.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/sdongpo.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/animsition.min.css">
-</head>
-<style>
-    /*消除VUE渲染过程*/
-    [v-cloak] {
-        display: none !important;
-    }
-</style>
-<body class="F oh Sbgf6">
-<div class="f H scroll animsition">
+{include file="common/header" title="全天的营养分析" keywords="全天的营养分析" description="" /}
+<div class="f H scroll">
     <div id="main" class="W H5"></div>
     <div id="main2" class="W H5"></div>
     <div id="main3" class="W H7"></div>
 </div>
 {include file="common/footer" /}
+<script src="__PUBLIC__/static/index/js/echarts.js"></script>
+<script src="__PUBLIC__/static/index/js/vintage.js"></script>
 <script>
     var myChart = echarts.init(document.getElementById('main'),'vintage');
     var option = {
@@ -34,7 +14,7 @@
 
         title: {
             show: true,
-            text: '营养套餐',
+            text: '午餐的营养比例',
             left: 'center',
             top: 20,
             textStyle: {
@@ -57,7 +37,7 @@
         },
         series : [
             {
-                name:'营养报表',
+                name:'午餐的营养比例',
                 type:'pie',
                 radius : '55%',
                 center: ['50%', '50%'],
@@ -107,7 +87,7 @@
     var myChart = echarts.init(document.getElementById('main2'),'vintage');
     var option = {
         title : {
-            text: '三类功能物质比例',
+            text: '三餐的营养比例',
             subtext: '',
             x:'center'
         },

@@ -1,9 +1,8 @@
-{include file="common/header" title="用户登录" keywords="用户登录" description="" /}
-<div class="W H3 animsition">
+{include file="common/header" title="用户登录" keywords="用户登录" description="茂阳校餐" /}
+<div class="W H3 ">
     <img src="__PUBLIC__/static/index/images/loginLogo.png" class="W H">
 </div>
-<!-- 账号密码 -->
-<div class="f H scroll bgf animsition">
+<div id="app" class="f H scroll bgf " v-cloak>
     <div class="bgf p20-10 bbe F_">
         <span>账号：</span>
         <span class="f ml20">
@@ -16,7 +15,6 @@
 				<input type="password" class="W bn" placeholder="请输入密码" v-model="password"/>
 			</span>
     </div>
-    <!-- 登录 -->
     <div class="pt40">
         <button class="bgdefault W9 r2 cf p10 f16 Ml5" @click="login">立即登录</button>
     </div>
@@ -24,13 +22,12 @@
 {include file="common/footer" /}
 <script type="text/javascript">
     window.onload = function () {
-        var data = {
-            username: '',
-            password: '',
-        };
-        var V3 = new Vue({
-            el: 'body',
-            data: data,
+        new Vue({
+            el: '#app',
+            data: {
+                username: '',
+                password: ''
+            },
             methods: {
                 login: function () {
                     var self = this;
@@ -39,16 +36,13 @@
                         return false;
                     }
                     $.ajax({
-                        url: "/index/login/login",
+                        url: SCapiDic.login,
                         type: "POST",
                         data: {
                             username: self.username,
-                            password: self.password,
+                            password: self.password
                         },
                         dataType: "json",
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-
-                        },
                         success: function (ret) {
                             if (ret.code == '1') {
                                 openWin(ret.url, {});
@@ -59,7 +53,7 @@
                             }
                         }
                     });
-                },
+                }
             }
         });
     }

@@ -27,8 +27,9 @@ var SCapiDic = {
     getmydept: '/index/mallapi/getmydept'+ran,
     getDeptEmpList: '/index/mallapi/getDeptEmpList'+ran,
     changePw:'/index/mallapi/changePw'+ran,
-    logout:'/index/mallapi/logout'+ran
-}
+    logout:'/index/mallapi/logout'+ran,
+    login:'/index/login/login'+ran
+};
 function intoView(el) {
     setTimeout(function() {
         el.scrollIntoViewIfNeeded();

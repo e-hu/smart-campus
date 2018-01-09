@@ -1,26 +1,26 @@
 {include file="common/header" title="菜谱详情" keywords="菜谱详情" description="" /}
-<div class="f fr6 scroll H animsition">
-    <ul class="bgf clear">
+<div id="app" class="f fr6 H scroll" v-cloak>
+    <ul class="bgf clear W SSheader">
         <li class="hl50 F_ bbd bgf">
             <p class='f pl10'>{{date}}</p>
         </li>
     </ul>
-    <ul class="tc bgf SSorder bgf clear bbe">
+    <ul class="tc bgf SSorder bgf clear bbe W mt50 SSheader">
         <li v-for="item in dinnerBaseList" class="h40 lh40 "
             :class="[dinnerBaseCount,{'Spactive': dinner_type == item.dinner_flag}]" @click='changeSp(item.dinner_flag)'
             value="{{item.dinner_flag}}">
             <div>{{item.dinner_name}}</div>
         </li>
     </ul>
-    <div class="tc pt50" v-if="cartGetCount == '0'">
+    <div class="tc pt140" v-if="cartGetCount == '0'">
         <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
         <p class="c9 mb15">今日菜谱空空如也！</p>
         <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
     </div>
-    <div v-else class="W scroll H86">
-        <ul class="tc clear H5 ">
-            <li class="H W5 ptinfo fl" v-for="item in cartProductList">
-                <img src="{{item.cookbook_image}}?imageslim" class="H7 W">
+    <div v-else class="W H mt90">
+        <ul class="tc clear H5">
+            <li class="H W5 fl ptinfo" v-for="item in cartProductList">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W">
                 <div class="bgf H3 W">
                     <div class="tl W3 fl tr H">
                         <div class="weui-cells_checkbox W H ptcheck">
@@ -32,7 +32,7 @@
                             </label>
                         </div>
                     </div>
-                    <div class="W7 H tc" style="display:table;line-height: .8rem;">
+                    <div class="W7 H tc ptcheckinfo_div">
                         <div class="W H ptcheckinfo">
                             <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span
                                 class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
@@ -43,14 +43,14 @@
         </ul>
     </div>
 </div>
-<!-- 底部导航栏 -->
-<div class="bgf btd tc f12 c9 h60 SSfooter animsition">
+<div id="price_total" class="bgf btd tc f12 c9 h60 SSfooter" v-cloak>
     <div class="W15 h60 tr c0 Cz"><span>合计：</span></div>
-    <div class="W2 h60 lh25 pt10 tl"><span class="Pn">{{price_num}}</span> 个菜品</span><br/><span class="Pr">{{price_total}}</span>元</div>
+    <div class="W2 h60 lh25 pt10 tl"><span class="Pn">{{price_num}}</span> 个菜品</span><br/><span class="Pr">{{price_total}}</span>元
+    </div>
     <div class="W15 h60 Cz tl" v-if="now_num == '0'"><span>(未预定)</span></div>
     <div class="W15 h60 Cz tl" v-else><span>(已预定)</span></div>
     <div class="W2 h60 Cz tl">
-        <div class="W H lh30"  v-if="now_num != '0' "><span>{{now_flag}}<span><br/><span>{{now_name}}</span></div>
+        <div class="W H lh30" v-if="now_num != '0' "><span>{{now_flag}}<span><br/><span>{{now_name}}</span></div>
     </div>
     <div class="W3 h60 Cz">
         <div class="W H ptcheck">
@@ -62,7 +62,6 @@
 {include file="common/footer" /}
 <script type="text/javascript">
     window.onload = function () {
-        document.title = '菜谱详情';
         var data = {
             day: getUrlParam('day'),
             cartProductList: [],
@@ -71,157 +70,153 @@
             dinnerBaseList: [],
             dinnerBaseCount: [],
             dinner_type: '',
-            cart_priceId: '',
-            price_total: '',
-            price_num: '',
-            now_num:'0',
-            now_flag:'',
-            now_name:''
+            cart_priceId: ''
         };
-        var V3 = new Vue({
-                el: 'body',
-                data: data,
-                methods: {
-                    initClassObj: function () {
-                        var self = this;
-                        $.ajax({
-                            url: SCapiDic.cartProductList,
-                            type: "POST",
-                            dataType: "json",
-                            data: {
-                                day: self.day
-                            },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
-                            },
-                            success: function (ret) {
-                                if (ret.code == '0') {
-                                    self.date = ret.data.date;
-                                } else {
-                                    self.date = ret.date;
-                                    self.dinnerBaseList = ret.dinnerBaseList;
-                                    self.dinnerBaseCount = ret.dinnerBaseCount;
-                                    self.price_total = ret.price_total;
-                                    self.price_num = ret.price_num;
-                                    self.dinner_type = ret.dinnerBaseList[0]['dinner_flag'];
-                                    self.initCartObj(self.dinner_type);
-                                }
-                            }
-                        });
-                    },
-                    initCartObj: function (dinner) {
-                        var self = this;
-                        self.now_num = '0';
-                        self.now_falg = '';
-                        self.now_name = '';
-                        $.ajax({
-                            url: SCapiDic.cartList,
-                            type: "POST",
-                            dataType: "json",
-                            data: {
-                                dinner: dinner,
-                                day: self.day
-                            },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
-                            },
-                            success: function (ret) {
-                                if (ret.code == '0') {
-                                    self.date = ret.data.date;
-                                } else {
-                                    self.cartProductList = ret.cartList;
-                                    self.cartGetCount = ret.cartCount;
-                                    self.cart_priceId = ret.cart_priceId;
-                                    self.now_num = ret.dinner_name.length;
-                                    self.now_flag = ret.dinner_name;
-                                    self.now_name = ret.cookbook_name;
-                                }
-                            }
-                        });
-                    },
-                    changeSp: function (Sp) {
-                        var self = this;
-                        self.dinner_type = Sp;
-                        self.cartProductList = [];
-                        self.initCartObj(Sp);
-                    },
-                    changeCa: function (Tn, Df, Cn, Pi, Cp, $event) {
-                        var self = this;
-                        if ($event.target.defaultChecked) {
-                            $.ajax({ //删除商品
-                                url: SCapiDic.delCart,
-                                type: "POST",
-                                dataType: "json",
-                                data: {
-                                    canteen_no: Tn,
-                                    dinner_flag: Df,
-                                    cookbook_no: Cn,
-                                    price_id: Pi,
-                                    cookbook_price: Cp,
-                                    day: self.day
-                                },
-                                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                    //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
-                                },
-                                success: function (ret) {
-                                    if (ret.code == '0') {
-                                        $.alert(ret.msg);
-                                    } else {
-                                        $('input:checkbox[name="radio"]').removeAttr('checked');
-                                        $event.target.checked = false;
-                                        $event.target.defaultChecked = false;
-                                        self.price_total = ret.data.price_total;
-                                        self.price_num = ret.data.price_num;
-                                        self.now_num = ret.data.dinner_name.length;
-                                        self.now_falg = '';
-                                        self.now_name = '';
-                                    }
-                                }
-                            });
-                        } else {
-                            $.ajax({ //增加商品
-                                url: SCapiDic.addCart,
-                                type: "POST",
-                                dataType: "json",
-                                data: {
-                                    canteen_no: Tn,
-                                    dinner_flag: Df,
-                                    cookbook_no: Cn,
-                                    price_id: Pi,
-                                    cookbook_price: Cp,
-                                    day: self.day
-                                },
-                                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                    //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
-                                },
-                                success: function (ret) {
-                                    if (ret.code == '0') {
-                                        $.alert(ret.msg);
-                                        $event.target.checked = false;
-                                        $event.target.defaultChecked = false;
-                                    } else {
-                                        $('input:checkbox[name="radio"]').removeAttr('checked');
-                                        $event.target.checked = true;
-                                        $event.target.defaultChecked = true;
-                                        self.price_total = ret.data.price_total;
-                                        self.price_num = ret.data.price_num;
-                                        self.now_num = ret.data.dinner_name.length;
-                                        self.now_flag = ret.data.dinner_name;
-                                        self.now_name = ret.data.cookbook_name;
-                                    }
-                                }
-                            });
-                        }
-                    },
-                    notice:function () {
-                        $.alert("选中菜品即下单成功");
-                    }
-                },
-                ready: function () {
-                    this.initClassObj();
+        var vm = new Vue({
+            el: '#price_total',
+            data: {
+                price_total: '',
+                price_num: '',
+                now_num: '0',
+                now_flag: '',
+                now_name: ''
+            },
+            methods:{
+                notice: function () {
+                    $.alert("选中菜品即下单成功");
                 }
-            })
-        ;
+            }
+        });
+        new Vue({
+            el: '#app',
+            data: data,
+            methods: {
+                initClassObj: function () {
+                    var self = this;
+                    $.ajax({
+                        url: SCapiDic.cartProductList,
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            day: self.day
+                        },
+                        success: function (ret) {
+                            if (ret.code == '0') {
+                                self.date = ret.data.date;
+                            } else {
+                                self.date = ret.date;
+                                self.dinnerBaseList = ret.dinnerBaseList;
+                                self.dinnerBaseCount = ret.dinnerBaseCount;
+                                vm.price_total = ret.price_total;
+                                vm.price_num = ret.price_num;
+                                self.dinner_type = ret.dinnerBaseList[0]['dinner_flag'];
+                                self.initCartObj(self.dinner_type);
+                            }
+                        }
+                    });
+                },
+                initCartObj: function (dinner) {
+                    var self = this;
+                    vm.now_num = '0';
+                    vm.now_falg = '';
+                    vm.now_name = '';
+                    $.ajax({
+                        url: SCapiDic.cartList,
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            dinner: dinner,
+                            day: self.day
+                        },
+                        success: function (ret) {
+                            if (ret.code == '0') {
+                                self.date = ret.data.date;
+                            } else {
+                                self.cartProductList = ret.cartList;
+                                self.cartGetCount = ret.cartCount;
+                                self.cart_priceId = ret.cart_priceId;
+                                vm.now_num = ret.dinner_name.length;
+                                vm.now_flag = ret.dinner_name;
+                                vm.now_name = ret.cookbook_name;
+                            }
+                        }
+                    });
+                },
+                changeSp: function (Sp) {
+                    var self = this;
+                    self.dinner_type = Sp;
+                    self.cartProductList = [];
+                    self.initCartObj(Sp);
+                },
+                changeCa: function (Tn, Df, Cn, Pi, Cp, $event) {
+                    var self = this;
+                    if ($event.target.defaultChecked) {
+                        $.ajax({ //删除商品
+                            url: SCapiDic.delCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                } else {
+                                    $('input:checkbox[name="radio"]').removeAttr('checked');
+                                    $event.target.checked = false;
+                                    $event.target.defaultChecked = false;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    vm.now_num = ret.data.dinner_name.length;
+                                    vm.now_falg = '';
+                                    vm.now_name = '';
+                                }
+                            }
+                        });
+                    } else {
+                        $.ajax({ //增加商品
+                            url: SCapiDic.addCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = false;
+                                    $event.target.defaultChecked = false;
+                                } else {
+                                    $('input:checkbox[name="radio"]').removeAttr('checked');
+                                    $event.target.checked = true;
+                                    $event.target.defaultChecked = true;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    vm.now_num = ret.data.dinner_name.length;
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        });
+                    }
+                }
+            },
+            mounted: function () {
+                this.$nextTick(function () {
+                    this.initClassObj();
+                })
+            }
+        });
     };
 </script>
 

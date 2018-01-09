@@ -2,6 +2,9 @@
 html, body {
     color: #222;
     background: #fff;
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 /**默认设置**/
@@ -55,6 +58,8 @@ html, body {
 
 /**头部预设class**/
 .SSheader {
+    position: fixed;
+    z-index: 999;
 }
 
 /**底部预设class**/
@@ -247,6 +252,13 @@ html, body {
     margin: .5rem;
 }
 
+.mt80{
+    margin-top: 80px;
+}
+
+.mt120{
+    margin-top: 120px;
+}
 .fr6 {
     font-size: .6rem;
 }
@@ -291,6 +303,31 @@ html, body {
     padding: .5rem;
 }
 
+.pt90{
+    padding-top: 90px;
+}
+
+.pt120{
+    padding-top: 120px;
+}
+.pt140{
+    padding-top: 140px;
+}
+
+.pt150{
+    padding-top: 150px;
+}
+.pt170{
+    padding-top: 170px;
+}
+.mt90{
+    margin-top: 90px;
+}
+
+.ptcheckinfo_div{
+    display:table;line-height: .8rem;
+}
+
 .ptcheckinfo {
     display:table-cell; vertical-align:middle;
 }
@@ -307,7 +344,6 @@ html, body {
 .month {
     width: 100%;
     background: #FFFFFF;
-    position: fixed;
     height: 3rem;
 }
 
@@ -317,6 +353,23 @@ html, body {
 
 }
 
+.month ul li {
+    color: black;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-family: Arial;
+}
+
+.month ul li img{
+    height:1rem;
+    line-height: 1rem;
+}
+
+.arrow {
+    padding: 1rem;
+}
+
 .year-month {
     display: flex;
     flex-direction: column;
@@ -324,22 +377,18 @@ html, body {
     justify-content: space-around;
 }
 
-.arrow {
-    padding: 20px;
+.index_dinner{
+    position:relative;top: -2rem;left: 5%;
+}
+.index_dinner img{
+    height: .5rem;
+    width: .5rem;
 }
 
 .active {
     background: #89C997;
     color: white;
     height: 3rem;
-}
-
-.month ul li {
-    color: black;
-    font-size: .8rem;
-    text-transform: uppercase;
-    letter-spacing: 3px;
-    font-family: Arial;
 }
 
 .weekdays {
@@ -394,7 +443,16 @@ html, body {
     color: #AFAFAE;
 }
 
-.ring {
+.tips li img{
     height: .5rem;
-    width: .5rem;
+    margin-top: .5rem;
+}
+
+.index_wait{
+    position: relative;top: -18rem;
+}
+/*页脚菜单栏*/
+.SSfooter img{
+    height: 1.5rem;
+    line-height: 1.5rem;
 }

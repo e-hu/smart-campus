@@ -1,41 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <title>首页</title>
-    <meta name="keywords" content="首页"/>
-    <meta name="description" content="首页"/>
-    <link rel="stylesheet" href="__PUBLIC__/static/index/lib/weui.min.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/jquery-weui.min.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/demos.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/default.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/sdongpo.css">
-    <link rel="stylesheet" href="__PUBLIC__/static/index/css/animsition.min.css">
-</head>
-<style>
-    /*消除VUE渲染过程*/
-    [v-cloak] {
-        display: none !important;
-    }
-</style>
-<body class="F oh Sbgf6">
-<div id="cart" class="f H scroll animsition" v-cloak>
-    <!-- 年份 月份 -->
+{include file="common/header" title="首页" keywords="首页" description="茂阳校餐" /}
+<div id="app" class="f H scroll" v-cloak>
     <div class="month SSheader pr">
         <ul>
-            <!--点击会触发pickpre函数，重新刷新当前日期 @click(vue v-on:click缩写) -->
             <li class="arrow" @click="pickPre(currentYear,currentMonth)"><i> <img
-                    src="__PUBLIC__/static/index/images/back_w.png" class="h20 lh20"></i></li>
+                    src="__PUBLIC__/static/index/images/back_w.png"></i></li>
             <li class="year-month">
-                <span style=" font-size:1rem;">{{ currentYear }}年{{ currentMonth }}月</span>
+                <span>{{ currentYear }}年{{ currentMonth }}月</span>
             </li>
             <li class="arrow" @click="pickNext(currentYear,currentMonth)"><i> <img
-                    src="__PUBLIC__/static/index/images/go.png" class="h20 lh20"></i></li>
+                    src="__PUBLIC__/static/index/images/go.png"></i></li>
         </ul>
     </div>
-    <!-- 星期 -->
     <ul class="weekdays">
         <li>一</li>
         <li>二</li>
@@ -51,31 +26,23 @@
                 <div v-if="index == dayobject.day.getDate()" @click="cart(leftobject[0].date_str)"
                      :class=" dayobject.day.getFullYear() == new Date().getFullYear() && dayobject.day.getMonth() == new Date().getMonth() && dayobject.day.getDate() == new Date().getDate() ? 'active' : 'months'">
                     <div>{{ dayobject.day.getDate() }}</div>
-                    <div class="W9 H" style="position:relative;top: -2rem;left: 5%;">
+                    <div class="W9 H index_dinner">
                         <ul>
                             <li class="H2" :class="dinnerBaseCount" v-for=" item in leftobject">
-                                <image v-if="item.dinner_status == '1'" src="__PUBLIC__/static/index/images/yh_z.png"
-                                       class="ring">
-
-                                    <image v-if="item.dinner_status == '2'"
-                                           src="__PUBLIC__/static/index/images/y_z.png" class="ring">
-
-                                        <image v-if="item.dinner_status == '3'"
-                                               src="__PUBLIC__/static/index/images/yh_j.png" class="ring">
-
-                                            <image v-if="item.dinner_status == '4'"
-                                                   src="__PUBLIC__/static/index/images/y_j.png" class="ring">
-
-                                                <image v-if="item.dinner_status == '5'"
-                                                       src="__PUBLIC__/static/index/images/y_h.png" class="ring">
-
-                                                    <image v-if="item.dinner_status == '6'"
-                                                           src="__PUBLIC__/static/index/images/y_g.png"
-                                                           class="ring">
-
-                                                        <image v-if="item.dinner_status == '7'"
-                                                               src="__PUBLIC__/static/index/images/y_j.png"
-                                                               class="ring">
+                                <img v-if="item.dinner_status == '1'"
+                                     src="__PUBLIC__/static/index/images/yh_z.png">
+                                <img v-if="item.dinner_status == '2'"
+                                     src="__PUBLIC__/static/index/images/y_z.png">
+                                <img v-if="item.dinner_status == '3'"
+                                     src="__PUBLIC__/static/index/images/yh_j.png">
+                                <img v-if="item.dinner_status == '4'"
+                                     src="__PUBLIC__/static/index/images/y_j.png">
+                                <img v-if="item.dinner_status == '5'"
+                                     src="__PUBLIC__/static/index/images/y_h.png">
+                                <img v-if="item.dinner_status == '6'"
+                                     src="__PUBLIC__/static/index/images/y_g.png">
+                                <img v-if="item.dinner_status == '7'"
+                                     src="__PUBLIC__/static/index/images/y_j.png">
                             </li>
                         </ul>
                     </div>
@@ -86,77 +53,49 @@
     <!-- 提示 -->
     <ul class="tips">
         <li class="tc">
-            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_j.png" class="h10  mt5"></i>已订餐</span>
-            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_g.png" class="h10  mt5"></i>待订餐</span>
-            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_z.png" class="h10  mt5"></i>历史订餐</span>
-            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_h.png" class="h10  mt5"></i>拒绝订餐</span>
+            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_j.png"></i>已订餐</span>
+            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_g.png"></i>待订餐</span>
+            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_z.png"></i>历史订餐</span>
+            <span class="C3"><i class="mr5"> <img src="__PUBLIC__/static/index/images/y_h.png"></i>拒绝订餐</span>
         </li>
         {if companyConf('dinner_before_days') > 0}
         <li class="ml20">请注意订餐或者取餐的时间,提前{:companyConf('dinner_before_days')}天订餐</li>
         {else}
         <li class="ml20">请注意订餐或者取餐的时间</li>
         {/if}
-        <li class="ml20" v-for="item in dinnerBaseList">{{item.dinner_name}}: 订餐当日 {{item.dinner_starttime}}-{{item.dinner_endtime}}
+        <li class="ml20" v-for="item in dinnerBaseList">{{item.dinner_name}}: 订餐当日
+            {{item.dinner_starttime}}-{{item.dinner_endtime}}
             取餐
         </li>
     </ul>
-    <ul class="weui-loadmore" v-show="doing == '1'" style="position: relative;top: -18rem;">
+    <ul class="weui-loadmore index_wait" v-show="doing == '1'">
         <i class="weui-loading"></i>
         <span class="weui-loadmore__tips">正在加载</span>
     </ul>
 </div>
-<div class="bgf btd tc f12 c9 h60 SSfooter animsition">
-    <div class="C4" onclick="window.location.href='/index/index/index'">
+<div class="W bgf btd tc f12 c9 h60 SSfooter ">
+    <div class="C4" onclick="openWin('/index/index/index',{})">
         <div class="h30 lh30 mt5">
-            <img src="__PUBLIC__/static/index/images/home-g.png" class="h30 lh30">
+            <img src="__PUBLIC__/static/index/images/home-g.png">
         </div>
         <div class=" h24 lh20 SScmenu">首页</div>
     </div>
-    <div class="C4" onclick="window.location.href='/index/index/menu'">
+    <div class="C4" onclick="openWin('/index/index/menu',{})">
         <div class="h30 lh30 mt5">
-            <img src="__PUBLIC__/static/index/images/menu.png" class="h30 lh30">
+            <img src="__PUBLIC__/static/index/images/menu.png">
         </div>
         <div class="h24 lh20">今日菜谱</div>
     </div>
-    <div class="C4" onclick="window.location.href='/index/index/me'">
+    <div class="C4" onclick="openWin('/index/index/me',{})">
         <div class="h30 lh30 mt5">
-            <img src="__PUBLIC__/static/index/images/me.png" class="h30 lh30">
+            <img src="__PUBLIC__/static/index/images/me.png">
         </div>
         <div class="h24 lh20">个人中心</div>
     </div>
 </div>
-<script src="__PUBLIC__/static/index/lib/jquery-2.1.4.js"></script>
-<script src="__PUBLIC__/static/index/js/jquery-weui.js"></script>
-<script src="__PUBLIC__/static/index/js/common.js"></script>
-<script src="__PUBLIC__/static/index/lib/fastclick.js"></script>
-<script>
-    $(function() {
-        FastClick.attach(document.body);
-    });
-</script>
-<script type="text/javascript">
-    var $animsition = $('.animsition');
-
-    $(document).ready(function() {
-        $animsition.animsition({
-            onLoadEvent: false
-        })
-    });
-
-    $(window).on('load', function() {
-        $animsition.each(function(i){
-            $(this).animsition('in');
-        });
-    });
-
-</script>
-</body>
-</html>
-<script src="https://cdn.jsdelivr.net/npm/vue"></script>
-<script src="__PUBLIC__/static/index/js/animsition.min.js"></script>
+{include file="common/footer" /}
 <script>
     window.onload = function () {
-        document.title = '首页';
         var data = {
             currentDay: 1,
             currentMonth: 1,
@@ -165,11 +104,11 @@
             days: [],
             leftobj: [],
             dinnerBaseList: [],
-            dinnerBaseCount:'',
+            dinnerBaseCount: '',
             doing: '0'
         };
         new Vue({
-            el: '#cart',
+            el: '#app',
             data: data,
             methods: {
                 cart: function (day) {  //下单
@@ -223,10 +162,7 @@
                         data: {
                             time: str
                         },
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
-                        },
-                        success: function (ret, status) {
+                        success: function (ret) {
                             if (ret.code == '0') {
                                 $.alert(ret.msg);
                             } else {
@@ -263,9 +199,6 @@
                         url: SCapiDic.getdinnerbase, //餐次
                         type: "POST",
                         dataType: "json",
-                        error: function (XMLHttpRequest, textStatus, errorThrown) {
-                            //alert("请求对象XMLHttpRequest: "+JSON.stringify(XMLHttpRequest));
-                        },
                         success: function (ret) {
                             if (ret.code == '0') {
                                 $.alert(ret.msg);
@@ -279,7 +212,6 @@
             },
             mounted: function () {
                 this.$nextTick(function () {
-                    // 代码保证 this.$el 在 document 中
                     this.getDinnerBase();
                     this.initData(null);
                 })
