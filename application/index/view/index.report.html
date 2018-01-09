@@ -2,7 +2,7 @@
 <div class="f H scroll">
     <div id="main" class="W H5"></div>
     <div id="main2" class="W H5"></div>
-    <div id="main3" class="W H7"></div>
+    <div id="main3" class="W H"></div>
 </div>
 {include file="common/footer" /}
 <script src="__PUBLIC__/static/index/js/echarts.js"></script>
@@ -10,7 +10,7 @@
 <script>
     var myChart = echarts.init(document.getElementById('main'),'vintage');
     var option = {
-        backgroundColor: '#2c343c',
+        backgroundColor: '#8785A2',
 
         title: {
             show: true,
@@ -31,9 +31,9 @@
             show: false,
             min: 80,
             max: 600,
-            inRange: {
-                colorLightness: [0, 1]
-            }
+            // inRange: {
+            //     colorLightness: [0, 1]
+            // }
         },
         series : [
             {
@@ -86,6 +86,8 @@
 <script>
     var myChart = echarts.init(document.getElementById('main2'),'vintage');
     var option = {
+        backgroundColor: '#BDE4F4',
+
         title : {
             text: '三餐的营养比例',
             subtext: '',
@@ -129,6 +131,14 @@
     var myChart = echarts.init(document.getElementById('main3'),'vintage');
 
     var option = {
+
+        title : {
+            show: true,
+            text: '每日餐次营养比例',
+            left: 'center',
+            top: 20
+        },
+
         tooltip : {
             trigger: 'axis',
             axisPointer : {            // 坐标轴指示器，坐标轴触发有效
