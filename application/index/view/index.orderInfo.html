@@ -13,7 +13,7 @@
     <div v-else class="W H mt50">
         <ul class="tc clear H5">
             <li class="H W5 fl ptinfo" v-for="item in cartProductList">
-                <img :src="item.cookbook_image+'?imageslim'" class="H7 W">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W" @click="popup()">
                 <div class="bgf H3 W">
                     <div class="H W tc" style="display:table;line-height: .8rem;">
                         <div class="W H ptcheckinfo">
@@ -38,6 +38,12 @@
             <button class="bgdefault w90 r5 SScwhite" v-if="dinner_status == '1'" @click="historyus()">历史订餐</button>
             <button class="bgdefault w90 r5 SScwhite" v-if="dinner_status == '2'" @click="waitus()">等待取餐</button>
         </div>
+    </div>
+</div>
+<div id="report" class="weui-popup__container popup-bottom">
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div id="main" style="width:100vw;height:50vh;"></div>
     </div>
 </div>
 {include file="common/footer" /}
@@ -73,6 +79,9 @@
             el: '#app',
             data: data,
             methods: {
+                popup: function () {
+                    $("#report").popup();
+                },
                 initClassObj: function () {
                     var self = this;
                     $.ajax({
@@ -132,6 +141,50 @@
         });
     };
 </script>
+<script src="__PUBLIC__/static/index/js/echarts.js"></script>
+<script src="__PUBLIC__/static/index/js/vintage.js"></script>
+<script>
+    var myChart = echarts.init(document.getElementById('main'),'vintage');
+    var option = {
+        backgroundColor: '#BDE4F4',
 
+        title : {
+            text: '三餐的营养比例',
+            subtext: '',
+            x:'center'
+        },
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['能量','蛋白质','脂肪']
+        },
+        series : [
+            {
+                name: '能量来源',
+                type: 'pie',
+                radius : '55%',
+                center: ['50%', '60%'],
+                data:[
+                    {value:335, name:'能量'},
+                    {value:310, name:'蛋白质'},
+                    {value:234, name:'脂肪'}
+                ],
+                itemStyle: {
+                    emphasis: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+</script>
 
 

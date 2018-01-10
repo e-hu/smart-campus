@@ -13,7 +13,7 @@
     <div v-else class="W mt50">
         <ul class="tc clear H5">
             <li class="H W5 fl ptinfo" v-for="item in cartProductList">
-                <img :src="item.cookbook_image+'?imageslim'" class="H7 W">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W" @click="popup()">
                 <div class="bgf H3 W">
                     <div class="H W tc ptcheckinfo_div">
                         <div class="W H ptcheckinfo">
@@ -47,6 +47,12 @@
         <div class="h24 lh20">个人中心</div>
     </div>
 </div>
+<div id="report" class="weui-popup__container popup-bottom">
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div id="main" style="width:100vw;height:50vh;"></div>
+    </div>
+</div>
 {include file="common/footer" /}
 <script type="text/javascript">
     window.onload = function () {
@@ -68,6 +74,9 @@
             el: '#app',
             data: data,
             methods: {
+                popup: function () {
+                    $("#report").popup();
+                },
                 initClassObj: function () {
                     var self = this;
                     $.ajax({
@@ -118,6 +127,83 @@
         })
         ;
     };
+</script>
+<script src="__PUBLIC__/static/index/js/echarts.js"></script>
+<script src="__PUBLIC__/static/index/js/vintage.js"></script>
+<script>
+    var myChart = echarts.init(document.getElementById('main'),'vintage');
+
+    var option = {
+
+        title : {
+            show: true,
+            text: '每日餐次营养比例',
+            left: 'center',
+            top: 20
+        },
+
+        tooltip : {
+            trigger: 'axis',
+            axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data: ['早餐', '午餐','晚餐']
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis:  {
+            type: 'value'
+        },
+        yAxis: {
+            type: 'category',
+            data: ['钙','铁','锌','维生素E','维生素B1','维生素A','维生素C','蛋白质','脂肪','能量']
+        },
+        series: [
+            {
+                name: '早餐',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: [320, 302, 301, 334, 390, 330, 320,200,300,400]
+            },
+            {
+                name: '午餐',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: [120, 132, 101, 134, 290, 230, 210,150,200,100]
+            },
+            {
+                name: '晚餐',
+                type: 'bar',
+                stack: '总量',
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'insideRight'
+                    }
+                },
+                data: [220, 182, 191, 234, 290, 330, 310,400,300,400]
+            }
+        ]
+    };
+    myChart.setOption(option);
 </script>
 
 

@@ -20,7 +20,7 @@
     <div v-else class="W H mt90">
         <ul class="tc clear H5 ">
             <li class="H W5 ptinfo fl" v-for="item in cartProductList">
-                <img :src="item.cookbook_image+'?imageslim'" class="H7 W">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W" @click="popup()">
                 <div class="bgf H3 W">
                     <div class="tl W3 fl tr H">
                         <div class="weui-cells_checkbox W H ptcheck">
@@ -60,6 +60,12 @@
 
     </div>
 </div>
+<div id="report" class="weui-popup__container popup-bottom">
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div id="main" style="width:100vw;height:50vh;"></div>
+    </div>
+</div>
 {include file="common/footer" /}
 <script type="text/javascript">
     window.onload = function () {
@@ -92,6 +98,9 @@
             el: '#app',
             data: data,
             methods: {
+                popup: function () {
+                    $("#report").popup();
+                },
                 initClassObj: function () {
                     var self = this;
                     $.ajax({
@@ -224,6 +233,83 @@
         });
     };
 </script>
+<script src="__PUBLIC__/static/index/js/echarts.js"></script>
+<script src="__PUBLIC__/static/index/js/vintage.js"></script>
+<script>
+    var myChart = echarts.init(document.getElementById('main'),'vintage');
+    var option = {
+        backgroundColor: '#8785A2',
 
+        title: {
+            show: true,
+            text: '菜品的营养比例',
+            left: 'center',
+            top: 20,
+            textStyle: {
+                color: '#ccc'
+            }
+        },
+
+        tooltip : {
+            trigger: 'item',
+            formatter: "{a} <br/>{b} : {c} ({d}%)"
+        },
+
+        visualMap: {
+            show: false,
+            min: 80,
+            max: 600,
+            inRange: {
+                colorLightness: [0, 1]
+            }
+        },
+        series : [
+            {
+                name:'午餐的营养比例',
+                type:'pie',
+                radius : '55%',
+                center: ['50%', '50%'],
+                data:[
+                    {value:335, name:'脂肪'},
+                    {value:310, name:'蛋白质'},
+                    {value:274, name:'能量'},
+
+                ].sort(function (a, b) { return a.value - b.value; }),
+                roseType: 'radius',
+                label: {
+                    normal: {
+                        textStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        }
+                    }
+                },
+                labelLine: {
+                    normal: {
+                        lineStyle: {
+                            color: 'rgba(255, 255, 255, 0.3)'
+                        },
+                        smooth: 0.2,
+                        length: 10,
+                        length2: 20
+                    }
+                },
+                itemStyle: {
+                    normal: {
+                        color: '#c23531',
+                        shadowBlur: 200,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                },
+
+                animationType: 'scale',
+                animationEasing: 'elasticOut',
+                animationDelay: function (idx) {
+                    return Math.random() * 200;
+                }
+            }
+        ]
+    };
+    myChart.setOption(option);
+</script>
 
 
