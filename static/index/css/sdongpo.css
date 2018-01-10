@@ -59,7 +59,7 @@ html, body {
 /**头部预设class**/
 .SSheader {
     position: fixed;
-    z-index: 999;
+    z-index: 1;
 }
 
 /**底部预设class**/

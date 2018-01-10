@@ -20,13 +20,13 @@
         <p class="c9 mb15">充值记录空空如也！</p>
         <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
     </div>
-    <div v-else class="W H mt120" v-show="orderType =='0'">
-        <ul class="W H">
-            <li class="hl50 F_ bbd bgf fr6" v-for="item in rechargeGetList">
+    <div v-else class="mt120" v-show="orderType =='0'">
+        <ul>
+            <li class="hl50 F_ bbd bgf fr6 ell" v-for="item in rechargeGetList">
                 <p class='pl10' v-if="item.get_account_degree > 0 ">{{item.create_date}}&nbsp;&nbsp;{{item.meal_name}}充值{{item.get_account_degree}}次和{{item.get_account_money}}元</p>
                 <p class='pl10' v-else>
                     {{item.create_date}}&nbsp;&nbsp;{{item.meal_name}}充值{{item.get_account_money}}元</p>
-                <!--<p class='pr10 c9'>{{item.case_date}}</p>-->
+                <p class='pr10 c9'>{{item.case_date}}</p>
             </li>
         </ul>
     </div>
@@ -36,12 +36,12 @@
         <p class="c9 mb15">消费记录空空如也！</p>
         <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
     </div>
-    <div v-else class="W H pt120" v-show="orderType =='1'">
-        <ul class="W H">
-            <li class="hl50 F_ bbd bgf fr6 " v-for="item in recordGetList" @click="order(item.day)">
+    <div v-else class="mt120" v-show="orderType =='1'">
+        <ul>
+            <li class="hl50 F_ bbd bgf fr6 ell" v-for="item in recordGetList" @click="order(item.day)">
                 <p class='pl10'>
                     {{item.dinner_datetime}}{{item.canteen_name}}{{item.dinner_name}}{{item.dinner_status}}{{item.cook_money}}元</p>
-                <!--<p class='pr10 c9'>{{item.dinner_createtime}}</p>-->
+                <p class='pr10 c9'>{{item.dinner_createtime}}</p>
             </li>
         </ul>
     </div>
