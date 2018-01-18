@@ -10,7 +10,7 @@
         <p class="c9 mb15">今日菜谱空空如也！</p>
         <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
     </div>
-    <div v-else class="W mt50">
+    <div v-else class="W H mt50">
         <ul class="tc clear H5">
             <li class="H W5 fl ptinfo" v-for="item in cartProductList">
                 <img :src="item.cookbook_image+'?imageslim'" class="H7 W" @click="popup()">
