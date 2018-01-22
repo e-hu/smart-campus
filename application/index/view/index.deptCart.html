@@ -51,7 +51,7 @@
     <div class="W15 h60 Cz tl" v-if="now_num == '0'"><span>(未预定)</span></div>
     <div class="W15 h60 Cz tl" v-else><span>(已预定)</span></div>
     <div class="W2 h60 Cz tl">
-        <div class="W H lh30" v-if="now_num != '0' "><span>{{now_flag}}<span><br/><span>{{now_name}}</span></div>
+        <div class="W H lh30" v-if="now_num !== '0' "><span>{{now_flag}}</span><br/><span>{{now_name}}</span></div>
     </div>
     <div class="W3 h60 Cz">
         <div class="W H ptcheck">
@@ -147,7 +147,9 @@
                                 self.cartProductList = ret.cartList;
                                 self.cartGetCount = ret.cartCount;
                                 self.cart_priceId = ret.cart_priceId;
-                                vm.now_num = ret.dinner_name.length;
+                                if(ret.dinner_name){
+                                    vm.now_num = ret.dinner_name.length;
+                                }
                                 vm.now_flag = ret.dinner_name;
                                 vm.now_name = ret.cookbook_name;
                             }
@@ -162,36 +164,7 @@
                 },
                 changeCa: function (Tn, Df, Cn, Pi, Cp, $event) {
                     var self = this;
-                    if ($event.target.defaultChecked) {
-                        $.ajax({ //删除商品
-                            url: SCapiDic.deptDelCart,
-                            type: "POST",
-                            dataType: "json",
-                            data: {
-                                canteen_no: Tn,
-                                dinner_flag: Df,
-                                cookbook_no: Cn,
-                                price_id: Pi,
-                                cookbook_price: Cp,
-                                day: self.day,
-                                emp_id: getUrlParam('emp_id')
-                            },
-                            success: function (ret) {
-                                if (ret.code == '0') {
-                                    $.alert(ret.msg);
-                                } else {
-                                    $('input:checkbox[name="radio"]').removeAttr('checked');
-                                    $event.target.checked = false;
-                                    $event.target.defaultChecked = false;
-                                    vm.price_total = ret.data.price_total;
-                                    vm.price_num = ret.data.price_num;
-                                    vm.now_num = ret.data.dinner_name.length;
-                                    vm.now_falg = '';
-                                    vm.now_name = '';
-                                }
-                            }
-                        });
-                    } else {
+                    if ($event.target.checked) {
                         $.ajax({ //增加商品
                             url: SCapiDic.deptAddCart,
                             type: "POST",
@@ -209,16 +182,45 @@
                                 if (ret.code == '0') {
                                     $.alert(ret.msg);
                                     $event.target.checked = false;
-                                    $event.target.defaultChecked = false;
                                 } else {
                                     $('input:checkbox[name="radio"]').removeAttr('checked');
                                     $event.target.checked = true;
-                                    $event.target.defaultChecked = true;
                                     vm.price_total = ret.data.price_total;
                                     vm.price_num = ret.data.price_num;
-                                    vm.now_num = ret.data.dinner_name.length;
+                                    if(ret.data.dinner_name){
+                                        vm.now_num = ret.data.dinner_name.length;
+                                    }
                                     vm.now_flag = ret.data.dinner_name;
                                     vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        });
+                    } else {
+                        $.ajax({ //删除商品
+                            url: SCapiDic.deptDelCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day,
+                                emp_id: getUrlParam('emp_id')
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = true;
+                                } else {
+                                    $('input:checkbox[name="radio"]').removeAttr('checked');
+                                    $event.target.checked = false;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    vm.now_num = '0';
+                                    vm.now_flag = '';
+                                    vm.now_name = '';
                                 }
                             }
                         });
