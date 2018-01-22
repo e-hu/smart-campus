@@ -28,18 +28,21 @@
 
         <div class="col-xs-2">
             <div class="form-group" style="line-height: 1em;padding-top:10px;  margin-left: 20px;">
-                餐厅名称: {$info.canteen_name}         </div>
+                餐厅名称: {$info.canteen_name}
+            </div>
         </div>
         <div class="col-xs-2">
             <div class="form-group" style="line-height: 1em;padding-top:10px;  margin-left: 20px;">
-                餐次名称:{$info.dinner_name}          </div>
+                餐次名称:{$info.dinner_name}
+            </div>
         </div>
         <div class="col-xs-2">
             <div class="form-group" style="line-height: 1em;padding-top:10px;  margin-left: 20px;">
-                售卖日期:{$info.sale_datetime}        </div>
+                售卖日期:{$info.sale_datetime}
+            </div>
         </div>
 
-        <div class="col-xs-3">
+        <div class="col-xs-2">
             <div class="form-group" style="
     margin-left: 20px;
 ">
@@ -74,13 +77,16 @@
             <tr>
                 <td class='text-center'>{$vo.cookbook_name}</td>
                 {if $vo.price_flag > 0}
-                <td class='text-center'><input class="layui-input layui-input-inline title-input price" name="{$vo.price_id}"
+                <td class='text-center'><input class="layui-input layui-input-inline title-input price"
+                                               name="{$vo.price_id}"
                                                value="{$vo.cookbook_price}" style="width: 72px;height: 32px;"/></td>
                 {else/}
                 <td class='text-center'>{$vo.cookbook_price}</td>
                 {/if}
-                <td class='text-center'><input class="layui-input layui-input-inline title-input number" name="{$vo.price_id}"
-                                               value="{$vo.cookbook_limit_quantity}" style="width: 72px;height: 32px;"/></td>
+                <td class='text-center'><input class="layui-input layui-input-inline title-input number"
+                                               name="{$vo.price_id}"
+                                               value="{$vo.cookbook_limit_quantity}" style="width: 72px;height: 32px;"/>
+                </td>
                 {if $vo.status > 0}
                 <td class="text-center selected"><span value="{$vo.price_id}"></span></td>
                 </td>
