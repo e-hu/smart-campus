@@ -29,15 +29,15 @@
         <div class="layui-input-block">
             {if $vo and isset($vo.price_flag)}
             {if $vo.price_flag == '0'}
-            <input type="radio"  checked   name="price_flag" value="0" title="不允许">
-            <input type="radio"     name="price_flag" value="1" title="允许">
-             {else/}
-            <input type="radio"  name="price_flag" value="0" title="不允许">
-            <input type="radio" checked  name="price_flag" value="1" title="允许">
+            <input type="radio" name="price_flag" value="1" title="允许">
+            <input type="radio" checked name="price_flag" value="0" title="不允许">
+            {else/}
+            <input type="radio" checked name="price_flag" value="1" title="允许">
+            <input type="radio" name="price_flag" value="0" title="不允许">
             {/if}
             {else/}
-            <input type="radio"   name="price_flag" value="0" title="不允许">
-            <input type="radio"   name="price_flag" value="1" title="允许">
+            <input type="radio" checked name="price_flag" value="1" title="允许">
+            <input type="radio" name="price_flag" value="0" title="不允许">
             {/if}
         </div>
     </div>
@@ -46,11 +46,15 @@
     <div class="layui-form-item">
         <label class="layui-form-label label-required">菜品类别</label>
         <div class="layui-input-block">
-            {foreach $cookbook_types as $cookbook_type}
+            {foreach $cookbook_types as $key=>$cookbook_type}
             {if isset($vo.cookbook_type) and $vo.cookbook_type == $cookbook_type.cookbook_typeid}
             <input type="radio" checked  name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">
             {else}
+            {if $key == 0}
+            <input type="radio" checked name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">
+            {else}
             <input type="radio" name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">
+            {/if}
             {/if}
             {/foreach}
         </div>
@@ -65,7 +69,7 @@
                    placeholder="请选择时间" class="input-sm form-control">
             {else}
             <input name="start_datetime" id="start_datetime"
-                   placeholder="请选择时间" class="input-sm form-control">
+                   placeholder="请选择时间" class="input-sm form-control" value="">
             {/if}
         </div>
     </div>
@@ -82,11 +86,15 @@
     <div class="layui-form-item">
         <label class="layui-form-label label-required">套餐指定</label>
         <div class="layui-input-block">
-            {foreach $cookbook_meal_types as $cookbook_meal_type}
+            {foreach $cookbook_meal_types as $key=>$cookbook_meal_type}
             {if isset($vo.meal_id) and $vo.meal_id == $cookbook_meal_type.meal_id}
             <input type="radio" checked  name="meal_id" value="{$cookbook_meal_type.meal_id}" title="{$cookbook_meal_type.meal_name}">
             {else}
+            {if $key == '0'}
+            <input type="radio" checked name="meal_id" value="{$cookbook_meal_type.meal_id}" title="{$cookbook_meal_type.meal_name}">
+            {else}
             <input type="radio" name="meal_id" value="{$cookbook_meal_type.meal_id}" title="{$cookbook_meal_type.meal_name}">
+            {/if}
             {/if}
             {/foreach}
         </div>
@@ -103,5 +111,5 @@
     <script>window.form.render();</script>
 </form>
 <script>
-    window.laydate.render({range: false, elem: '#start_datetime', format: 'yyyy-MM-dd'});
+    window.laydate.render({range: false, elem: '#start_datetime', format: 'yyyy-MM-dd',value: new Date().getFullYear()+'-'+new Date().getMonth() + 1+'-'+new Date().getDate()});
 </script>
