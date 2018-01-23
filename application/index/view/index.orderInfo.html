@@ -43,7 +43,7 @@
 <div id="report" class="weui-popup__container popup-bottom">
     <div class="weui-popup__overlay"></div>
     <div class="weui-popup__modal">
-        <div id="main" style="width:100vw;height:50vh;"></div>
+        <div id="main" style="width:100vw;height:70vh;"></div>
     </div>
 </div>
 {include file="common/footer" /}
@@ -66,13 +66,13 @@
             },
             methods: {
                 takeus: function () {
-                    $.alert('不用看了,可以去取餐了!')
+                    $.alert('快点快点,可以去取餐了!')
                 },
                 historyus: function () {
-                    $.alert('不用看了,订单已经过期了!')
+                    $.alert('不用看了,这笔订单已经过期了!')
                 },
                 waitus: function () {
-                    $.alert('慢慢等吧，还没可以取餐!')
+                    $.alert('慢慢等吧，还没到可以取餐的时间!')
                 }
             }
         });
@@ -226,7 +226,7 @@
                                         name: '营养比例',
                                         type: 'pie',
                                         radius: '50%',
-                                        center: ['65%', '50%'],
+                                        center: ['63%', '50%'],
                                         data: [
                                             {value: ret['ingredient']['calcium'], name: ret['types_name']['calcium']},
                                             //{value: ret['ingredient']['calory'], name: ret['types_name']['calory']},
