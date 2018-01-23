@@ -126,7 +126,7 @@ select::-ms-expand { display: none; }
 .W1,.W2,.W3,.W4,.W5,.W6,.W7,.W8,.W9,.C1,.C2,.C3,.C4,.C5,.C6,.C7,.C8,.C9,.C10,.C11{float:left}
 .W1{width:10%}.W2{width:20%}.W3{width:30%}.W4{width:40%}.W5{width:50%}.W6{width:60%}.W7{width:70%}.W8{width:80%}.W9{width:90%}
 .C1{width:8.33333333%}.C2{width:16.66666667%}.C3{width:25%}.C4{width:33.33333333%}.C5{width:41.66666667%}.C6{width:50%}.C7{width:58.33333333%}.C8{width:66.66666667%}.C9{width:75%}.C10{width:83.33333333%}.C11{width:91.66666667%}
-.H3{height:30%}.H4{height:40%}.H5{height:50%}.H6{height:60%}.H7{height:70%}.H8{height:80%}.H9{height:90%}.H78{height:78%}
+.H1{height:10%}.H2{height:20%}.H3{height:30%}.H4{height:40%}.H5{height:50%}.H6{height:60%}.H7{height:70%}.H8{height:80%}.H9{height:90%}.H78{height:78%}
 /* float */
 .fl{float:left}
 .fr{float:right}
@@ -180,7 +180,7 @@ select::-ms-expand { display: none; }
 .m5-0{margin:5px 0px}.m5-10{margin:5px 10px}.m5-15{margin:5px 15px}.m5-20{margin:5px 20px}
 .m10-0{margin:10px 0px}.m10-5{margin:10px 5px}.m10-15{margin:10px 15px}.m10-20{margin:10px 20px}
 .m15-0{margin:15px 0px}.m15-5{margin:15px 5px}.m15-10{margin:15px 10px}.m15-20{margin:15px 20px}
-.m20-0{margin:20px 0px}.m20-5{margin:20px 5px}.m20-10{margin:20px 10px}.m20-15{margin:20px 15px}
+.m20-0{margin:20px 0px}.m20-5{margin:20px 5px}.m20-10{margin:20px 10px}.m20-15{margin:20px 15px}.m20-20{margin:20px 20px}
 
 /* position    0~20    */     .T0{top:0px}.R0{right:0px}.B0{bottom:0px}.L0{left:0px}.T1{top:1px}.R1{right:1px}.B1{bottom:1px}.L1{left:1px}.T2{top:2px}.R2{right:2px}.B2{bottom:2px}.L2{left:2px}.T3{top:3px}.R3{right:3px}.B3{bottom:3px}.L3{left:3px}.T4{top:4px}.R4{right:4px}.B4{bottom:4px}.L4{left:4px}.T5{top:5px}.R5{right:5px}.B5{bottom:5px}.L5{left:5px}.T6{top:6px}.R6{right:6px}.B6{bottom:6px}.L6{left:6px}.T7{top:7px}.R7{right:7px}.B7{bottom:7px}.L7{left:7px}.T8{top:8px}.R8{right:8px}.B8{bottom:8px}.L8{left:8px}.T9{top:9px}.R9{right:9px}.B9{bottom:9px}.L9{left:9px}.T10{top:10px}.R10{right:10px}.B10{bottom:10px}.L10{left:10px}.T11{top:11px}.R11{right:11px}.B11{bottom:11px}.L11{left:11px}.T12{top:12px}.R12{right:12px}.B12{bottom:12px}.L12{left:12px}.T13{top:13px}.R13{right:13px}.B13{bottom:13px}.L13{left:13px}.T14{top:14px}.R14{right:14px}.B14{bottom:14px}.L14{left:14px}.T15{top:15px}.R15{right:15px}.B15{bottom:15px}.L15{left:15px}.T16{top:16px}.R16{right:16px}.B16{bottom:16px}.L16{left:16px}.T17{top:17px}.R17{right:17px}.B17{bottom:17px}.L17{left:17px}.T18{top:18px}.R18{right:18px}.B18{bottom:18px}.L18{left:18px}.T19{top:19px}.R19{right:19px}.B19{bottom:19px}.L19{left:19px}.T20{top:20px}.R20{right:20px}.B20{bottom:20px}.L20{left:20px}
 /* color       0~9 a~f */     .cr{color:#c80000}.c0{color:#000}.c1{color:#111}.c2{color:#222}.c3{color:#333}.c4{color:#444}.c5{color:#555}.c6{color:#666}.c7{color:#777}.c8{color:#888}.c9{color:#999}.ca{color:#aaa}.cb{color:#bbb}.cc{color:#ccc}.cd{color:#ddd}.ce{color:#eee}.cf{color:#fff}
