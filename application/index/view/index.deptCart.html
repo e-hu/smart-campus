@@ -20,7 +20,7 @@
     <div v-else class="W H mt90">
         <ul class="tc clear H5 ">
             <li class="H W5 ptinfo fl" v-for="item in cartProductList">
-                <img :src="item.cookbook_image+'?imageslim'" class="H7 W" @click="popup()">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W" @click="popup(item.cookbook_name)">
                 <div class="bgf H3 W">
                     <div class="tl W3 fl tr H">
                         <div class="weui-cells_checkbox W H ptcheck">
@@ -99,7 +99,7 @@
             el: '#app',
             data: data,
             methods: {
-                popup: function () {
+                popup: function (name) {
                     var self = this;
                     $.ajax({
                         url: '/index/mallapi/boohee_food',
