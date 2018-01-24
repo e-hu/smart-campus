@@ -141,19 +141,19 @@ class User extends BasicAdmin
             }else{
                 $data['authorize'] = '';
             }
-            if (isset($data['canteen']) && is_array($data['canteen'])) {
+            if (isset($data['id'])) {
+                unset($data['username']);
+            } elseif (Db::name($this->table)->where(['username'=>$data['username'],'company_id'=>session('company_id')])->find()) {
+                $this->error('用户账号已经存在，请使用其它账号！');
+            }
+            if (isset($data['canteen']) && is_array($data['canteen']) && isset($data['id'])) {
                 Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['id'], 'dept_type' => 'canteen'])->delete();
                 foreach ($data['canteen'] as $key => $val) {
                     Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['id'], 'dept_id' => $data['canteen'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'canteen']);
                 }
                 unset($data['canteen']);
-            }else{
+            }elseif(!isset($data['canteen'])&& isset($data['id'])){
                 Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['id'], 'dept_type' => 'canteen'])->delete();
-            }
-            if (isset($data['id'])) {
-                unset($data['username']);
-            } elseif (Db::name($this->table)->where('username', $data['username'])->find()) {
-                $this->error('用户账号已经存在，请使用其它账号！');
             }
         } else {
             $data['authorize'] = explode(',', isset($data['authorize']) ? $data['authorize'] : '');
@@ -161,7 +161,7 @@ class User extends BasicAdmin
             if (session('user.company_id') == '0') {     //只有超级管理员才能选择公司列表
                 $this->assign('companys', Db::name('Company_list')->where('status', 1)->select());
             }
-            if (session('user.company_id') != '0') {     //不是超级管理员才能选择数据权限列表
+            if (session('user.company_id') != '0' && isset($_GET['id'])) {     //不是超级管理员才能选择数据权限列表
                 $list = Db::name('t_user_manager_dept_id')->where(['company_id'=>session('user.company_id'),'u_id'=>$_GET['id']] )->select();
                 $dept_ids = array_column($list, 'dept_id');
                 $this->assign('manager', $dept_ids);
