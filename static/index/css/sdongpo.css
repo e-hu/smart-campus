@@ -323,7 +323,9 @@ html, body {
 .mt90{
     margin-top: 90px;
 }
-
+.mt100{
+    margin-top: 100px;
+}
 .ptcheckinfo_div{
     display:table;line-height: .8rem;
 }
