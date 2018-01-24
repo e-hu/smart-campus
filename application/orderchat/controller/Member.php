@@ -51,7 +51,7 @@ class Member extends BasicAdmin
         }
         if (isset($get['tag']) && $get['tag'] !== '') {
             //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
-            $db->where("',' +''+dept_no+''+',' like :tag", ['tag' => "%,{$get['tag']},%"]);
+            $db->where('dept_no',$get['tag']);
         }
         // 实例化并显示
         return parent::_list($db);

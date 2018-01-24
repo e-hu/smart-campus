@@ -39,8 +39,7 @@ class Grant extends BasicAdmin {
             ->where('a.company_id',session('user.company_id'));
         // 应用搜索条件
         if (isset($get['tag']) && $get['tag'] !== '') {
-            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
-            $db->where("',' +''+dept_no+''+',' like :tag", ['tag' => "%,{$get['tag']},%"]);
+            $db->where('dept_no',$get['tag']);
         }
         // 实例化并显示
         return parent::_list($db);

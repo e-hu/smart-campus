@@ -43,8 +43,7 @@ class CookBook extends BasicAdmin {
             }
         }
         if (isset($get['tag']) && $get['tag'] !== '') {
-            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
-            $db->where("',' +''+cookbook_typeid+''+',' like :tag", ['tag' => "%,{$get['tag']},%"]);
+            $db->where('cookbook_typeid',$get['tag']);
         }
         // 实例化并显示
         return parent::_list($db);

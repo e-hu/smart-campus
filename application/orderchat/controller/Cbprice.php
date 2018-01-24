@@ -48,11 +48,9 @@ class CbPrice extends BasicAdmin
         }
 
         if (isset($get['canteen_no']) && $get['canteen_no'] !== '') {
-            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
-            $db->where("',' +''+a.canteen_no+''+',' like :canteen_no", ['canteen_no' => "%,{$get['canteen_no']},%"]);
+            $db->where('a.canteen_no',$get['canteen_no']);
         }
         if (isset($get['dinner_flag']) && $get['dinner_flag'] !== '') {
-            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
             $db->where('a.dinner_flag', $get['dinner_flag']);
         }
         if (session('user.create_by') != '10001') {
@@ -205,11 +203,9 @@ class CbPrice extends BasicAdmin
         }
 
         if (isset($get['canteen_no']) && $get['canteen_no'] !== '') {
-            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
-            $db->where("',' +''+a.canteen_no+''+',' like :canteen_no", ['canteen_no' => "%,{$get['canteen_no']},%"]);
+            $db->where('a.canteen_no',$get['canteen_no']);
         }
         if (isset($get['dinner_flag']) && $get['dinner_flag'] !== '') {
-            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
             $db->where('a.dinner_flag', $get['dinner_flag']);
         }
         if (session('user.create_by') != '10001') {

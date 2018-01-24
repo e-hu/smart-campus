@@ -49,11 +49,9 @@ class Cbdinnerinfo extends BasicAdmin
             $db->whereBetween('a.dinner_datetime', ["{$start} 00:00:00", "{$end} 23:59:59"]);
         }
         if (isset($get['canteen_no']) && $get['canteen_no'] !== '') {
-            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
-            $db->where("',' +''+a.canteen_no+''+',' like :canteen_no", ['canteen_no' => "%,{$get['canteen_no']},%"]);
+            $db->where('a.canteen_no',$get['canteen_no']);
         }
         if (isset($get['dinner_flag']) && $get['dinner_flag'] !== '') {
-            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
             $db->where('a.dinner_flag', $get['dinner_flag']);
         }
 
