@@ -183,7 +183,6 @@
 
     myChart.setOption(option);
 </script>
-
 <script>
     var myChart = echarts.init(document.getElementById('main3'), 'vintage');
 
@@ -248,9 +247,24 @@
                         position: 'insideRight'
                     }
                 },
-                data: [220, 182, 191, 234, 290, 330, 310, 400, 300, 400]
-            }
-        ]
+                data: [220, 182, 191, 234, 290, 330, 310, 400, 300, 400],
+                markLine : {
+                    itemStyle: {
+                        normal: {
+                            color:'#FA8565',
+                            label: {
+                                formatter: '{c}'
+                            }
+                        }
+                    },
+                    data : [
+                        {type : 'max',
+                            name: '过量线'
+                        }
+                    ]
+                }
+            },
+        ],
     };
     myChart.setOption(option);
 </script>
