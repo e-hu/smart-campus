@@ -7,4 +7,5 @@
 /nbproject
 /composer.lock
 /static/upload
-application/database.php
+/application/database.php
+/webhook.php

@@ -42,8 +42,8 @@
             el: '#app',
             data: data,
             methods: {
-                deptCart: function (sale_datetime,emp_id) {  //跳转函数
-                    openWin('/index/index/deptCart', {day: sale_datetime,emp_id:emp_id});
+                deptCart: function (sale_datetime, emp_id) {  //跳转函数
+                    openWin('/index/index/deptCart', {day: sale_datetime, emp_id: emp_id});
                 },
                 initDeptObj: function () {
                     var self = this;
@@ -51,10 +51,10 @@
                         url: SCapiDic.getDeptEmpList,
                         type: "POST",
                         dataType: "json",
-                        data:{
-                            sale_datetime:getUrlParam('sale_datetime'),
-                            dinner_flag:getUrlParam('dinner_flag'),
-                            dept_id:getUrlParam('dept_id')
+                        data: {
+                            sale_datetime: getUrlParam('sale_datetime'),
+                            dinner_flag: getUrlParam('dinner_flag'),
+                            dept_id: getUrlParam('dept_id')
                         },
                         success: function (ret) {
                             self.memberDeptList = ret.memberDeptList;
@@ -70,8 +70,7 @@
                     this.initDeptObj();
                 })
             }
-        })
-        ;
+        });
     };
 </script>
 
