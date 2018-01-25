@@ -13,7 +13,8 @@
     <div v-else class="W H mt50">
         <ul class="tc clear H5">
             <li class="H W5 fl ptinfo" v-for="item in cartProductList">
-                <img :src="item.cookbook_image+'?imageslim'" class="H7 W" @click="popup(item.cookbook_name)">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W"
+                     @click="popup(item.cookbook_name,item.cookbook_info)">
                 <div class="bgf H3 W">
                     <div class="H W tc" style="display:table;line-height: .8rem;">
                         <div class="W H ptcheckinfo">
@@ -43,7 +44,9 @@
 <div id="report" class="weui-popup__container popup-bottom">
     <div class="weui-popup__overlay"></div>
     <div class="weui-popup__modal">
-        <div id="main" style="width:100vw;height:70vh;"></div>
+        <div id="cbInfo" class="tc lh30" style="width:100vw;height:10vh;"><span class="f20" style="font-weight:bold">{{select_cbname}}</span><br><span
+                class="f15">{{select_cbinfo}}</span></div>
+        <div id="main" style="width:100vw;height:50vh;"></div>
     </div>
 </div>
 {include file="common/footer" /}
@@ -76,12 +79,21 @@
                 }
             }
         });
+        var report = new Vue({
+            el: '#report',
+            data: {
+                select_cbname: '',
+                select_cbinfo: ''
+            }
+        });
         new Vue({
             el: '#app',
             data: data,
             methods: {
-                popup: function (name) {
+                popup: function (name, info) {
                     var self = this;
+                    report.select_cbname = name;
+                    report.select_cbinfo = info;
                     $.ajax({
                         url: '/index/mallapi/boohee_food',
                         type: "GET",
@@ -231,23 +243,44 @@
                                             {value: ret['ingredient']['calcium'], name: ret['types_name']['calcium']},
                                             //{value: ret['ingredient']['calory'], name: ret['types_name']['calory']},
                                             //{value: ret['ingredient']['carbohydrate'], name: ret['types_name']['carbohydrate']},
-                                            {value: ret['ingredient']['cholesterol'], name: ret['types_name']['cholesterol']},
+                                            {
+                                                value: ret['ingredient']['cholesterol'],
+                                                name: ret['types_name']['cholesterol']
+                                            },
                                             {value: ret['ingredient']['copper'], name: ret['types_name']['copper']},
                                             //{value: ret['ingredient']['fat'], name: ret['types_name']['fat']},
                                             //{value: ret['ingredient']['fiber_dietary'], name: ret['types_name']['fiber_dietary']},
                                             {value: ret['ingredient']['iron'], name: ret['types_name']['iron']},
                                             {value: ret['ingredient']['kalium'], name: ret['types_name']['kalium']},
-                                            {value: ret['ingredient']['lactoflavin'], name: ret['types_name']['lactoflavin']},
-                                            {value: ret['ingredient']['magnesium'], name: ret['types_name']['magnesium']},
-                                            {value: ret['ingredient']['manganese'], name: ret['types_name']['manganese']},
+                                            {
+                                                value: ret['ingredient']['lactoflavin'],
+                                                name: ret['types_name']['lactoflavin']
+                                            },
+                                            {
+                                                value: ret['ingredient']['magnesium'],
+                                                name: ret['types_name']['magnesium']
+                                            },
+                                            {
+                                                value: ret['ingredient']['manganese'],
+                                                name: ret['types_name']['manganese']
+                                            },
                                             {value: ret['ingredient']['natrium'], name: ret['types_name']['natrium']},
                                             {value: ret['ingredient']['niacin'], name: ret['types_name']['niacin']},
                                             //{value: ret['ingredient']['protein'], name: ret['types_name']['protein']},
                                             {value: ret['ingredient']['selenium'], name: ret['types_name']['selenium']},
                                             {value: ret['ingredient']['thiamine'], name: ret['types_name']['thiamine']},
-                                            {value: ret['ingredient']['vitamin_a'], name: ret['types_name']['vitamin_a']},
-                                            {value: ret['ingredient']['vitamin_c'], name: ret['types_name']['vitamin_c']},
-                                            {value: ret['ingredient']['vitamin_e'], name: ret['types_name']['vitamin_e']},
+                                            {
+                                                value: ret['ingredient']['vitamin_a'],
+                                                name: ret['types_name']['vitamin_a']
+                                            },
+                                            {
+                                                value: ret['ingredient']['vitamin_c'],
+                                                name: ret['types_name']['vitamin_c']
+                                            },
+                                            {
+                                                value: ret['ingredient']['vitamin_e'],
+                                                name: ret['types_name']['vitamin_e']
+                                            },
                                             {value: ret['ingredient']['zinc'], name: ret['types_name']['zinc']},
                                         ],
                                         // label: {

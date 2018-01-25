@@ -13,6 +13,19 @@
     </div>
 
     <div class="layui-form-item">
+        <label class="layui-form-label">套餐组合</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.cookbook_info)}
+            <input type="text"  name="cookbook_info" value='{$vo.cookbook_info|default=""}'
+                   title="请输入2位及以上的字符" placeholder="请输入套餐组合" class="layui-input disabled">
+            {else}
+            <input type="text" name="cookbook_info" value='' pattern="^\S{2,}$"
+                   title="请输入2位及以上的字符"  placeholder="请输入套餐组合" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
         <label class="layui-form-label">价格</label>
         <div class="layui-input-inline">
             {if $vo and isset($vo.price)}

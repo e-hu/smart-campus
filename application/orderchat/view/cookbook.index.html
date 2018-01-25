@@ -59,6 +59,7 @@
                     <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
                 </th>
                 <th class='text-center'>菜品名称</th>
+                <th class='text-center'>套餐组合</th>
                 <th class='text-center'>菜品价格</th>
                 <th class='text-center'>是否允许修改价格</th>
                 <th class='text-center'>开始日期</th>
@@ -77,6 +78,7 @@
                     <input class="list-check-box" value='{$vo.cookbook_no}' type='checkbox'/>
                 </td>
                 <td class='text-center'>{$vo.cookbook_name|default="<span style='color:#ccc'>还没有设置菜品名称</span>"}</td>
+                <td class='text-center'>{$vo.cookbook_info|default="<span style='color:#ccc'>还没有设置套餐组合</span>"}</td>
                 <td class='text-center'>{$vo.price|default="<span style='color:#ccc'>还没有设置菜品价格</span>"}元</td>
                 {if $vo.price_flag == '0'}
                 <td class='text-center'>不允许</td>
@@ -107,7 +109,7 @@
             </tr>
             {/foreach}
             {if empty($list)}
-            <tr><td colspan="7" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            <tr><td colspan="9" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
             {/if}
         </tbody>
     </table>
