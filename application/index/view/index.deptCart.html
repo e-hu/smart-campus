@@ -217,9 +217,13 @@
 
                             var option = {
                                 title: {
-                                    text: name + '的营养比例',
+                                    text: '营养比例',
                                     subtext: '以每100克计算,毫克(mg)为单位',
-                                    x: 'center'
+                                    x: 'right',
+                                    textStyle: {
+                                        // color: 'red',
+                                        fontSize: 15
+                                    }
                                 },
                                 tooltip: {
                                     trigger: 'item',
@@ -256,8 +260,8 @@
                                     {
                                         name: '营养比例',
                                         type: 'pie',
-                                        radius: '50%',
-                                        center: ['63%', '50%'],
+                                        radius: '35%',
+                                        center: ['65%', '65%'],
                                         data: [
                                             {value: ret['ingredient']['calcium'], name: ret['types_name']['calcium']},
                                             //{value: ret['ingredient']['calory'], name: ret['types_name']['calory']},
