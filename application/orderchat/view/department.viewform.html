@@ -19,7 +19,7 @@
     }
 </style>
 
-<form class="layui-form layui-box" onsubmit="return false;" >
+<form class="layui-form layui-box" onsubmit="return false;">
 
     <div id="list" style="overflow-x: auto; overflow-y: auto; height: 300px; width:auto;">
         <table class="table table-hover">
@@ -34,15 +34,19 @@
             <tr>
                 <td class='text-center'>{$vo.dept_name}</td>
                 <td class='text-center nowrap'>
-                {if auth("$classuri/edit")}
-                <span class="text-explode">|</span>
-                <a data-modal='{:url("$classuri/edit")}?dept_no={$vo.dept_no}' href="javascript:void(0)">编辑</a>
-                {/if}
-                {if auth("$classuri/del")}
-                <span class="text-explode">|</span>
-                <a data-update="{$vo.dept_no}" data-field='delete' data-action='{:url("$classuri/del")}'
-                   href="javascript:void(0)">删除</a>
-                {/if}
+                    {if auth("$classuri/auth")}
+                    <span class="text-explode">|</span>
+                    <a data-modal='{:url("$classuri/auth")}?dept_no={$vo.dept_no}' href="javascript:void(0)">授权</a>
+                    {/if}
+                    {if auth("$classuri/edit")}
+                    <span class="text-explode">|</span>
+                    <a data-modal='{:url("$classuri/edit")}?dept_no={$vo.dept_no}' href="javascript:void(0)">编辑</a>
+                    {/if}
+                    {if auth("$classuri/del")}
+                    <span class="text-explode">|</span>
+                    <a data-update="{$vo.dept_no}" data-field='delete' data-action='{:url("$classuri/del")}'
+                       href="javascript:void(0)">删除</a>
+                    {/if}
                 </td>
             </tr>
             {/foreach}

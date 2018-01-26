@@ -45,6 +45,15 @@ class Department extends BasicAdmin
         return parent::_list($db);
     }
 
+    /**
+     * 授权管理
+     * @return array|string
+     */
+    public function auth()
+    {
+        LogService::write('订餐管理', '执行授权管理操作');
+        return $this->_form($this->table, 'auth', 'dept_no');
+    }
 
     /**
      * 部门添加
@@ -104,11 +113,32 @@ class Department extends BasicAdmin
     public function _form_filter(&$data)
     {
         if ($this->request->isPost()) {
+            if (isset($data['canteen']) && is_array($data['canteen'])) {
+                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['dept_no'], 'dept_type' => 'deptcanteen'])->delete();
+                foreach ($data['canteen'] as $key => $val) {
+                    Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['dept_no'], 'dept_id' => $data['canteen'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'deptcanteen']);
+                }
+                unset($data['canteen']);
+            } else {
+                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['dept_no'], 'dept_type' => 'deptcanteen'])->delete();
+            }
+
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where('dept_no', $data['dept_no'])->find()) {
                 unset($data['dept_name']);
             } elseif (isset($data['dept_name']) and Db::name($this->table)->where('dept_name', $data['dept_name'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('部门名称已经存在，请使用其它部门名称！');
             }
+        }else {
+            if(isset( $_GET['dept_no'])){
+                $list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['dept_no']])->select();
+                $dept_ids = array_column($list, 'dept_id');
+                $this->assign('manager', $dept_ids);
+            }
+            $db = Db::name('canteen_base_info')->where('company_id', session('user.company_id'));
+            if (session('user.create_by') != '10001') {
+                $db->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
+            }
+            $this->assign('canteens', $db->select());
         }
     }
 
