@@ -36,7 +36,7 @@ class Member extends BasicAdmin
         $db = Db::name($this->table)
             ->alias('a')
             ->field('a.*,dept_name')
-            ->join('dept_info c', 'a.Dept_Id = c.dept_no and a.company_id = c.company_id')
+            ->join('dept_info c', 'a.Dept_Id = c.dept_no and a.company_id = c.company_id','left')
             ->where('a.company_id', session('user.company_id'));
         // 应用搜索条件ss
         foreach (['Emp_Name'] as $key) {
