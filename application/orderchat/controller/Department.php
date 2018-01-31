@@ -34,11 +34,15 @@ class Department extends BasicAdmin
         $get = $this->request->get();
         // 实例Query对象
         $db = Db::name($this->table)
-            ->where('company_id', session('user.company_id'))->where('parent_dept_no', 'Null');
-        // 应用搜索条件ss
+            ->join('t_user_manager_dept_id t','t.company_id = dept_info.company_id  and t.u_id = dept_info.dept_no and t.dept_type = :dept_type','left')
+            ->bind('dept_type','deptcanteen')
+            ->join('canteen_base_info i','i.company_id = dept_info.company_id and i.canteen_no = t.dept_id','left')
+            ->where('dept_info.company_id', session('user.company_id'))->where('dept_info.parent_dept_no', 'Null')
+            ->field('dept_info.*,canteen_name');
+        // 应用搜索条件
         foreach (['dept_name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
-                $db->where($key, 'like', "%{$get[$key]}%");
+                $db->where('dept_info'.$key, 'like', "%{$get[$key]}%");
             }
         }
         // 实例化并显示
@@ -98,7 +102,12 @@ class Department extends BasicAdmin
             $data = [];
             $get = $this->request->get();
             $db = Db::name($this->table)
-                ->where('parent_dept_no',$get['parent_dept_no'])
+                ->join('t_user_manager_dept_id t','t.company_id = dept_info.company_id  and t.u_id = dept_info.dept_no and t.dept_type = :dept_type','left')
+                ->bind('dept_type','deptcanteen')
+                ->join('canteen_base_info i','i.company_id = dept_info.company_id and i.canteen_no = t.dept_id','left')
+                ->where('dept_info.parent_dept_no',$get['parent_dept_no'])
+                ->where('dept_info.company_id',session('user.company_id'))
+                ->field('dept_info.*,canteen_name')
                 ->select();
             $data['list'] = $db;
             $this->assign('list', $data['list']);
@@ -130,7 +139,7 @@ class Department extends BasicAdmin
             }
         }else {
             if(isset( $_GET['dept_no'])){
-                $list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['dept_no']])->select();
+                $list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['dept_no'],'dept_type'=>'deptcanteen'])->select();
                 $dept_ids = array_column($list, 'dept_id');
                 $this->assign('manager', $dept_ids);
             }

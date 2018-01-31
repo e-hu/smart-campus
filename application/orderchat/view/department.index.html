@@ -38,20 +38,22 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th class='list-table-check-td'>
-                    <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
-                </th>
+                <!--<th class='list-table-check-td'>-->
+                    <!--<input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>-->
+                <!--</th>-->
                 <th class='text-center'>部门名称</th>
+                <th class='text-center'>餐厅授权</th>
                 <th class='text-center'>操作</th>
             </tr>
         </thead>
         <tbody>
             {foreach $list as $key=>$vo}
             <tr>
-                <td class='list-table-check-td'>
-                    <input class="list-check-box" value='{$vo.dept_no}' type='checkbox'/>
-                </td>
+                <!--<td class='list-table-check-td'>-->
+                    <!--<input class="list-check-box" value='{$vo.dept_no}' type='checkbox'/>-->
+                <!--</td>-->
                 <td class='text-center'>{$vo.dept_name}</td>
+                <td class='text-center'>{$vo.canteen_name|default="<span style='color:#ccc'>无</span>"}</td>
                 <td class='text-center nowrap'>
                     {if auth("$classuri/add")}
                     <span class="text-explode">|</span>

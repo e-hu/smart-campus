@@ -66,6 +66,7 @@
                 <th class='text-center'>联系电话</th>
                 <th class='text-center'>IC卡编号</th>
                 <th class='text-center'>账号名称</th>
+                <th class='text-center'>餐次授权</th>
                 <th class='text-center'>状态</th>
                 <th class='text-center'>操作</th>
             </tr>
@@ -81,6 +82,7 @@
                 <td class='text-center'>{$vo.Default_Tel}</td>
                 <td class='text-center'>{$vo.Ic_Card}</td>
                 <td class='text-center'>{$vo.Emp_MircoMsg_Uid}</td>
+                <td class='text-center'>{$vo.dinner_name|default="<span style='color:#ccc'>无</span>"}</td>
                 <td class='text-center'>
                     {if $vo.Emp_Status eq 0}
                     <span>已禁用</span>

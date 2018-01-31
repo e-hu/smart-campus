@@ -120,7 +120,6 @@ class BasicAdmin extends Controller {
         }
         if (false !== $this->_callback('_data_filter', $result['list']) && $isDisplay) {
             !empty($this->title) && $this->assign('title', $this->title);
-            //print_r($result);exit;
             return $this->fetch('', $result);
         }
         return $result;

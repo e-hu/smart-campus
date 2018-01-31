@@ -13,9 +13,25 @@
         </div>
     </div>
 
+    {if $dinners}
+    <div class="layui-form-item">
+        <label class="layui-form-label">餐次授权</label>
+        <div class="layui-input-block">
+            {foreach $dinners as $dinner}
+            {if in_array($dinner['dinner_no'],$manager_dinner)}
+            <input type="checkbox" checked name="dinner[]" value="{$dinner.dinner_no}"
+                   title="{$dinner.dinner_name}">
+            {else}
+            <input type="checkbox" name="dinner[]" value="{$dinner.dinner_no}" title="{$dinner.dinner_name}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    {/if}
+
     {if $depts}
     <div class="layui-form-item">
-        <label class="layui-form-label">访问授权</label>
+        <label class="layui-form-label">部门授权</label>
         <div class="layui-input-block">
             {foreach $depts as $dept}
             {if in_array($dept['dept_no'],$manager)}

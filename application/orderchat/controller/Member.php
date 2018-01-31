@@ -35,7 +35,10 @@ class Member extends BasicAdmin
         // 实例Query对象
         $db = Db::name($this->table)
             ->alias('a')
-            ->field('a.*,dept_name')
+            ->field('a.*,dept_name,dinner_name')
+            ->join('t_user_manager_dept_id t','t.company_id = a.company_id  and t.u_id = a.Emp_Id and t.dept_type = :dinner_type','left')
+            ->bind('dinner_type','userdinner')
+            ->join('dinner_base_info i','i.company_id = a.company_id and i.dinner_no = t.dept_id','left')
             ->join('dept_info c', 'a.Dept_Id = c.dept_no and a.company_id = c.company_id','left')
             ->where('a.company_id', session('user.company_id'));
         // 应用搜索条件ss
@@ -132,6 +135,16 @@ class Member extends BasicAdmin
                 Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdept'])->delete();
             }
 
+            if (isset($data['dinner']) && is_array($data['dinner'])) {
+                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdinner'])->delete();
+                foreach ($data['dinner'] as $key => $val) {
+                    Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dinner'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdinner']);
+                }
+                unset($data['dinner']);
+            } else {
+                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdinner'])->delete();
+            }
+
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where(['Emp_Id' => $data['Emp_Id'], 'Emp_MircoMsg_Uid' => array('neq', '')])->find()) {
                 unset($data['Emp_MircoMsg_Uid']);
             } elseif (isset($data['Emp_MircoMsg_Uid']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Emp_MircoMsg_Uid', $data['Emp_MircoMsg_Uid'])->find()) {
@@ -141,13 +154,22 @@ class Member extends BasicAdmin
             }
         } else {
             if(isset( $_GET['Emp_Id'])){
-                $list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id']])->select();
-                $dept_ids = array_column($list, 'dept_id');
+                //部门
+                $dept_list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id'],'dept_type'=>'userdept'])->select();
+                $dept_ids = array_column($dept_list, 'dept_id');
                 $this->assign('manager', $dept_ids);
+                //餐次
+                $dinner_list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id']])->select();
+                $dept_ids = array_column($dinner_list, 'dept_id');
+                $this->assign('manager_dinner', $dept_ids);
             }
+            //部门
             $this->assign('dept_infos', Db::name("dept_info")->where('company_id', session('user.company_id'))->select());
             $db = Db::name('dept_info')->where('company_id', session('user.company_id'))->select();
             $this->assign('depts', $db);
+            //餐次
+            $db_dinner = Db::name('dinner_base_info')->where('company_id', session('user.company_id'))->select();
+            $this->assign('dinners', $db_dinner);
         }
     }
 

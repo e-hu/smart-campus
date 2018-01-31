@@ -26,6 +26,7 @@
             <thead>
             <tr>
                 <th class='text-center'>部门名称</th>
+                <th class='text-center'>餐厅授权</th>
                 <th class='text-center'>操作</th>
             </tr>
             </thead>
@@ -33,6 +34,7 @@
             {foreach $list as $key=>$vo}
             <tr>
                 <td class='text-center'>{$vo.dept_name}</td>
+                <td class='text-center'>{$vo.canteen_name|default="<span style='color:#ccc'>无</span>"}</td>
                 <td class='text-center nowrap'>
                     {if auth("$classuri/auth")}
                     <span class="text-explode">|</span>

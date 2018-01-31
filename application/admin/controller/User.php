@@ -162,7 +162,7 @@ class User extends BasicAdmin
                 $this->assign('companys', Db::name('Company_list')->where('status', 1)->select());
             }
             if (session('user.company_id') != '0' && isset($_GET['id'])) {     //不是超级管理员才能选择数据权限列表
-                $list = Db::name('t_user_manager_dept_id')->where(['company_id'=>session('user.company_id'),'u_id'=>$_GET['id']] )->select();
+                $list = Db::name('t_user_manager_dept_id')->where(['company_id'=>session('user.company_id'),'u_id'=>$_GET['id'],'dept_type'=>'canteen'] )->select();
                 $dept_ids = array_column($list, 'dept_id');
                 $this->assign('manager', $dept_ids);
                 $db = Db::name('canteen_base_info')->where('company_id', session('user.company_id'))->select();
