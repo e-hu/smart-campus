@@ -8,65 +8,8 @@
     <img src="__PUBLIC__/static/index/images/1.jpg" class="H W mt50" onclick="funcReadImgInfo()">
     <img src="__PUBLIC__/static/index/images/2.jpg" class="H W mt50" onclick="funcReadImgInfo()">
 </div>
-<!-- 底部导航栏 -->
-<div class="W bgf btd tc f12 c9 h60 SSfooter" id="menu">
-    <div class="C4" onclick="openWin('/index/index/index',{})">
-        <div class="h30 lh30 mt5">
-            <img src="__PUBLIC__/static/index/images/home.png">
-        </div>
-        <div class=" h24 lh20">首页</div>
-    </div>
-    <div class="C4" @click="menu()">
-        <div class="h30 lh30 mt5">
-            <img src="__PUBLIC__/static/index/images/menu-g.png">
-        </div>
-        <div class="h24 lh20 SScmenu">今日菜谱</div>
-    </div>
-    <div class="C4" onclick="openWin('/index/index/me',{})">
-        <div class="h30 lh30 mt5">
-            <img src="__PUBLIC__/static/index/images/me.png">
-        </div>
-        <div class="h24 lh20">个人中心</div>
-    </div>
-</div>
 {include file="common/footer" /}
 <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
-<script type="text/javascript">
-    window.onload = function () {
-        var menu = new Vue({
-            el: '#menu',
-            methods: {
-                menu: function () {  //菜单
-                    $.actions({
-                        actions: [
-                            {
-                                text: "今日菜谱",
-                                className: "color-success",
-                                onClick: function() {
-                                    openWin('/index/index/menu',{})
-                                }
-                            },
-                            {
-                                text: "食学教育",
-                                className: "color-success",
-                                onClick: function() {
-                                    openWin('http://mp.weixin.qq.com/s/lMox_9tXogcEl_Mk-c4wRw',{})
-                                }
-                            },
-                            {
-                                text: "食材检测报告",
-                                className: "color-success",
-                                onClick: function() {
-                                    openWin('http://mp.weixin.qq.com/s/UIkYTiZXtSLJCAzfBeMwnA',{})
-                                }
-                            }
-                        ]
-                    });
-                }
-            },
-        });
-    };
-</script>
 <script>
     /*调用微信预览图片的方法*/
     function funcReadImgInfo(){

@@ -28,24 +28,50 @@
     </div>
 </div>
 <!-- 底部导航栏 -->
-<div class="W bgf btd tc f12 c9 h60 SSfooter" id="menu">
-    <div class="C4" onclick="openWin('/index/index/index',{})">
+<div class="W bgf btd tc f12 c9 h60 SSfooter animsition" id="menu" v-show = "dn == '0'">
+    <div class="C3" onclick="openWin('/index/index/index',{})">
         <div class="h30 lh30 mt5">
-            <img src="__PUBLIC__/static/index/images/home.png">
+            <img src="__PUBLIC__/static/index/images/home-g.png">
         </div>
-        <div class=" h24 lh20">首页</div>
+        <div class=" h24 lh20 SScmenu">首页</div>
     </div>
-    <div class="C4" @click="menu()">
+    <div class="C3" onclick="openWin('/index/index/menu',{})">
         <div class="h30 lh30 mt5">
-            <img src="__PUBLIC__/static/index/images/menu-g.png">
+            <img src="__PUBLIC__/static/index/images/menu.png">
         </div>
-        <div class="h24 lh20 SScmenu">今日菜谱</div>
+        <div class="h24 lh20">今日菜谱</div>
     </div>
-    <div class="C4" onclick="openWin('/index/index/me',{})">
+    <div class="C3" onclick="openWin('/index/index/me',{})">
         <div class="h30 lh30 mt5">
             <img src="__PUBLIC__/static/index/images/me.png">
         </div>
         <div class="h24 lh20">个人中心</div>
+    </div>
+    <div class="C3"  @click="open()">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/more.png">
+        </div>
+        <div class="h24 lh20">更多</div>
+    </div>
+</div>
+<div class="W bgf btd tc f12 c9 h60 SSfooter animsition" id="more" v-show = "dn == '0'">
+    <div class="C4" onclick="openWin('http://mp.weixin.qq.com/s/lMox_9tXogcEl_Mk-c4wRw',{})">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/teach.png">
+        </div>
+        <div class="h24 lh20">食学教育</div>
+    </div>
+    <div class="C4" onclick="openWin('/index/index/wechat',{})">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/report.png">
+        </div>
+        <div class="h24 lh20">食材检测报告</div>
+    </div>
+    <div class="C4"  @click="close()">
+        <div class="h30 lh30 mt5">
+            <img src="__PUBLIC__/static/index/images/close.png">
+        </div>
+        <div class="h24 lh20">关闭</div>
     </div>
 </div>
 <div id="report" class="weui-popup__container popup-bottom">
@@ -81,37 +107,31 @@
                 select_cbinfo: ''
             }
         });
+        var more = new Vue({
+            el: '#more',
+            data: {
+                dn : '1'
+            },
+            methods: {
+                close: function () {  //菜单
+                    var self = this;
+                    self.dn = '1';
+                    menu.dn= '0';
+                }
+            }
+        });
         var menu = new Vue({
             el: '#menu',
-            methods: {
-                menu: function () {  //菜单
-                    $.actions({
-                        actions: [
-                            {
-                                text: "今日菜谱",
-                                className: "color-success",
-                                onClick: function() {
-                                    openWin('/index/index/menu',{})
-                                }
-                            },
-                            {
-                                text: "食学教育",
-                                className: "color-success",
-                                onClick: function() {
-                                    openWin('http://mp.weixin.qq.com/s/lMox_9tXogcEl_Mk-c4wRw',{})
-                                }
-                            },
-                            {
-                                text: "食材检测报告",
-                                className: "color-success",
-                                onClick: function() {
-                                    openWin('/index/index/wechat',{})
-                                }
-                            }
-                        ]
-                    });
-                }
+            data: {
+                dn : '0'
             },
+            methods: {
+                open: function () {  //菜单
+                    var self = this;
+                    self.dn = '1';
+                    more.dn = '0';
+                }
+            }
         });
         new Vue({
             el: '#app',
@@ -386,8 +406,7 @@
                     this.initClassObj();
                 })
             }
-        })
-        ;
+        });
     };
 </script>
 
