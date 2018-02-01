@@ -5,8 +5,8 @@
             <p class='f pl10 tc'>食材检测报告</p>
         </li>
     </ul>
-    <img src="__PUBLIC__/static/index/images/1.jpg" class="H W mt50">
-    <img src="__PUBLIC__/static/index/images/2.jpg" class="H W">
+    <img src="__PUBLIC__/static/index/images/1.jpg" class="H W mt50" @click="funcReadImgInfo()">
+    <img src="__PUBLIC__/static/index/images/2.jpg" class="H W" @click="funcReadImgInfo()">
 </div>
 <!-- 底部导航栏 -->
 <div class="W bgf btd tc f12 c9 h60 SSfooter" id="menu">
@@ -30,7 +30,7 @@
     </div>
 </div>
 {include file="common/footer" /}
-<script src="__PUBLIC__/static/index/js/echarts.min.js"></script>
+<script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script type="text/javascript">
     window.onload = function () {
         var menu = new Vue({
@@ -65,8 +65,25 @@
                 }
             },
         });
+        /*调用微信预览图片的方法*/
+        function funcReadImgInfo(){
+            var imgs = [];
+            var imgObj = $("#app img");//这里改成相应的对象
+            for(var i=0; i<imgObj.length; i++){
+                imgs.push(imgObj.eq(i).attr('src'));
+                imgObj.eq(i).click(function(){
+                    var nowImgurl = $(this).attr('src');
+                    WeixinJSBridge.invoke("imagePreview",{
+                        "urls":imgs,
+                        "current":nowImgurl
+                    });
+                });
+            }
+
+        }
     };
 </script>
+
 
 
 
