@@ -73,14 +73,14 @@
         <span class="weui-loadmore__tips">正在加载</span>
     </ul>
 </div>
-<div class="W bgf btd tc f12 c9 h60 SSfooter ">
+<div class="W bgf btd tc f12 c9 h60 SSfooter" id="menu">
     <div class="C4" onclick="openWin('/index/index/index',{})">
         <div class="h30 lh30 mt5">
             <img src="__PUBLIC__/static/index/images/home-g.png">
         </div>
         <div class=" h24 lh20 SScmenu">首页</div>
     </div>
-    <div class="C4" onclick="openWin('/index/index/menu',{})">
+    <div class="C4" @click="menu()">
         <div class="h30 lh30 mt5">
             <img src="__PUBLIC__/static/index/images/menu.png">
         </div>
@@ -107,6 +107,38 @@
             dinnerBaseCount: '',
             doing: '0'
         };
+        var menu = new Vue({
+            el: '#menu',
+            methods: {
+                menu: function () {  //菜单
+                    $.actions({
+                        actions: [
+                            {
+                                text: "今日菜谱",
+                                className: "color-success",
+                                onClick: function() {
+                                    openWin('/index/index/menu',{})
+                                }
+                            },
+                            {
+                                text: "食学教育",
+                                className: "color-success",
+                                onClick: function() {
+                                    openWin('http://mp.weixin.qq.com/s/UIkYTiZXtSLJCAzfBeMwnA',{})
+                                }
+                            },
+                            {
+                                text: "食材检测报告",
+                                className: "color-success",
+                                onClick: function() {
+                                    openWin('https://mp.weixin.qq.com/s/1_YaTZl2hzEBYyexyR0fog',{})
+                                }
+                            }
+                            ]
+                    });
+                }
+            },
+        });
         new Vue({
             el: '#app',
             data: data,
