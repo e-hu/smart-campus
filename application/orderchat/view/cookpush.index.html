@@ -75,9 +75,9 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th class='list-table-check-td'>
-                <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
-            </th>
+            <!--<th class='list-table-check-td'>-->
+                <!--<input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>-->
+            <!--</th>-->
             <th class='text-center'>所属公司</th>
             <th class='text-center'>菜品名称</th>
             <th class='text-center'>菜品价格</th>
@@ -91,9 +91,9 @@
         <tbody>
         {foreach $list as $key=>$vo}
         <tr>
-            <td class='list-table-check-td'>
-                <input class="list-check-box" value='{$vo.cookbook_no}' type='checkbox'/>
-            </td>
+            <!--<td class='list-table-check-td'>-->
+                <!--<input class="list-check-box" value='{$vo.cookbook_no}' type='checkbox'/>-->
+            <!--</td>-->
             <td class='text-center'>{$vo.company_name|default="<span style='color:#ccc'>平台自建</span>"}</td>
             <td class='text-center'>{$vo.cookbook_name|default="<span style='color:#ccc'>还没有设置菜品名称</span>"}</td>
             <td class='text-center'>{$vo.price|default="<span style='color:#ccc'>还没有设置菜品价格</span>"}元</td>

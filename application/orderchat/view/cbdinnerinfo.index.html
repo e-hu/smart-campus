@@ -67,9 +67,9 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th class='list-table-check-td'>
-                <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
-            </th>
+            <!--<th class='list-table-check-td'>-->
+                <!--<input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>-->
+            <!--</th>-->
             <th class='text-center'>真实名称</th>
             <th class='text-center'>就餐日期</th>
             <th class='text-center'>餐厅名称</th>
@@ -88,9 +88,9 @@
         <tbody>
         {foreach $list as $key=>$vo}
         <tr>
-            <td class='list-table-check-td'>
-                <input class="list-check-box" value='{$vo.canteen_no}' type='checkbox'/>
-            </td>
+            <!--<td class='list-table-check-td'>-->
+                <!--<input class="list-check-box" value='{$vo.canteen_no}' type='checkbox'/>-->
+            <!--</td>-->
             <td class='text-center'>{$vo.emp_name}</td>
             <td class='text-center'>{:date('Y-m-d',strtotime($vo['dinner_datetime']))}</td>
             <td class='text-center'>{$vo.canteen_name}</td>
