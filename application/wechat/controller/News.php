@@ -183,7 +183,9 @@ class News extends BasicAdmin {
                 }
                 $ids = explode(',', $params);
                 $db = Db::name('WechatFans');
-                !in_array('0', $ids) && $db->where("concat(',',tagid_list,',') REGEXP '," . join(',|,', $ids) . ",'");
+//                !in_array('0', $ids) && $db->where("concat(',',tagid_list,',') REGEXP '," . join(',|,', $ids) . ",'");
+                !in_array('0', $ids) && $db->where("',' +''+tagid_list+''+',' like '," . join(',|,', $ids) . ",'");  //REGEXP正则再sqlsever不适用
+
                 return ['code' => "SUCCESS", 'data' => $db->where('subscribe', '1')->limit(200)->column('nickname')];
             default :
                 $news_id = $this->request->get('id', '');
