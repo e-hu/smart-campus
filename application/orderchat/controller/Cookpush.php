@@ -8,7 +8,7 @@ use service\LogService;
 use think\Db;
 
 /**
- * 菜谱推送管理控制器
+ * 菜品推送管理控制器
  * Class Company
  * @package app\admin\controller
  * @author Anyon <zoujingli@qq.com>
@@ -24,12 +24,12 @@ class Cookpush extends BasicAdmin
     public $table = 'cookbook_base_info';
 
     /**
-     * 菜谱推送列表
+     * 菜品推送列表
      */
     public function index()
     {
         // 设置页面标题
-        $this->title = '菜谱推送管理';
+        $this->title = '菜品推送管理';
         // 获取到所有GET参数
         $get = $this->request->get();
         // 实例Query对象
@@ -92,25 +92,25 @@ class Cookpush extends BasicAdmin
     }
 
     /**
-     * 菜谱推送禁用
+     * 菜品推送禁用
      */
     public function forbid()
     {
-        LogService::write('订餐管理', '执行菜谱推送禁用操作');
+        LogService::write('订餐管理', '执行菜品推送禁用操作');
         if (empty($_GET['company_id']))
             $this->error("推送公司不存在，请稍候再试！");
         if (DataService::update($this->table, ['company_id' => $_GET['company_id'], 'source_flag' => '2'], 'cookbook_no')) {
-            $this->success("菜谱推送禁用成功！", '');
+            $this->success("菜品推送禁用成功！", '');
         }
-        $this->error("菜谱推送禁用失败，请稍候再试！");
+        $this->error("菜品推送禁用失败，请稍候再试！");
     }
 
     /**
-     * 菜谱推送启用
+     * 菜品推送启用
      */
     public function resume()
     {
-        LogService::write('订餐管理', '执行菜谱推送启用操作');
+        LogService::write('订餐管理', '执行菜品推送启用操作');
         if (empty($_GET['company_id']))
             $this->error("推送公司不存在，请稍候再试！");
         $data = Db::name($this->table)->where(['company_id' => session('company_id'), 'cookbook_no' => $_GET['cookbook_no']])->find();
@@ -118,9 +118,9 @@ class Cookpush extends BasicAdmin
         $data['company_id'] = $_GET['company_id'];
         unset($data['ROW_NUMBER']);
         if (DataService::save($this->table, $data, 'cookbook_no',['company_id' => $_GET['company_id']])) {
-            $this->success("菜谱推送启用成功！", '');
+            $this->success("菜品推送启用成功！", '');
         }
-        $this->error("菜谱推送启用失败，请稍候再试！");
+        $this->error("菜品推送启用失败，请稍候再试！");
     }
 
 }

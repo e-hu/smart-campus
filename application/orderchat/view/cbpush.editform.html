@@ -1,0 +1,81 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+    <div class="row">
+
+        <div class="col-xs-2">
+            <div class="form-group" style="line-height: 1em;padding-top:10px;  margin-left: 20px;">
+                公司名称: {$company_name}
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group" style="line-height: 1em;padding-top:10px;  margin-left: 20px;">
+                餐次名称:{$dinner_name}
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="form-group" style="line-height: 1em;padding-top:10px;  margin-left: 20px;">
+                周数:第{$week_info.week_num}周  {$week_info.start_datetime}-{$week_info.end_datetime}
+            </div>
+        </div>
+    </div>
+
+    <script>window.form.render();</script>
+   {if !empty($list)}
+    <div id="list" style="overflow-x: auto; overflow-y: auto; height: auto; width:auto;margin-left:20px;">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class='text-center'>星期数</th>
+                <th class='text-center'>时间</th>
+                <th class='text-center'>餐次</th>
+                <th class='text-center'>菜品</th>
+            </tr>
+            </thead>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='text-center'>星期{$vo.week_no}</td>
+                <td class='text-center'>{$vo.start_datetime}-{$vo.end_datetime}</td>
+                <td class='text-center'>{$vo.dinner_name}</td>
+                <td class='text-center'>
+                    <select lay-filter="filter" lay-verify="required" lay-search=""  title="请选择菜品">
+                    <option value="">直接选择或搜索选择</option>
+                    <!--{foreach $cbinfos as $key=>$cbinfo}-->
+                    <!--{if $vo.cookbook_no eq $key}-->
+                    <option selected value="{$key}"  title="{$vo.id}">{$cbinfo.cookbook_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}"  title="{$vo.id}">{$cbinfo.cookbook_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+                </td>
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+    {/if}
+</form>
+<script>
+    form.on('select(filter)', function(data){
+        console.log(data.elem[data.elem.selectedIndex].title);
+        console.log(data.value); //得到被选中的值
+        var id = data.elem[data.elem.selectedIndex].title;
+        var cookbook_no= data.value;
+        $.ajax({
+            type: 'POST',
+            url: "{:url('cbpush/save')}",  //保存
+            data: {
+                'id': id,
+                'cookbook_no': cookbook_no
+            },
+            async: false,
+            success: function (data) {
+                if (data.flag = 1) {
+                    layer.msg('菜品绑定成功');
+
+                } else {
+                    layer.msg('菜品绑定失败');
+                }
+
+            }
+        });
+    });
+</script>

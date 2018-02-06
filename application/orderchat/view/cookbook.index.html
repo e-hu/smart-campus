@@ -54,63 +54,63 @@
     <input type="hidden" value="resort" name="action"/>
     <table class="table table-hover">
         <thead>
-            <tr>
-                <th class='list-table-check-td'>
-                    <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
-                </th>
-                <th class='text-center'>菜品名称</th>
-                <th class='text-center'>套餐组合</th>
-                <th class='text-center'>菜品价格</th>
-                <th class='text-center'>是否允许修改价格</th>
-                <th class='text-center'>开始日期</th>
-                <th class='text-center'>菜品图片</th>
-                <th class='text-center'>菜品类型</th>
-                {if auth("orderchat/mealtype/index")}
-                <th class='text-center'>套餐名称</th>
-                {/if}
-                <th class='text-center'>操作</th>
-            </tr>
+        <tr>
+            <th class='list-table-check-td'>
+                <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+            </th>
+            <th class='text-center'>菜品名称</th>
+            <th class='text-center'>套餐组合</th>
+            <th class='text-center'>菜品价格</th>
+            <th class='text-center'>是否允许修改价格</th>
+            <th class='text-center'>开始日期</th>
+            <th class='text-center'>菜品图片</th>
+            <th class='text-center'>菜品类型</th>
+            {if auth("orderchat/mealtype/index")}
+            <th class='text-center'>套餐名称</th>
+            {/if}
+            <th class='text-center'>操作</th>
+        </tr>
         </thead>
         <tbody>
-            {foreach $list as $key=>$vo}
-            <tr>
-                <td class='list-table-check-td'>
-                    <input class="list-check-box" value='{$vo.cookbook_no}' type='checkbox'/>
-                </td>
-                <td class='text-center'>{$vo.cookbook_name|default="<span style='color:#ccc'>还没有设置菜品名称</span>"}</td>
-                <td class='text-center'>{$vo.cookbook_info|default="<span style='color:#ccc'>还没有设置套餐组合</span>"}</td>
-                <td class='text-center'>{$vo.price|default="<span style='color:#ccc'>还没有设置菜品价格</span>"}元</td>
-                {if $vo.price_flag == '0'}
-                <td class='text-center'>不允许</td>
-                {else/}
-                <td class='text-center'>允许</td>
-                {/if}
-                <td class='text-center'>{:date('Y-m-d',strtotime($vo['start_datetime']))}</td>
-                {if !empty($vo.cookbook_image)}
-                <td class='text-center'><img data-tips-image src="{$vo.cookbook_image}" style="height: 60px;width: 60px;"></td>
-                {else/}
-                <td class='text-center'>无</td>
-                {/if}
-                <td class='text-center'>{$vo.cookbook_typename|default="<span style='color:#ccc'>无</span>"}</td>
-                {if auth("orderchat/mealtype/index")}
-                <td class='text-center'>{$vo.meal_name|default="<span style='color:#ccc'>无</span>"}</td>
-                {/if}
-                <td class='text-center nowrap'>
-                    {if auth("$classuri/edit")}
-                    <span class="text-explode">|</span>
-                    <a data-modal='{:url("$classuri/edit")}?cookbook_no={$vo.cookbook_no}' href="javascript:void(0)">编辑</a>
-                    {/if}
-                    {if auth("$classuri/del")}
-                    <span class="text-explode">|</span>
-                    <a data-update="{$vo.cookbook_no}" data-field='delete' data-action='{:url("$classuri/del")}'
-                       href="javascript:void(0)">删除</a>
-                    {/if}
-                </td>
-            </tr>
-            {/foreach}
-            {if empty($list)}
-            <tr><td colspan="9" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='list-table-check-td'>
+                <input class="list-check-box" value='{$vo.cookbook_no}' type='checkbox'/>
+            </td>
+            <td class='text-center'>{$vo.cookbook_name|default="<span style='color:#ccc'>还没有设置菜品名称</span>"}</td>
+            <td class='text-center'>{$vo.cookbook_info|default="<span style='color:#ccc'>还没有设置套餐组合</span>"}</td>
+            <td class='text-center'>{$vo.price|default="<span style='color:#ccc'>还没有设置菜品价格</span>"}元</td>
+            {if $vo.price_flag == '0'}
+            <td class='text-center'>不允许</td>
+            {else/}
+            <td class='text-center'>允许</td>
             {/if}
+            <td class='text-center'>{:date('Y-m-d',strtotime($vo['start_datetime']))}</td>
+            {if !empty($vo.cookbook_image)}
+            <td class='text-center'><img data-tips-image src="{$vo.cookbook_image}" style="height: 60px;width: 60px;"></td>
+            {else/}
+            <td class='text-center'>无</td>
+            {/if}
+            <td class='text-center'>{$vo.cookbook_typename|default="<span style='color:#ccc'>无</span>"}</td>
+            {if auth("orderchat/mealtype/index")}
+            <td class='text-center'>{$vo.meal_name|default="<span style='color:#ccc'>无</span>"}</td>
+            {/if}
+            <td class='text-center nowrap'>
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-modal='{:url("$classuri/edit")}?cookbook_no={$vo.cookbook_no}' href="javascript:void(0)">编辑</a>
+                {/if}
+                {if auth("$classuri/del")}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.cookbook_no}" data-field='delete' data-action='{:url("$classuri/del")}'
+                   href="javascript:void(0)">删除</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        {if empty($list)}
+        <tr><td colspan="9" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+        {/if}
         </tbody>
     </table>
     {if isset($page)}<p>{$page}</p>{/if}

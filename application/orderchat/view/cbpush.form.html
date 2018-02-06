@@ -1,0 +1,120 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+
+    <div class="layui-inline">
+        <label class="layui-form-label">搜索公司</label>
+        <div class="layui-input-inline">
+            <select lay-verify="required" lay-search="" name="company_id" required title="请选择公司">
+                <option value="">直接选择或搜索选择</option>
+                <!--{foreach $company_lists as $key=>$company_list}-->
+                <!--{if isset($company_id) && $company_id eq $key}-->
+                <option selected value="{$key}">{$company_list.Company_Name}</option>
+                <!--{else}-->
+                <option value="{$key}">{$company_list.Company_Name}</option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-inline">
+        <label class="layui-form-label">搜索周数</label>
+        <div class="layui-input-inline">
+            <select lay-verify="required" lay-search="" name="week_id" id="week_id" required title="请选择周数">
+                <option value="">直接选择或搜索选择</option>
+                <!--{foreach $weeks as $key=>$week}-->
+
+                <!--{if isset($week_id) && $week_id eq $key}-->
+                <option selected value="{$key}">第{$week.week_num}周{$week.start_datetime}-{$week.end_datetime}</option>
+                <!--{else}-->
+                <option value="{$key}">第{$week.week_num}周{$week.start_datetime}-{$week.end_datetime}</option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+
+
+    <div class="layui-inline">
+        <label class="layui-form-label">搜索餐次</label>
+        <div class="layui-input-inline">
+            <select lay-verify="required" lay-search="" name="dinner_flag" id="dinner_flag" required title="请选择餐次">
+                <option value="">直接选择或搜索选择</option>
+                <!--{foreach $tags as $key=>$tag}-->
+                <!--{if isset($dinner_flag) && $dinner_flag eq $key}-->
+                <option selected value="{$key}">{$tag.dinner_name}</option>
+                <!--{else}-->
+                <option value="{$key}">{$tag.dinner_name}</option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>生成数据</button>
+    </div>
+
+    <script>window.form.render();</script>
+   {if !empty($list)}
+    <div id="list" style="overflow-x: auto; overflow-y: auto; height: auto; width:auto;margin-left:20px;">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th class='text-center'>星期数</th>
+                <th class='text-center'>时间</th>
+                <th class='text-center'>餐次</th>
+                <th class='text-center'>菜品</th>
+            </tr>
+            </thead>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='text-center'>星期{$vo.week_no}</td>
+                <td class='text-center'>{$vo.start_datetime}-{$vo.end_datetime}</td>
+                <td class='text-center'>{$vo.dinner_name}</td>
+                <td class='text-center'>
+                    <select lay-filter="filter" lay-verify="required" lay-search=""  title="请选择菜品">
+                    <option value="">直接选择或搜索选择</option>
+                    <!--{foreach $cbinfos as $key=>$cbinfo}-->
+                    <!--{if $vo.cookbook_no eq $key}-->
+                    <option selected value="{$key}"  title="{$vo.id}">{$cbinfo.cookbook_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}"  title="{$vo.id}">{$cbinfo.cookbook_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+                </td>
+            </tr>
+            {/foreach}
+        </table>
+    </div>
+    {/if}
+</form>
+<script>
+    form.on('select(filter)', function(data){
+        console.log(data.elem[data.elem.selectedIndex].title);
+        console.log(data.value); //得到被选中的值
+        var id = data.elem[data.elem.selectedIndex].title;
+        var cookbook_no= data.value;
+        $.ajax({
+            type: 'POST',
+            url: "{:url('cbpush/save')}",  //保存
+            data: {
+                'id': id,
+                'cookbook_no': cookbook_no
+            },
+            async: false,
+            success: function (data) {
+                if (data.flag = 1) {
+                    layer.msg('菜品绑定成功');
+
+                } else {
+                    layer.msg('菜品绑定失败');
+                }
+
+            }
+        });
+    });
+</script>

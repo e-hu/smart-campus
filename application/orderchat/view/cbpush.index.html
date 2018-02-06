@@ -1,0 +1,137 @@
+{extend name='extra@admin/content'}
+{block name="button"}
+<div class="nowrap pull-right" style="margin-top:10px">
+    <button data-open='{:url("cbpush/add")}' data-title="添加菜谱推送" class='layui-btn layui-btn-small'><i
+            class='fa fa-plus'></i> 添加菜谱推送
+    </button>
+</div>
+{/block}
+<div class="ibox-title">
+    <h5>菜谱列表管理</h5>
+    <div class="nowrap pull-right" style="margin-top:10px">
+        <button data-open='{:url("cbpush/add")}' data-title="添加菜谱推送" class='layui-btn layui-btn-small'><i
+                class='fa fa-plus'></i> 添加菜谱推送
+        </button>
+    </div>
+</div>
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="company_id" class="input-sm form-control">
+                    <option value="">- 公司列表 -</option>
+                    <!--{foreach $company_lists as $key=>$company_list}-->
+                    <!--{if $Think.get.company_id eq $key}-->
+                    <option selected value="{$key}">{$company_list.Company_Name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$company_list.Company_Name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="dinner_flag" class="input-sm form-control">
+                    <option value="">- 餐次列表 -</option>
+                    <!--{foreach $tags as $key=>$tag}-->
+                    <!--{if $Think.get.dinner_flag eq $key}-->
+                    <option selected value="{$key}">{$tag.dinner_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$tag.dinner_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-4">
+        <div class="form-group">
+            <select name="week_id" class="input-sm form-control">
+                <option value="">- 周数列表 -</option>
+                <!--{foreach $weeks as $key=>$week}-->
+                <!--{if $Think.get.week_id eq $key}-->
+                <option selected value="{$key}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}</option>
+                <!--{else}-->
+                <option value="{$key}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}</option>
+                <!--{/if}-->
+                <!--{/foreach}-->
+            </select>
+        </div>
+    </div>
+
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 表单搜索 结束 -->
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class='text-center'>组合序列号</th>
+            <th class='text-center'>公司名称</th>
+            <th class='text-center'>周数</th>
+            <th class='text-center'>时间范围</th>
+            <th class='text-center'>餐次</th>
+            <th class='text-center'>周一</th>
+            <th class='text-center'>周二</th>
+            <th class='text-center'>周三</th>
+            <th class='text-center'>周四</th>
+            <th class='text-center'>周五</th>
+            <th class='text-center'>周六</th>
+            <th class='text-center'>周日</th>
+            <th class='text-center'>客户是否选择</th>
+            <th class='text-center'>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center'>{$vo.recommend_index}</td>
+            <td class='text-center'>{$vo.company_name}</td>
+            <td class='text-center'>第{$vo.week_num}周</td>
+            <td class='text-center'>{$vo.start_datetime} - {$vo.end_datetime}</td>
+            <td class='text-center'>{$vo.dinner_name}</td>
+            <td class='text-center'>{$vo.Mon}</td>
+            <td class='text-center'>{$vo.Tue}</td>
+            <td class='text-center'>{$vo.Wed}</td>
+            <td class='text-center'>{$vo.Thu}</td>
+            <td class='text-center'>{$vo.Fri}</td>
+            <td class='text-center'>{$vo.Sat}</td>
+            <td class='text-center'>{$vo.Sun}</td>
+            {if $vo.choose_flag =='0'}
+            <td class='text-center'><img src="__PUBLIC__/static/theme/default/img/selecte.png"
+                                         style="height:50px;width:50px;"></td>
+            {else }
+            <td class='text-center'><img src="__PUBLIC__/static/theme/default/img/selected.png"
+                                         style="height:50px;width:50px;"></td>
+            {/if}
+            <td class='text-center nowrap'>
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-open='{:url("$classuri/edit")}?company_id={$Think.get.company_id}&dinner_flag={$Think.get.dinner_flag}&week_id={$Think.get.week_id}' href="javascript:void(0)">编辑</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        {if empty($list)}
+        <tr>
+            <td colspan="14" style="text-align:center">没 有 记 录 了 哦 !</td>
+        </tr>
+        {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+{/block}
