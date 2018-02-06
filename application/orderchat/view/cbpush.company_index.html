@@ -1,34 +1,11 @@
 {extend name='extra@admin/content'}
-<div class="ibox-title">
-    <h5>菜谱列表管理</h5>
-    <div class="nowrap pull-right" style="margin-top:10px">
-        <button data-open='{:url("cbpush/add")}' data-title="添加菜谱推送" class='layui-btn layui-btn-small'><i
-                class='fa fa-plus'></i> 添加菜谱推送
-        </button>
-    </div>
-</div>
+
 {block name="content"}
 
 <!-- 表单搜索 开始 -->
 <form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
 
     <div class="row">
-
-        <div class="col-xs-2">
-            <div class="form-group">
-                <select name="company_id" class="input-sm form-control">
-                    <option value="">- 公司列表 -</option>
-                    <!--{foreach $company_lists as $key=>$company_list}-->
-                    <!--{if $Think.get.company_id eq $key}-->
-                    <option selected value="{$key}">{$company_list.Company_Name}</option>
-                    <!--{else}-->
-                    <option value="{$key}">{$company_list.Company_Name}</option>
-                    <!--{/if}-->
-                    <!--{/foreach}-->
-                </select>
-            </div>
-        </div>
-
         <div class="col-xs-2">
             <div class="form-group">
                 <select name="dinner_flag" class="input-sm form-control">
@@ -45,19 +22,19 @@
         </div>
 
         <div class="col-xs-4">
-        <div class="form-group">
-            <select name="week_id" class="input-sm form-control">
-                <option value="">- 周数列表 -</option>
-                <!--{foreach $weeks as $key=>$week}-->
-                <!--{if $Think.get.week_id eq $key}-->
-                <option selected value="{$key}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}</option>
-                <!--{else}-->
-                <option value="{$key}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}</option>
-                <!--{/if}-->
-                <!--{/foreach}-->
-            </select>
+            <div class="form-group">
+                <select name="week_id" class="input-sm form-control">
+                    <option value="">- 周数列表 -</option>
+                    <!--{foreach $weeks as $key=>$week}-->
+                    <!--{if $Think.get.week_id eq $key}-->
+                    <option selected value="{$key}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}</option>
+                    <!--{else}-->
+                    <option value="{$key}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
         </div>
-    </div>
 
         <div class="col-xs-1">
             <div class="form-group">
@@ -72,8 +49,7 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <th class='text-center'>组合序列号</th>
-            <th class='text-center'>公司名称</th>
+            <th class='text-center'>组合索引</th>
             <th class='text-center'>周数</th>
             <th class='text-center'>时间范围</th>
             <th class='text-center'>餐次</th>
@@ -84,15 +60,13 @@
             <th class='text-center'>周五</th>
             <th class='text-center'>周六</th>
             <th class='text-center'>周日</th>
-            <th class='text-center'>客户是否选择</th>
-            <th class='text-center'>操作</th>
+            <th class='text-center'>是否选择</th>
         </tr>
         </thead>
         <tbody>
         {foreach $list as $key=>$vo}
         <tr>
             <td class='text-center'>{$vo.recommend_index}</td>
-            <td class='text-center'>{$vo.company_name}</td>
             <td class='text-center'>第{$vo.week_num}周</td>
             <td class='text-center'>{$vo.start_datetime} - {$vo.end_datetime}</td>
             <td class='text-center'>{$vo.dinner_name}</td>
@@ -103,17 +77,17 @@
             <td class='text-center'>{$vo.Fri}</td>
             <td class='text-center'>{$vo.Sat}</td>
             <td class='text-center'>{$vo.Sun}</td>
-            {if $vo.choose_flag =='0'}
-            <td class='text-center'><img src="__PUBLIC__/static/theme/default/img/selecte.png"
-                                         style="height:50px;width:50px;"></td>
-            {else }
-            <td class='text-center'><img src="__PUBLIC__/static/theme/default/img/selected.png"
-                                         style="height:50px;width:50px;"></td>
-            {/if}
             <td class='text-center nowrap'>
-                {if auth("$classuri/edit")}
-                <span class="text-explode">|</span>
-                <a data-open='{:url("$classuri/edit")}?company_id={$Think.get.company_id}&dinner_flag={$Think.get.dinner_flag}&week_id={$Think.get.week_id}' href="javascript:void(0)">编辑</a>
+                {if isset($vo.choose_flag) and $vo.choose_flag eq '0' and auth("$classuri/resume")}
+                <a data-modal='{:url("$classuri/resume",["recommend_index"=>$vo.recommend_index,"start_datetime"=>$vo.start_datetime])}'
+                   data-action='{:url("$classuri/resume",["recommend_index"=>$vo.recommend_index,"start_datetime"=>$vo.start_datetime])}'
+                   href="javascript:void(0)"><img src="__PUBLIC__/static/theme/default/img/selecte.png"
+                                                  style="height:50px;width:50px;"></a>
+                {else if isset($vo.choose_flag) and auth("$classuri/forbid")}
+                <a data-modal='{:url("$classuri/forbid",["recommend_index"=>$vo.recommend_index,"start_datetime"=>$vo.start_datetime])}'
+                   data-action='{:url("$classuri/forbid",["recommend_index"=>$vo.recommend_index,"start_datetime"=>$vo.start_datetime])}'
+                   href="javascript:void(0)"><img src="__PUBLIC__/static/theme/default/img/selected.png"
+                                                  style="height:50px;width:50px;"></a>
                 {/if}
             </td>
         </tr>

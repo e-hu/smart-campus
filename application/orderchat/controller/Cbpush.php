@@ -46,9 +46,8 @@ class Cbpush extends BasicAdmin
                 $this->error('条件不正确');
             }
             $weekinfo = Db::name('week_day_list')->where(['id'=>$get['week_id']])->find();
-            $list = [];
             $sqlstr = "exec [up_create_recommend_detail] ?,?,?,?";
-            $result = Db::query($sqlstr, [$weekinfo['year'], $weekinfo['week_num'], $_GET['company_id'], $_GET['dinner_flag'],'0']);
+            $result = Db::query($sqlstr, [$weekinfo['year'], $weekinfo['week_num'], $_GET['company_id'], $_GET['dinner_flag'],'1']);
             $list = $result[0];
         }
         $this->assign('list', $list);
@@ -135,11 +134,11 @@ class Cbpush extends BasicAdmin
     }
 
     /**
-     * 绑定菜品
+     * 绑定菜普
      */
     public function save()
     {
-        LogService::write('订餐管理', '执行绑定菜品操作');
+        LogService::write('订餐管理', '执行绑定菜普操作');
         if ($this->request->isAjax()) {
             $post = $this->request->post();
             $result = DataService::save($this->table, $post, 'id');
@@ -151,6 +150,63 @@ class Cbpush extends BasicAdmin
             }
             return json($data);
         }
+    }
+
+    /**
+     * 推荐菜谱列表
+     */
+    public function company_index()
+    {
+        // 设置页面标题
+        $this->title = '推荐菜谱列表管理';
+        $this->assign('title', $this->title);
+        $tags = Db::name('dinner_base_info')->where('company_id', session('company_id'))->column('dinner_flag,dinner_name');
+        $weeks = Db::name('week_day_list')->column('id,week_num,start_datetime,end_datetime');
+        $this->assign('tags', $tags);
+        $this->assign('weeks', $weeks);
+
+        $list = [];
+        // 应用搜索条件
+        $get = $this->request->get();
+        if ($this->request->get() && isset($_GET['dinner_flag']) && isset($_GET['week_id'])) {
+            if ( $get['dinner_flag'] == '' || $get['week_id'] == '') {
+                $this->error('条件不正确');
+            }
+            $weekinfo = Db::name('week_day_list')->where(['id'=>$get['week_id']])->find();
+            $sqlstr = "exec [up_create_recommend_detail] ?,?,?,?";
+            $return = Db::query($sqlstr, [$weekinfo['year'], $weekinfo['week_num'], session('company_id'), $_GET['dinner_flag'],'2']);
+            $list = $return[0];
+        }
+        $this->assign('list', $list);
+        return $this->fetch();
+    }
+
+    /**
+     * 菜普推送禁用
+     */
+    public function forbid()
+    {
+        LogService::write('订餐管理', '执行菜普推送禁用操作');
+        if (empty($_GET['recommend_index'])||empty($_GET['start_datetime']))
+            $this->error("条件错误，请稍候再试！");
+        if (Db::name('cookbook_recommend_detail')->where(['company_id' => session('company_id'), 'recommend_index' => $_GET['recommend_index'],'start_datetime'=> $_GET['start_datetime']])->update(['choose_flag'=>'0'])) {
+            $this->success("菜普推送禁用成功！", '');
+        }
+        $this->error("菜普推送禁用失败，请稍候再试！");
+    }
+
+    /**
+     * 菜普推送启用
+     */
+    public function resume()
+    {
+        LogService::write('订餐管理', '执行菜普推送启用操作');
+        if (empty($_GET['recommend_index'])||empty($_GET['start_datetime']))
+            $this->error("条件错误，请稍候再试！");
+        if (Db::name('cookbook_recommend_detail')->where(['company_id' => session('company_id'), 'recommend_index' => $_GET['recommend_index'],'start_datetime'=> $_GET['start_datetime']])->update(['choose_flag'=>'1'])) {
+            $this->success("菜普推送启用成功！", '');
+        }
+        $this->error("菜普推送启用失败，请稍候再试！");
     }
 
 }
