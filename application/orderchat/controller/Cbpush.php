@@ -46,7 +46,7 @@ class Cbpush extends BasicAdmin
                 $this->error('条件不正确');
             }
             $weekinfo = Db::name('week_day_list')->where(['id'=>$get['week_id']])->find();
-            $sqlstr = "exec [up_create_recommend_detail] ?,?,?,?";
+            $sqlstr = "exec [up_create_recommend_detail] ?,?,?,?,?";
             $result = Db::query($sqlstr, [$weekinfo['year'], $weekinfo['week_num'], $_GET['company_id'], $_GET['dinner_flag'],'1']);
             $list = $result[0];
         }
@@ -77,7 +77,7 @@ class Cbpush extends BasicAdmin
             $where['a.company_id'] = $post['company_id'];
             $where['a.week_num'] = $weekinfo['week_num'];
             $where['a.dinner_flag'] = $post['dinner_flag'];
-            $sqlstr = "exec [up_create_recommend_detail] ?,?,?,?";
+            $sqlstr = "exec [up_create_recommend_detail] ?,?,?,?,?";
             $result = Db::query($sqlstr, [$weekinfo['year'], $weekinfo['week_num'], $post['company_id'], $post['dinner_flag'],'1']);
             if (!empty($result)) {
                 $list = Db::name($this->table)
@@ -173,7 +173,7 @@ class Cbpush extends BasicAdmin
                 $this->error('条件不正确');
             }
             $weekinfo = Db::name('week_day_list')->where(['id'=>$get['week_id']])->find();
-            $sqlstr = "exec [up_create_recommend_detail] ?,?,?,?";
+            $sqlstr = "exec [up_create_recommend_detail] ?,?,?,?,?";
             $return = Db::query($sqlstr, [$weekinfo['year'], $weekinfo['week_num'], session('company_id'), $_GET['dinner_flag'],'2']);
             $list = $return[0];
         }
@@ -190,7 +190,7 @@ class Cbpush extends BasicAdmin
         if (empty($_GET['recommend_index'])||empty($_GET['start_datetime']))
             $this->error("条件错误，请稍候再试！");
         if (Db::name('cookbook_recommend_detail')->where(['company_id' => session('company_id'), 'recommend_index' => $_GET['recommend_index'],'start_datetime'=> $_GET['start_datetime']])->update(['choose_flag'=>'0'])) {
-            $this->success("菜普推送禁用成功！", '');
+            $this->success("菜谱推送禁用成功！", '');
         }
         $this->error("菜普推送禁用失败，请稍候再试！");
     }
@@ -204,7 +204,7 @@ class Cbpush extends BasicAdmin
         if (empty($_GET['recommend_index'])||empty($_GET['start_datetime']))
             $this->error("条件错误，请稍候再试！");
         if (Db::name('cookbook_recommend_detail')->where(['company_id' => session('company_id'), 'recommend_index' => $_GET['recommend_index'],'start_datetime'=> $_GET['start_datetime']])->update(['choose_flag'=>'1'])) {
-            $this->success("菜普推送启用成功！", '');
+            $this->success("菜谱推送启用成功！", '');
         }
         $this->error("菜普推送启用失败，请稍候再试！");
     }
