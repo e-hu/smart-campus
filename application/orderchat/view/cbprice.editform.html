@@ -69,6 +69,7 @@
                 <th class='text-center'>菜品名称</th>
                 <th class='text-center'>菜品价格</th>
                 <th class='text-center'>限制数量</th>
+                <th class='text-center'>是否多选</th>
                 <th class='text-center'>状态</th>
             </tr>
             </thead>
@@ -87,11 +88,18 @@
                                                name="{$vo.price_id}"
                                                value="{$vo.cookbook_limit_quantity}" style="width: 72px;height: 32px;"/>
                 </td>
-                {if $vo.status > 0}
-                <td class="text-center selected"><span value="{$vo.price_id}"></span></td>
+                {if $vo.choice_flag > 0}
+                <td class="text-center selected" data-value="choice"><span value="{$vo.price_id}"></span></td>
                 </td>
                 {else/}
-                <td class="text-center selecte"><span value="{$vo.price_id}"></span></td>
+                <td class="text-center selecte" data-value="choice"><span value="{$vo.price_id}"></span></td>
+                </td>
+                {/if}
+                {if $vo.status > 0}
+                <td class="text-center selected" data-value="status"><span value="{$vo.price_id}"></span></td>
+                </td>
+                {else/}
+                <td class="text-center selecte" data-value="status"><span value="{$vo.price_id}"></span></td>
                 </td>
                 {/if}
             </tr>
@@ -132,10 +140,15 @@
                             html += '<td class="text-center">' + v.cookbook_price + '</td>';
                         }
                         html += '<td class="text-center"><input class="layui-input layui-input-inline title-input number" pattern="^[0-9a-z]$" name="' + v.price_id + '" value="' + v.cookbook_limit_quantity + '" style="width: 72px;height: 32px;"/></td>';
-                        if (v.status > 0) {
-                            html += '<td class="text-center selected" ><span  value="' + v.price_id + '" ></span></td></td>';
+                        if (v.choice_flag > 0) {
+                            html += '<td class="text-center selected" data-value="choice"><span  value="' + v.price_id + '" ></span></td></td>';
                         } else {
-                            html += '<td class="text-center selecte" ><span value="' + v.price_id + '"></span></td></tr>';
+                            html += '<td class="text-center selecte" data-value="choice"><span value="' + v.price_id + '"></span></td></tr>';
+                        }
+                        if (v.status > 0) {
+                            html += '<td class="text-center selected" data-value="status"><span  value="' + v.price_id + '" ></span></td></td>';
+                        } else {
+                            html += '<td class="text-center selecte" data-value="status"><span value="' + v.price_id + '"></span></td></tr>';
                         }
                         $('#content').html(html);
                     });
@@ -151,47 +164,94 @@
     $("#list").on("click", ".selecte", function () {
         var a = $(this);
         var id = a.children("span").attr("value");
-        $.ajax({
-            type: 'POST',
-            url: "{:url('cbprice/save')}",  //启用
-            data: {
-                'price_id': id,
-                'status': '1'
-            },
-            async: false,
-            success: function (data) {
-                if (data.flag = 1) {
-                    a.removeClass("selecte").addClass("selected");
-                    layer.msg('状态修改成功');
-                } else {
-                    layer.msg('状态修改失败');
-                }
+        var is_value = a.attr("data-value");
+        if(is_value == 'choice'){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('cbprice/save')}",  //切换多选列表
+                data: {
+                    'price_id': id,
+                    'choice_flag': '1'
+                },
+                async: false,
+                success: function (data) {
+                    if (data.flag = 1) {
+                        a.removeClass("selecte").addClass("selected");
+                        layer.msg('切换多选列表成功');
+                    } else {
+                        layer.msg('切换多选列表失败');
+                    }
 
-            }
-        });
+                }
+            });
+        }else{
+            $.ajax({
+                type: 'POST',
+                url: "{:url('cbprice/save')}",  //启用
+                data: {
+                    'price_id': id,
+                    'status': '1'
+                },
+                async: false,
+                success: function (data) {
+                    if (data.flag = 1) {
+                        a.removeClass("selecte").addClass("selected");
+                        layer.msg('状态修改成功');
+                    } else {
+                        layer.msg('状态修改失败');
+                    }
+
+                }
+            });
+        }
+
     });
     $("#list").on("click", ".selected", function () {
         var a = $(this);
         var id = a.children("span").attr("value");
-        $.ajax({
-            type: 'POST',
-            url: "{:url('cbprice/save')}",  //启用
-            data: {
-                'price_id': id,
-                'status': '0'
-            },
-            async: false,
-            success: function (data) {
-                if (data.flag = 1) {
-                    a.removeClass("selected").addClass("selecte");
-                    layer.msg('状态修改成功');
+        var is_value = a.attr("data-value");
+        if(is_value == 'choice'){
+            $.ajax({
+                type: 'POST',
+                url: "{:url('cbprice/save')}",  //启用
+                data: {
+                    'price_id': id,
+                    'choice_flag': '0'
+                },
+                async: false,
+                success: function (data) {
+                    if (data.flag = 1) {
+                        a.removeClass("selected").addClass("selecte");
+                        layer.msg('切换多选列表成功');
 
-                } else {
-                    layer.msg('状态修改失败');
+                    } else {
+                        layer.msg('切换多选列表失败');
+                    }
+
                 }
+            });
+        }else{
+            $.ajax({
+                type: 'POST',
+                url: "{:url('cbprice/save')}",  //启用
+                data: {
+                    'price_id': id,
+                    'status': '0'
+                },
+                async: false,
+                success: function (data) {
+                    if (data.flag = 1) {
+                        a.removeClass("selected").addClass("selecte");
+                        layer.msg('状态修改成功');
 
-            }
-        });
+                    } else {
+                        layer.msg('状态修改失败');
+                    }
+
+                }
+            });
+        }
+
     });
     $("#list").on('blur', ".price", function () {
         var id = this.name;

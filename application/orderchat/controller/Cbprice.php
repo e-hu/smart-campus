@@ -109,7 +109,7 @@ class CbPrice extends BasicAdmin
                     ->join('cookbook_base_info c', 'a.cookbook_no = c.cookbook_no and a.company_id = c.company_id', 'left')
                     ->join('dinner_base_info b', 'a.dinner_flag = b.dinner_flag and a.company_id = b.company_id', 'left')
                     ->where($where)
-                    ->order('status desc')
+                    ->order('status desc , choice_flag desc')
                     ->select();
                 if (!empty($db)) {
                     $data['flag'] = '1';
@@ -151,7 +151,7 @@ class CbPrice extends BasicAdmin
                     ->join('cookbook_base_info c', 'a.cookbook_no = c.cookbook_no and a.company_id = c.company_id', 'left')
                     ->join('dinner_base_info d', 'a.dinner_flag = d.dinner_flag and a.company_id = d.company_id', 'left')
                     ->where($where)
-                    ->order('status desc')
+                    ->order('status desc , choice_flag desc')
                     ->select();
                 $data['list'] = $db;
             }

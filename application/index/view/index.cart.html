@@ -18,6 +18,11 @@
         <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
     </div>
     <div v-else class="W H mt90">
+        <ul v-if="cartChoiceProductList !=''">
+            <li class="hl50 F_ bbd bgdefault tc">
+                <p class='f SScwhite'>单选列表</p>
+            </li>
+        </ul>
         <ul class="tc clear H5">
             <li class="H W5 fl ptinfo" v-for="item in cartProductList">
                 <img :src="item.cookbook_image+'?imageslim'" class="H7 W"
@@ -28,6 +33,35 @@
                             <label class="weui-cell W H">
                                 <input type="checkbox" class="weui-check" name="radio"
                                        @click='changeCa(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
+                                       :checked="item.order_index == 1">
+                                <i class="weui-icon-checked"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="W7 H tc ptcheckinfo_div">
+                        <div class="W H ptcheckinfo">
+                            <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span
+                                class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul v-if="cartChoiceProductList !=''">
+            <li class="hl50 F_ bbd bgdefault tc">
+                <p class='f SScwhite'>多选列表</p>
+            </li>
+        </ul>
+        <ul class="tc clear H5" v-if="cartChoiceProductList !=''">
+            <li class="H W5 fl ptinfo" v-for="item in cartChoiceProductList">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W"
+                     @click="popup(item.cookbook_name,item.cookbook_info)">
+                <div class="bgf H3 W">
+                    <div class="tl W3 fl tr H">
+                        <div class="weui-cells_checkbox W H ptcheck">
+                            <label class="weui-cell W H">
+                                <input type="checkbox" class="weui-check" name="checkbox"
+                                       @click='changeCb(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
                                        :checked="item.order_index == 1">
                                 <i class="weui-icon-checked"></i>
                             </label>
@@ -75,6 +109,7 @@
         var data = {
             day: getUrlParam('day'),
             cartProductList: [],
+            cartChoiceProductList:[],
             cartGetCount: '0',
             date: '',
             dinnerBaseList: [],
@@ -122,105 +157,12 @@
                         success: function (ret) {
                             self.report = ret['ingredient'];
                             var myChart = echarts.init(document.getElementById('main'));
-                            // var option = {
-                            //
-                            //     title : {
-                            //         show: true,
-                            //         text: name+'的营养元素比例',
-                            //         left: 'center',
-                            //         top: 20
-                            //     },
-                            //
-                            //     tooltip : {
-                            //         trigger: 'axis',
-                            //         axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-                            //             type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-                            //         }
-                            //     },
-                            //     legend: {
-                            //         data: [name]
-                            //     },
-                            //     grid: {
-                            //         left: '3%',
-                            //         right: '4%',
-                            //         bottom: '3%',
-                            //         containLabel: true
-                            //     },
-                            //     xAxis:  {
-                            //         type: 'value'
-                            //     },
-                            //     yAxis: {
-                            //         type: 'category',
-                            //         data: [
-                            //             ret['types_name']['calcium'],
-                            //             // ret['types_name']['calory'], //热量
-                            //             // ret['types_name']['carbohydrate'], //碳水化合物
-                            //             ret['types_name']['cholesterol'],
-                            //             ret['types_name']['copper'],
-                            //             // ret['types_name']['fat'], //脂肪
-                            //            // ret['types_name']['fiber_dietary'], //膳食纤维
-                            //             ret['types_name']['iron'],
-                            //             ret['types_name']['kalium'],
-                            //             ret['types_name']['lactoflavin'],
-                            //             ret['types_name']['magnesium'],
-                            //             ret['types_name']['manganese'],
-                            //             ret['types_name']['natrium'],
-                            //             ret['types_name']['niacin'],
-                            //             // ret['types_name']['protein'], //蛋白质
-                            //             ret['types_name']['selenium'],
-                            //             ret['types_name']['thiamine'],
-                            //             ret['types_name']['vitamin_a'],
-                            //             ret['types_name']['vitamin_c'],
-                            //             ret['types_name']['vitamin_e'],
-                            //             ret['types_name']['zinc']
-                            //         ]
-                            //     },
-                            //     series: [
-                            //         {
-                            //             name: name,
-                            //             type: 'bar',
-                            //             stack: '总量',
-                            //             label: {
-                            //                 normal: {
-                            //                     show: true,
-                            //                     position: 'insideRight'
-                            //                 }
-                            //             },
-                            //             data: [
-                            //                 ret['ingredient']['calcium'],
-                            //                 // ret['ingredient']['calory'], //热量
-                            //                 // ret['ingredient']['carbohydrate'],  //碳水化合物
-                            //                 ret['ingredient']['cholesterol'],
-                            //                 ret['ingredient']['copper'],
-                            //                 // ret['ingredient']['fat'], //脂肪
-                            //                 //ret['ingredient']['fiber_dietary'], //膳食纤维
-                            //                 ret['ingredient']['iron'],
-                            //                 ret['ingredient']['kalium'],
-                            //                 ret['ingredient']['lactoflavin'],
-                            //                 ret['ingredient']['magnesium'],
-                            //                 ret['ingredient']['manganese'],
-                            //                 ret['ingredient']['natrium'],
-                            //                 ret['ingredient']['niacin'],
-                            //                 // ret['ingredient']['protein'], //蛋白质
-                            //                 ret['ingredient']['selenium'],
-                            //                 ret['ingredient']['thiamine'],
-                            //                 ret['ingredient']['vitamin_a'],
-                            //                 ret['ingredient']['vitamin_c'],
-                            //                 ret['ingredient']['vitamin_e'],
-                            //                 ret['ingredient']['zinc']
-                            //             ]
-                            //         }
-                            //     ]
-                            // };
-
-
                             var option = {
                                 title: {
                                     text: '营养比例',
                                     subtext: '以每100克计算,毫克(mg)为单位',
                                     x: 'right',
                                     textStyle: {
-                                        // color: 'red',
                                         fontSize: 15
                                     }
                                 },
@@ -233,12 +175,8 @@
                                     left: 'left',
                                     data: [
                                         ret['types_name']['calcium'],
-                                        //ret['types_name']['calory'],
-                                        //ret['types_name']['carbohydrate'],
                                         ret['types_name']['cholesterol'],
                                         ret['types_name']['copper'],
-                                        //ret['types_name']['fat'],
-                                        //ret['types_name']['fiber_dietary'],
                                         ret['types_name']['iron'],
                                         ret['types_name']['kalium'],
                                         ret['types_name']['lactoflavin'],
@@ -246,7 +184,6 @@
                                         ret['types_name']['manganese'],
                                         ret['types_name']['natrium'],
                                         ret['types_name']['niacin'],
-                                        //ret['types_name']['protein'],
                                         ret['types_name']['selenium'],
                                         ret['types_name']['thiamine'],
                                         ret['types_name']['vitamin_a'],
@@ -263,15 +200,11 @@
                                         center: ['65%', '65%'],
                                         data: [
                                             {value: ret['ingredient']['calcium'], name: ret['types_name']['calcium']},
-                                            //{value: ret['ingredient']['calory'], name: ret['types_name']['calory']},
-                                            //{value: ret['ingredient']['carbohydrate'], name: ret['types_name']['carbohydrate']},
                                             {
                                                 value: ret['ingredient']['cholesterol'],
                                                 name: ret['types_name']['cholesterol']
                                             },
                                             {value: ret['ingredient']['copper'], name: ret['types_name']['copper']},
-                                            //{value: ret['ingredient']['fat'], name: ret['types_name']['fat']},
-                                            //{value: ret['ingredient']['fiber_dietary'], name: ret['types_name']['fiber_dietary']},
                                             {value: ret['ingredient']['iron'], name: ret['types_name']['iron']},
                                             {value: ret['ingredient']['kalium'], name: ret['types_name']['kalium']},
                                             {
@@ -288,7 +221,6 @@
                                             },
                                             {value: ret['ingredient']['natrium'], name: ret['types_name']['natrium']},
                                             {value: ret['ingredient']['niacin'], name: ret['types_name']['niacin']},
-                                            //{value: ret['ingredient']['protein'], name: ret['types_name']['protein']},
                                             {value: ret['ingredient']['selenium'], name: ret['types_name']['selenium']},
                                             {value: ret['ingredient']['thiamine'], name: ret['types_name']['thiamine']},
                                             {
@@ -305,16 +237,6 @@
                                             },
                                             {value: ret['ingredient']['zinc'], name: ret['types_name']['zinc']},
                                         ],
-                                        // label: {
-                                        //     normal: {
-                                        //         position: 'outside',
-                                        //         formatter: '{b} {c}mg',
-                                        //         textStyle: {
-                                        //             color: '',
-                                        //             fontSize: 14
-                                        //         }
-                                        //     }
-                                        // },
                                         itemStyle: {
                                             emphasis: {
                                                 shadowBlur: 10,
@@ -372,6 +294,7 @@
                                 self.date = ret.data.date;
                             } else {
                                 self.cartProductList = ret.cartList;
+                                self.cartChoiceProductList = ret.cartChoiceList;
                                 self.cartGetCount = ret.cartCount;
                                 self.cart_priceId = ret.cart_priceId;
                                 if (ret.dinner_name) {
@@ -387,9 +310,10 @@
                     var self = this;
                     self.dinner_type = Sp;
                     self.cartProductList = [];
+                    self.cartChoiceProductList=[];
                     self.initCartObj(Sp);
                 },
-                changeCa: function (Tn, Df, Cn, Pi, Cp, $event) {
+                changeCa: function (Tn, Df, Cn, Pi, Cp, $event) { //单选添加商品
                     var self = this;
                     if ($event.target.checked) {
                         $.ajax({ //增加商品
@@ -397,6 +321,7 @@
                             type: "POST",
                             dataType: "json",
                             data: {
+                                is_choice:'0',
                                 canteen_no: Tn,
                                 dinner_flag: Df,
                                 cookbook_no: Cn,
@@ -413,8 +338,8 @@
                                     $event.target.checked = true;
                                     vm.price_total = ret.data.price_total;
                                     vm.price_num = ret.data.price_num;
-                                    if (ret.data.dinner_name) {
-                                        vm.now_num = ret.data.dinner_name.length;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
                                     }
                                     vm.now_flag = ret.data.dinner_name;
                                     vm.now_name = ret.data.cookbook_name;
@@ -427,6 +352,7 @@
                             type: "POST",
                             dataType: "json",
                             data: {
+                                is_choice:'0',
                                 canteen_no: Tn,
                                 dinner_flag: Df,
                                 cookbook_no: Cn,
@@ -443,14 +369,81 @@
                                     $event.target.checked = false;
                                     vm.price_total = ret.data.price_total;
                                     vm.price_num = ret.data.price_num;
-                                    vm.now_num = '0';
-                                    vm.now_flag = '';
-                                    vm.now_name = '';
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        })
+                    }
+                },
+                changeCb: function (Tn, Df, Cn, Pi, Cp, $event) { //多选添加商品
+                    var self = this;
+                    if ($event.target.checked) {
+                        $.ajax({ //增加商品
+                            url: SCapiDic.addCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                is_choice:'1',
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = false;
+                                } else {
+                                    $event.target.checked = true;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        });
+                    } else {
+                        $.ajax({ //删除商品
+                            url: SCapiDic.delCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                is_choice:'1',
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = true;
+                                } else {
+                                    $event.target.checked = false;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
                                 }
                             }
                         })
                     }
                 }
+
             },
             mounted: function () {
                 this.$nextTick(function () {

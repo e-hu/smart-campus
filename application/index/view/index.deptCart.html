@@ -18,7 +18,12 @@
         <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
     </div>
     <div v-else class="W H mt90">
-        <ul class="tc clear H5 ">
+        <ul v-if="cartChoiceProductList !=''">
+            <li class="hl50 F_ bbd bgdefault tc">
+                <p class='f SScwhite'>单选列表</p>
+            </li>
+        </ul>
+        <ul class="tc clear H5">
             <li class="H W5 ptinfo fl" v-for="item in cartProductList">
                 <img :src="item.cookbook_image+'?imageslim'" class="H7 W"
                      @click="popup(item.cookbook_name,item.cookbook_info)">
@@ -28,6 +33,35 @@
                             <label class="weui-cell W H">
                                 <input type="checkbox" class="weui-check" name="radio"
                                        @click='changeCa(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
+                                       :checked="item.order_index == 1">
+                                <i class="weui-icon-checked"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="W7 H tc ptcheckinfo_div">
+                        <div class="W H ptcheckinfo">
+                            <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span
+                                class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul v-if="cartChoiceProductList !=''">
+            <li class="hl50 F_ bbd bgdefault tc">
+                <p class='f SScwhite'>多选列表</p>
+            </li>
+        </ul>
+        <ul class="tc clear H5 " v-if="cartChoiceProductList !=''">
+            <li class="H W5 ptinfo fl" v-for="item in cartChoiceProductList">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W"
+                     @click="popup(item.cookbook_name,item.cookbook_info)">
+                <div class="bgf H3 W">
+                    <div class="tl W3 fl tr H">
+                        <div class="weui-cells_checkbox W H ptcheck">
+                            <label class="weui-cell W H">
+                                <input type="checkbox" class="weui-check" name="checkbox"
+                                       @click='changeCb(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
                                        :checked="item.order_index == 1">
                                 <i class="weui-icon-checked"></i>
                             </label>
@@ -76,6 +110,7 @@
         var data = {
             day: getUrlParam('day'),
             cartProductList: [],
+            cartChoiceProductList:[],
             cartGetCount: '0',
             date: '',
             dinnerBaseList: [],
@@ -213,7 +248,6 @@
                             //         }
                             //     ]
                             // };
-
 
                             var option = {
                                 title: {
@@ -375,6 +409,7 @@
                                 self.date = ret.data.date;
                             } else {
                                 self.cartProductList = ret.cartList;
+                                self.cartChoiceProductList = ret.cartChoiceList;
                                 self.cartGetCount = ret.cartCount;
                                 self.cart_priceId = ret.cart_priceId;
                                 if (ret.dinner_name) {
@@ -390,9 +425,10 @@
                     var self = this;
                     self.dinner_type = Sp;
                     self.cartProductList = [];
+                    self.cartChoiceProductList=[];
                     self.initCartObj(Sp);
                 },
-                changeCa: function (Tn, Df, Cn, Pi, Cp, $event) {
+                changeCa: function (Tn, Df, Cn, Pi, Cp, $event) {  //单选添加商品
                     var self = this;
                     if ($event.target.checked) {
                         $.ajax({ //增加商品
@@ -400,6 +436,7 @@
                             type: "POST",
                             dataType: "json",
                             data: {
+                                is_choice:'0',
                                 canteen_no: Tn,
                                 dinner_flag: Df,
                                 cookbook_no: Cn,
@@ -417,8 +454,8 @@
                                     $event.target.checked = true;
                                     vm.price_total = ret.data.price_total;
                                     vm.price_num = ret.data.price_num;
-                                    if (ret.data.dinner_name) {
-                                        vm.now_num = ret.data.dinner_name.length;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
                                     }
                                     vm.now_flag = ret.data.dinner_name;
                                     vm.now_name = ret.data.cookbook_name;
@@ -431,6 +468,7 @@
                             type: "POST",
                             dataType: "json",
                             data: {
+                                is_choice:'0',
                                 canteen_no: Tn,
                                 dinner_flag: Df,
                                 cookbook_no: Cn,
@@ -448,9 +486,77 @@
                                     $event.target.checked = false;
                                     vm.price_total = ret.data.price_total;
                                     vm.price_num = ret.data.price_num;
-                                    vm.now_num = '0';
-                                    vm.now_flag = '';
-                                    vm.now_name = '';
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        });
+                    }
+                },
+                changeCb: function (Tn, Df, Cn, Pi, Cp, $event) { //多选添加商品
+                    var self = this;
+                    if ($event.target.checked) {
+                        $.ajax({ //增加商品
+                            url: SCapiDic.deptAddCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                is_choice:'1',
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day,
+                                emp_id: getUrlParam('emp_id')
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = false;
+                                } else {
+                                    $event.target.checked = true;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        });
+                    } else {
+                        $.ajax({ //删除商品
+                            url: SCapiDic.deptDelCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                is_choice:'1',
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day,
+                                emp_id: getUrlParam('emp_id')
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = true;
+                                } else {
+                                    $event.target.checked = false;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
                                 }
                             }
                         });

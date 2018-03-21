@@ -220,6 +220,5 @@ function post_curls($url, $post)
     }
     curl_close($curl); // 关闭CURL会话
     return $res; // 返回数据，json格式
-
 }
 
