@@ -15,7 +15,7 @@
         <div class="col-xs-4">
             <div class="form-group">
                 <input name="dinner_datetime" id="dinner_datetime" value="{$Think.get.dinner_datetime|default=''}"
-                       placeholder="请选择时间" class="input-sm form-control">
+                       placeholder="请选择就餐日期" class="input-sm form-control">
             </div>
         </div>
         <div class="col-xs-3">
@@ -82,6 +82,7 @@
             <th class='text-center'>结算方式</th>
             <th class='text-center'>取餐方式</th>
             <th class='text-center'>下单方式</th>
+            <th class='text-center'>下单时间</th>
             <!--<th class='text-center'>操作</th>-->
         </tr>
         </thead>
@@ -133,6 +134,7 @@
             {else}
             <td class='text-center'>无</td>
             {/if}
+            <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['dinner_createtime']))}</td>
             <!--<td class='text-center nowrap'>-->
             <!--{if auth("$classuri/edit")}-->
             <!--<span class="text-explode">|</span>-->
