@@ -103,16 +103,16 @@ class Company extends BasicAdmin
                 unset($data['pay_type']);
             } else {
                 Db::name('company_list_third_interface')->where(['company_id' => $data['company_id'],'third_type'=>'2'])->delete();
+                unset($data['pay_type']);
             }
 
-            if (isset($data['ic_type'])) {
+            if (isset($data['ic_type']) && $data['ic_type'] != '0') {
                 Db::name('company_list_third_interface')->where(['company_id' => $data['company_id'],'third_type'=>'1'])->delete();
                 Db::name('company_list_third_interface')->insert(['company_id' => $data['company_id'], 'third_interface_id' => $data['ic_type'],'third_type'=>'1']);
                 unset($data['ic_type']);
-            }elseif ($data['ic_type'] == '0'){
+            }else {
                 Db::name('company_list_third_interface')->where(['company_id' => $data['company_id'],'third_type'=>'1'])->delete();
-            } else {
-                Db::name('company_list_third_interface')->where(['company_id' => $data['company_id'],'third_type'=>'1'])->delete();
+                unset($data['ic_type']);
             }
 
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->find()) {

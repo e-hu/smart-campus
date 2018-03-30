@@ -30,7 +30,7 @@
             <i class="iconfont  c9 mr10"> <img src="__PUBLIC__/static/index/images/go.png" class="h20 lh20 mt15"></i>
         </li>
 
-        <li class="hl50 F_ bbd bgf" onclick="openWin('/index/index/recharge',{})">
+        <li class="hl50 F_ bbd bgf" onclick="openWin('/index/index/recharge',{})" v-show="third_type == '2'">
             <i class="iconfont  f26 ml10 Sc4"> <img src="__PUBLIC__/static/index/images/充值.png"
                                                     class="h20 lh20 mt15"></i>
             <p class='f pl10'>账户充值</p>
@@ -135,7 +135,8 @@
         var data = {
             name: '',
             image:'',
-            dept_type:''
+            dept_type:'',
+            third_type:'1'
         };
         var more = new Vue({
             el: '#more',
@@ -179,6 +180,11 @@
                             } else {
                                 self.name = ret.Emp_Name;
                                 self.dept_type = ret.dept_type;
+                                if(ret.third_type > 0){
+                                    self.third_type = '2';
+                                }else{
+                                    self.third_type = '1';
+                                }
                                 if(ret.Emp_image){
                                     self.image = ret.Emp_image;
                                 }else{
