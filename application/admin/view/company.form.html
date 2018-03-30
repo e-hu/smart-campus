@@ -25,6 +25,35 @@
         </div>
     </div>
     {/if}
+    {if isset($ic_type)}
+    <div class="layui-form-item">
+        <label class="layui-form-label">第三方IC卡接口</label>
+        <div class="layui-input-block">
+            {foreach $ic_type as $types}
+            {if isset($vo.type) and isset($ic_id) and $ic_id == $types.third_ic_id}
+            <input type="radio" checked  name="ic_type" value="{$types.third_ic_id}" title="{$types.third_company}">
+            {else}
+            <input type="radio" name="ic_type" value="{$types.third_ic_id}" title="{$types.third_company}">
+            {/if}
+            {/foreach}
+            <input type="radio" name="ic_type" value="0" title="无">
+        </div>
+    </div>
+    {/if}
+    {if isset($pay_type)}
+    <div class="layui-form-item">
+        <label class="layui-form-label">第三方支付接口</label>
+        <div class="layui-input-block">
+            {foreach $pay_type as $types}
+            {if isset($pay_ids) and in_array($types['third_ic_id'],$pay_ids)}
+            <input type="checkbox" checked  name="pay_type[]" value="{$types.third_ic_id}" title="{$types.third_company}">
+            {else}
+            <input type="checkbox" name="pay_type[]" value="{$types.third_ic_id}" title="{$types.third_company}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    {/if}
     <div class="hr-line-dashed"></div>
 
     <div class="layui-form-item text-center">
