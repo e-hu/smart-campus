@@ -36,9 +36,8 @@ class Intface extends ApiBase
      * 浙农信支付结果通知接口
      */
     public function payResult(){
-       $data = $data = $this->request->post();
-       if($data['Transld']="PSNR"){
-           $this->paySearch();
+       if($_POST['Transld']="PSNR"){
+           $this->paySearch($_GET['EmpId'],$_POST);
        }
     }
 
@@ -46,7 +45,10 @@ class Intface extends ApiBase
      *浙农信支付查询
      */
 
-    private function paySearch(){
-
+    private function paySearch($Emp_id,$data){
+        if($data['RespCode'] = '000000'){
+            Db::table("rechargeOrder_list")->where(['Emp_id'=>$Emp_id,'MerSeqNo'=>$data['MerSeqNo'],'TransAmt'=>$data['TransAmt'],'status'=>'0'])->update(['status'=>'1']);
+        }
+        return json(['RespCode'=>'000000']); 
     }
 }
