@@ -49,6 +49,6 @@ class Intface extends ApiBase
         if($data['RespCode'] = '000000'){
             Db::table("rechargeOrder_list")->where(['Emp_id'=>$Emp_id,'MerSeqNo'=>$data['MerSeqNo'],'TransAmt'=>$data['TransAmt'],'status'=>'0'])->update(['status'=>'1']);
         }
-        return json(['RespCode'=>'000000']); 
+        return json(['RespCode'=>'000000']);
     }
 }
