@@ -19,17 +19,34 @@ class Intface extends ApiBase
 
     public function _initialize()
     {
-
     }
+
     /**
      * pC端数据交互接口
      * @param $no
      */
-    public function up_machine_info($no){
+    public function up_machine_info($no)
+    {
         $sql = "exec up_machine_info :no";
         $result = Db::query($sql, ['no' => $no]);
         return $result[0][0]['return_msg'];
     }
 
+    /**
+     * 浙农信支付结果通知接口
+     */
+    public function payResult(){
+       $data = $data = $this->request->post();
+       if($data['Transld']="PSNR"){
+           $this->paySearch();
+       }
+    }
 
+    /**
+     *浙农信支付查询
+     */
+
+    private function paySearch(){
+
+    }
 }

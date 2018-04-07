@@ -1,43 +1,33 @@
 {include file="common/header" title="订单详情" keywords="订单详情" description="" /}
-<div id="app" class="f H scroll p10" v-cloak>
+<div id="app" class="f H scroll p10">
     <form action="{$shop_url}" method="post">
         <input type="hidden" name="signedData" value="">
         <input type="hidden" name="TransId" value="IPSR">
         <input type="hidden" name="Plain" value="{$Plain}">
         <input type="hidden" name="Signature" value="{$Signature}">
-    <div class="bgf p20-10 bbe F_">
-        <span>确认充值金额：</span>
-        <span class="f ml20">
-				<input type="number" class="W bn" v-model="TransAmt" readonly/>
+        <div class="bgf p20-10 bbe F_">
+            <span>确认充值金额：</span>
+            <span class="f ml20">
+				<input type="number" class="W bn" value="{$money}" id="TransAmt" readonly/>
 			</span>
-    </div>
-    <div class="pt40">
-        <button class="bgdefault W r2 cf p10 f16" @click="confirm">确认支付</button>
-    </div>
+        </div>
+        <div class="pt40">
+            <button type="submit" class="bgdefault W r2 cf p10 f16" id="submit">确认支付</button>
+        </div>
     </form>
 </div>
 {include file="common/footer" /}
 <script type="text/javascript">
-    window.onload = function () {
-        var data = {
-            TransAmt:'<?php echo $money ?>',
-        };
-        new Vue({
-            el: '#app',
-            data: data,
-            methods: {
-                confirm: function () {
-                    var self = this;
-                    if (self.TransAmt == '') {
-                        $.alert('充值金额不能为空');
-                        return false;
-                    }
-
-                }
-            }
-        });
-    }
-
+    var submitBtn = document.getElementById("submit");
+    submitBtn.onclick = function (event) {
+        var TransAmt = $("#TransAmt").val();
+        if (TransAmt > 0) {
+            return true;
+        } else {
+            $.alert("充值金额必须大于0");
+            return false;
+        }
+    };
 </script>
 
 
