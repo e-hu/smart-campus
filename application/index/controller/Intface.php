@@ -37,7 +37,10 @@ class Intface extends ApiBase
      */
     public function payResult(){
        if($_POST['Transld']="PSNR"){
-           $this->paySearch($_POST);
+           if($_POST['RespCode'] = '000000'){
+               Db::table("rechargeOrder_list")->where(['MerSeqNo'=>$_POST['MerSeqNo'],'TransAmt'=>$_POST['TransAmt'],'status'=>'0'])->update(['status'=>'1']);
+           }
+           return json(['RespCode'=>'000000']);
        }
     }
 
@@ -45,10 +48,8 @@ class Intface extends ApiBase
      *浙农信支付查询
      */
 
-    private function paySearch($data){
-        if($data['RespCode'] = '000000'){
-            Db::table("rechargeOrder_list")->where(['MerSeqNo'=>$data['MerSeqNo'],'TransAmt'=>$data['TransAmt'],'status'=>'0'])->update(['status'=>'1']);
-        }
-        return json(['RespCode'=>'000000']);
+    private function paySearch(){
+
     }
+
 }
