@@ -65,7 +65,8 @@ class Intface extends ApiBase
         $data2['Signature'] = $arr[1][3];
         $data2['signedData'] = [];
         $html = post_curls('http://158.222.29.118:8080/paygate/main',$data2);
-        preg_match_all('|value="(.*)"|isU',$html,$arr); //匹配到数组$arr中；
+        $data = xml_to_json($html);
+        print_r($data);exit;
     }
 
 }

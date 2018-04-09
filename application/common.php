@@ -222,3 +222,13 @@ function post_curls($url, $post)
     return $res; // 返回数据，json格式
 }
 
+function xml_to_json($source) {
+    if(is_file($source)){ //传的是文件，还是xml的string的判断
+        $xml_array=simplexml_load_file($source);
+    }else{
+        $xml_array=simplexml_load_string($source);
+    }
+    $json = json_encode($xml_array);
+    return $json;
+}
+
