@@ -157,6 +157,10 @@ class Department extends BasicAdmin
     public function del()
     {
         LogService::write('订餐管理', '执行删除部门操作');
+        $depart_info = Db::name($this->table)->where("parent_dept_no",$_POST['id'])->find();
+        if($depart_info){
+            $this->error("部门删除失败，请查看是否有下级部门！");
+        }
         if (DataService::update($this->table,'','dept_no')) {
             $this->success("部门删除成功！", '');
         }
