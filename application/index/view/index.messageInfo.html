@@ -1,0 +1,49 @@
+{include file="common/header" title="通知详情" keywords="通知详情" description="" /}
+<div id="app" class="f H oh fr6" v-cloak>
+    <div class="W scroll H">
+        <ul>
+            <li class="hl50 F_ bbd bgf" v-for="item in messageProductInfo">
+                <p class='pl10'>{{item.title}}</p>
+                <p class='pl10'>{{item.content}}</p>
+                <p class='pr10 c9'>{{item.create_datetime}}</p>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- 底部导航栏 -->
+{include file="common/footer" /}
+<script type="text/javascript">
+    window.onload = function () {
+        var data = {
+            id: getUrlParam('id'),
+            messageProductInfo: []
+        };
+        new Vue({
+            el: '#app',
+            data: data,
+            methods: {
+                initMessageObj: function () {
+                    var self = this;
+                    $.ajax({
+                        url: '/index/mallapi/messageInfo',
+                        type: "POST",
+                        dataType: "json",
+                        data: {'id':self.id},
+                        success: function (ret) {
+                            self.messageProductInfo = ret.messageInfo;
+                        }
+                    });
+                }
+            },
+            mounted: function () {
+                this.$nextTick(function () {
+                    this.initMessageObj();
+                })
+            }
+        })
+        ;
+    };
+</script>
+
+
+

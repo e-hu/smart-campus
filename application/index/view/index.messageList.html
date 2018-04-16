@@ -1,0 +1,57 @@
+{include file="common/header" title="系统通知" keywords="系统通知" description="" /}
+<div id="app" class="f H oh fr6" v-cloak>
+    <div class="tc pt50" v-if="messageGetCount == '0'">
+        <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
+        <p class="c9 mb15">系统通知空空如也！</p>
+        <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
+    </div>
+    <div v-else class="W scroll H">
+        <ul>
+            <li class="hl50 F_ bbd bgf" v-for="item in messageProductList" @click="order(item.id)">
+                <p class='pl10'>{{item.title}}</p>
+                <p class='pr10 c9'>{{item.create_datetime}}</p>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- 底部导航栏 -->
+{include file="common/footer" /}
+<script type="text/javascript">
+    window.onload = function () {
+        var data = {
+            messageProductList: [],
+            messageGetCount: ''
+        };
+        new Vue({
+            el: '#app',
+            data: data,
+            methods: {
+                order: function (id) {  //跳转函数
+                    openWin('/index/index/messageInfo', {id: id});
+                },
+                initMessageObj: function () {
+                    var self = this;
+                    $.ajax({
+                        url: '/index/mallapi/messageList',
+                        type: "POST",
+                        dataType: "json",
+                        data: {},
+                        success: function (ret) {
+                            self.messageProductList = ret.messageList;
+                            self.messageGetCount = ret.messageCount;
+                        }
+                    });
+                }
+            },
+            mounted: function () {
+                this.$nextTick(function () {
+                    this.initMessageObj();
+                })
+            }
+        })
+        ;
+    };
+</script>
+
+
+
