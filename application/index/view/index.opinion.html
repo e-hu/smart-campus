@@ -1,0 +1,53 @@
+{include file="common/header" title="意见反馈" keywords="意见反馈" description="" /}
+<style>
+    .Sbgf6{background:#f6f6f6;}
+    .Snewsty{color:#F8A3E7; font-size:40px;}
+</style>
+<div id="app" class="F oh Sbgf6">
+    <div class="pb20 bgf">
+        <div class="m10 bd r5 p5 bgf">
+            <textarea style="resize:none; width:100%; height:200px;" class="bn" placeholder="请输入要提交的内容..." v-model="content"></textarea>
+        </div>
+    </div>
+    <div class="p0-10 pt40">
+        <button class="bgdefault W r2 cf p10 f16" @click="Sub">提交</button>
+    </div>
+</div>
+{include file="common/footer" /}
+<script type="text/javascript">
+    window.onload = function() {
+        var data = {
+            content: '',
+        };
+        new Vue({
+            el: '#app',
+            data: data,
+            methods: {
+                Sub:function(){
+                    var self = this;
+                    var data = {};
+                    data.content = self.content;
+                    if(data.content == ''){
+                        layer.msg("提交内容不能为空");
+                        return false;
+                    }
+                    //提交反馈
+                    $.ajax({
+                        url: '/index/mallapi/submit_opinion',
+                        type: "POST",
+                        data: {data:JSON.stringify(data)},
+                        dataType: "json",
+                        success: function(ret){
+                            $.alert(ret.msg, function() {
+                                openWin(ret.url,'');
+                            });
+                        }
+                    });
+                },
+            }
+        });
+    }
+</script>
+
+
+
