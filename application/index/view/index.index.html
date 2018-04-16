@@ -166,6 +166,14 @@
                 cart: function (day) {  //下单
                     openWin('/index/index/cart', {day: day});
                 },
+                formatDate: function (year, month, day) {
+                    var y = year;
+                    var m = month;
+                    if (m < 10) m = "0" + m;
+                    var d = day;
+                    if (d < 10) d = "0" + d;
+                    return y + "-" + m + "-" + d
+                },
                 initData: function (cur) {
                     var date;
                     var self = this;
@@ -236,15 +244,6 @@
                     d.setDate(35);
                     this.initData(this.formatDate(d.getFullYear(), d.getMonth() + 1, 1));
                 },
-                // 返回 类似 2016-01-02 格式的字符串
-                formatDate: function (year, month, day) {
-                    var y = year;
-                    var m = month;
-                    if (m < 10) m = "0" + m;
-                    var d = day;
-                    if (d < 10) d = "0" + d;
-                    return y + "-" + m + "-" + d
-                },
                 getDinnerBase: function () {
                     var self = this;
                     $.ajax({
@@ -260,12 +259,37 @@
                             }
                         }
                     });
+                },
+                message: function () {
+                    $.ajax({
+                        url: '/index/mallapi/message', //消息通知
+                        type: "POST",
+                        dataType: "json",
+                        success: function (ret) {
+                            if(ret.length > 0){
+                                $.notification({
+                                    title: "<div class='tc f16 lh20'>"+ret.title+"</div>",
+                                    text: "<div class='tc f14 lh20'>"+ret.content+"</div>",
+                                    data: ret.url,
+                                    onClick: function(data) {
+                                        openWin(data,{})
+                                    },
+                                    onClose: function(data) {
+
+                                    }
+                                });
+                            }
+
+                        }
+                    });
                 }
+                
             },
             mounted: function () {
                 this.$nextTick(function () {
                     this.getDinnerBase();
                     this.initData(null);
+                    this.message();
                 })
             }
         });
