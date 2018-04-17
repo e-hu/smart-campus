@@ -268,8 +268,8 @@
                         success: function (ret) {
                             if(ret['id'].length > 0){
                                 $.notification({
-                                    title: "<div class='tc f16 lh20'>"+ret.title+"</div>",
-                                    text: "<div class='tc f14 lh20'>"+ret.content+"</div>",
+                                    title: "<div class='tc f16 lh20'>系统通知</div>",
+                                    text: "<div class='tc f14 lh20'>"+ret.title+"</div>",
                                     data: '/index/index/messageInfo?id='+ret.id,
                                     onClick: function(data) {
                                         openWin(data,{})
