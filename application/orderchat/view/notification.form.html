@@ -13,15 +13,13 @@
         </div>
     </div>
 
-    <div class="layui-form-item">
+    <div class="layui-form-item layui-form-text">
         <label class="layui-form-label">通知内容</label>
         <div class="layui-input-block">
             {if $vo and isset($vo.content)}
-            <input type="text" name="content" value='{$vo.content|default=""}'
-                   required="required" title="请输入通知内容" placeholder="请输入通知内容" class="layui-input disabled">
+            <textarea name="content" placeholder="请输入内容" class="layui-textarea">{$vo.content|default=""}</textarea>
             {else}
-            <input type="text" name="content" value='{$vo.content|default=""}' pattern="^\S{2,}$"
-                   title="请输入2位及以上的字符" required="required" placeholder="请输入通知内容" class="layui-input">
+            <textarea name="content" placeholder="请输入内容" class="layui-textarea">{$vo.content|default=""}</textarea>
             {/if}
         </div>
     </div>

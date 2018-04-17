@@ -73,6 +73,8 @@ class Notification extends BasicAdmin {
     public function _form_filter(&$data) {
         if ($this->request->isPost()) {
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where('title', $data['title'])->find()) {
+                unset($data['title']);
+            } elseif (Db::name($this->table)->where('company_id', session('user.company_id'))->where('title', $data['title'])->find()) {
                 $this->error('通知标题已经存在，请使用其它名称！');
             }
         }
