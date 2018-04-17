@@ -2,10 +2,14 @@
 <div id="app" class="f H oh fr6" v-cloak>
     <div class="W scroll H">
         <ul>
-            <li class="hl50 F_ bbd bgf" v-for="item in messageProductInfo">
-                <p class='pl10'>{{item.title}}</p>
-                <p class='pl10'>{{item.content}}</p>
-                <p class='pr10 c9'>{{item.create_datetime}}</p>
+            <li class="hl50 F_ bbd bgf tc">
+                <p class='pl10 W'>{{messageProductInfo.title}}</p>
+            </li>
+            <li class="hl50 F_ bbd bgf tl">
+            <p class='pl10 W'>{{messageProductInfo.content}}</p>
+            </li>
+            <li class="hl50 F_ bbd bgf tr">
+            <p class='pr10 c9 W'>{{messageProductInfo.create_time}}</p>
             </li>
         </ul>
     </div>

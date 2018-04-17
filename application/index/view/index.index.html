@@ -266,11 +266,11 @@
                         type: "POST",
                         dataType: "json",
                         success: function (ret) {
-                            if(ret.length > 0){
+                            if(ret['id'].length > 0){
                                 $.notification({
                                     title: "<div class='tc f16 lh20'>"+ret.title+"</div>",
                                     text: "<div class='tc f14 lh20'>"+ret.content+"</div>",
-                                    data: ret.url,
+                                    data: '/index/index/messageInfo?id='+ret.id,
                                     onClick: function(data) {
                                         openWin(data,{})
                                     },
@@ -283,7 +283,7 @@
                         }
                     });
                 }
-                
+
             },
             mounted: function () {
                 this.$nextTick(function () {
