@@ -37,6 +37,8 @@ class Intface extends ApiBase
      */
     public function payResult(){
         $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+        $txt = '01212222';
+        fwrite($myfile, $txt);
         $txt = $_POST;
         fwrite($myfile, $txt);
         $txt = $_GET;
