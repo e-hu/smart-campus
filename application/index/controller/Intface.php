@@ -36,6 +36,12 @@ class Intface extends ApiBase
      * 浙农信支付结果通知接口
      */
     public function payResult(){
+        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
+        $txt = $_POST;
+        fwrite($myfile, $txt);
+        $txt = $_GET;
+        fwrite($myfile, $txt);
+        fclose($myfile);
        if($_POST['Transld']="PSNR"){
            if($_POST['RespCode'] = '000000'){
                Db::table("rechargeOrder_list")->where(['MerSeqNo'=>$_POST['MerSeqNo'],'TransAmt'=>$_POST['TransAmt'],'status'=>'0'])->update(['status'=>'1']);
