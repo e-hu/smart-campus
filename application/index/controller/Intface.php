@@ -37,44 +37,16 @@ class Intface extends ApiBase
      */
     public function payResult(){
         $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
-        $txt = '01212222';
-        fwrite($myfile, $txt);
-        $txt = $_POST;
-        fwrite($myfile, $txt);
-        $txt = $_GET;
-        fwrite($myfile, $txt);
-        fclose($myfile);
-       if($_POST['Transld']="PSNR"){
-           if($_POST['RespCode'] = '000000'){
-               Db::table("rechargeOrder_list")->where(['MerSeqNo'=>$_POST['MerSeqNo'],'TransAmt'=>$_POST['TransAmt'],'status'=>'0'])->update(['status'=>'1']);
-           }
+        $xml = file_get_contents("php://input");
+        $data = xml_to_json($xml);
+       if($data['Message']['RespCode']="000000"){
+               Db::table("rechargeOrder_list")
+                   ->where(['MerSeqNo'=>$data['Message']['MerSeqNo'],'TransAmt'=>$data['Message']['TransAmt'],'status'=>'0'])
+                   ->update(['status'=>'1','TransSeqNo'=>$data['Message']['TransSeqNo'],'ClearDate'=>$data['Message']['ClearDate']]);
            return json(['RespCode'=>'000000']);
        }else{
            return json(['RespCode'=>'000001']);
        }
-    }
-
-    /**
-     *浙农信支付查询
-     */
-
-    private function paySearch($MerSeqNo){
-        $order_info = Db::table("rechargeOrder_list")->where(['MerSeqNo'=>$MerSeqNo])->find();
-        $data = [];
-        $data['TransId'] = 'IQSR';
-        $data['MerchantId'] = $order_info['MerchantId'];
-        $data['SubMerchantId'] = $order_info['MerchantId'];
-        $data['MerSeqNo'] = $order_info['MerSeqNo'];
-        $data['MerTransDate'] = $order_info['MerDateTime'];
-        $html = post_curls('http://158.222.29.118:8080/merchant/*.do?TransName=prePWDReq',$data);
-        preg_match_all('|value="(.*)"|isU',$html,$arr); //匹配到数组$arr中；
-        $data2 = [];
-        $data2['Plain'] = $arr[1][2];
-        $data2['Signature'] = $arr[1][3];
-        $data2['signedData'] = [];
-        $html = post_curls('http://158.222.29.118:8080/paygate/main',$data2);
-        $data = xml_to_json($html);
-        print_r($data);exit;
     }
 
 }
