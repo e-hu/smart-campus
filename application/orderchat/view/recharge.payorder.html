@@ -29,41 +29,41 @@
             </div>
         </div>
 
-        <div class="col-xs-2">
-            <div class="form-group">
-                <select name="status" class="input-sm form-control">
-                    <option value="">- 推送状态 -</option>
-                    <!--{if $Think.get.status eq '0'}-->
-                    <option selected value="0">未推送</option>
-                    <option value="{$Think.get.company_id}">已推送</option>
-                    <!--{elseif $Think.get.status eq '' }-->
-                    <option value="0">未推送</option>
-                    <option value="{$Think.get.company_id}">已推送</option>
-                    <!--{else}-->
-                    <option value="0">未推送</option>
-                    <option selected value="{$Think.get.company_id}">已推送</option>
-                    <!--{/if}-->
-                </select>
-            </div>
-        </div>
+        <!--<div class="col-xs-2">-->
+            <!--<div class="form-group">-->
+                <!--<select name="status" class="input-sm form-control">-->
+                    <!--<option value="">- 推送状态 -</option>-->
+                    <!--&lt;!&ndash;{if $Think.get.status eq '0'}&ndash;&gt;-->
+                    <!--<option selected value="0">未推送</option>-->
+                    <!--<option value="{$Think.get.company_id}">已推送</option>-->
+                    <!--&lt;!&ndash;{elseif $Think.get.status eq '' }&ndash;&gt;-->
+                    <!--<option value="0">未推送</option>-->
+                    <!--<option value="{$Think.get.company_id}">已推送</option>-->
+                    <!--&lt;!&ndash;{else}&ndash;&gt;-->
+                    <!--<option value="0">未推送</option>-->
+                    <!--<option selected value="{$Think.get.company_id}">已推送</option>-->
+                    <!--&lt;!&ndash;{/if}&ndash;&gt;-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
 
-        <div class="col-xs-2">
-            <div class="form-group">
-                <select name="status" class="input-sm form-control">
-                    <option value="">- 订单状态 -</option>
-                    <!--{if $Think.get.status eq '0'}-->
-                    <option selected value="0">待付款</option>
-                    <option value="1">付款成功</option>
-                    <!--{elseif $Think.get.status eq '1' }-->
-                    <option selected value="0">待付款</option>
-                    <option value="1">待对账</option>
-                    <!--{else}-->
-                    <option value="0">未对账</option>
-                    <option selected value="{$Think.get.company_id}">已对账</option>
-                    <!--{/if}-->
-                </select>
-            </div>
-        </div>
+        <!--<div class="col-xs-2">-->
+            <!--<div class="form-group">-->
+                <!--<select name="status" class="input-sm form-control">-->
+                    <!--<option value="">- 订单状态 -</option>-->
+                    <!--&lt;!&ndash;{if $Think.get.status eq '0'}&ndash;&gt;-->
+                    <!--<option selected value="0">待付款</option>-->
+                    <!--<option value="1">付款成功</option>-->
+                    <!--&lt;!&ndash;{elseif $Think.get.status eq '1' }&ndash;&gt;-->
+                    <!--<option selected value="0">待付款</option>-->
+                    <!--<option value="1">待对账</option>-->
+                    <!--&lt;!&ndash;{else}&ndash;&gt;-->
+                    <!--<option value="0">未对账</option>-->
+                    <!--<option selected value="{$Think.get.company_id}">已对账</option>-->
+                    <!--&lt;!&ndash;{/if}&ndash;&gt;-->
+                <!--</select>-->
+            <!--</div>-->
+        <!--</div>-->
 
         <div class="col-xs-1">
             <div class="form-group">
