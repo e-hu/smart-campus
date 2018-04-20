@@ -36,7 +36,6 @@ class Intface extends ApiBase
      * 浙农信支付结果通知接口
      */
     public function payResult(){
-        $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
         $xml = file_get_contents("php://input");
         $data = xml_to_json($xml);
         $arr = json_decode($data,true);
