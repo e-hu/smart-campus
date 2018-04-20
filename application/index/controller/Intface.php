@@ -39,14 +39,15 @@ class Intface extends ApiBase
         $myfile = fopen("newfile.txt", "w") or die("Unable to open file!");
         $xml = file_get_contents("php://input");
         $data = xml_to_json($xml);
-       if($data['Message']['RespCode']="000000"){
-               Db::table("rechargeOrder_list")
-                   ->where(['MerSeqNo'=>$data['Message']['MerSeqNo'],'TransAmt'=>$data['Message']['TransAmt'],'status'=>'0'])
-                   ->update(['status'=>'1','TransSeqNo'=>$data['Message']['TransSeqNo'],'ClearDate'=>$data['Message']['ClearDate']]);
-           return json(['RespCode'=>'000000']);
-       }else{
-           return json(['RespCode'=>'000001']);
-       }
+        $arr = json_decode($data,true);
+        if($arr['Message']['RespCode']="000000"){
+           Db::table("rechargeOrder_list")
+                ->where(['MerSeqNo'=>$arr['Message']['MerSeqNo'],'TransAmt'=>$arr['Message']['TransAmt'],'status'=>'0'])
+                ->update(['status'=>'1','TransSeqNo'=>$arr['Message']['TransSeqNo'],'ClearDate'=>$arr['Message']['ClearDate']]);
+            return json(['RespCode'=>'000000']);
+        }else{
+            return json(['RespCode'=>'000001']);
+        }
     }
 
 }
