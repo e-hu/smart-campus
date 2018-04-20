@@ -40,7 +40,7 @@ class Intface extends ApiBase
         $data = xml_to_json($xml);
         $arr = json_decode($data,true);
         if($arr['Message']['RespCode']="000000"){
-           Db::table("rechargeOrder_list")
+           Db::table("rechargeOrderList")
                 ->where(['MerSeqNo'=>$arr['Message']['MerSeqNo'],'TransAmt'=>$arr['Message']['TransAmt'],'status'=>'0'])
                 ->update(['status'=>'1','TransSeqNo'=>$arr['Message']['TransSeqNo'],'ClearDate'=>$arr['Message']['ClearDate']]);
             return json(['RespCode'=>'000000']);

@@ -273,3 +273,23 @@ function paySearch($TransId = 'IQSR',$MerchantId,$SubMerchantId,$MerSeqNo,$MerTr
 //    $data = xml_to_json($xml);
 //    $arr = json_decode($data,true);
 }
+
+/**
+ * 浙农信对账数据查询
+ */
+function payOrder($TransId = 'QDZF',$MerchantId,$SubMerchantId,$Field='1',$StartTime,$EndTime,$Type='1',$PageNo='1',$PageSize='40'){
+    $data = [];
+    $data['TransId'] = $TransId;
+    $data['MerchantId'] = $MerchantId;
+    $data['SubMerchantId'] = $SubMerchantId;
+    $data['Field'] = $Field;
+    $data['StartTime'] = $StartTime;
+    $data['EndTime'] = $EndTime;
+    $data['Type'] = $Type;
+    $data['PageNo'] = $PageNo;
+    $data['PageSize'] = $PageSize;
+    $html = request_post('http://121.40.119.155:9001/helloworld/nongshang',$data);
+//    $xml = file_get_contents("php://input");
+//    $data = xml_to_json($xml);
+//    $arr = json_decode($data,true);
+}

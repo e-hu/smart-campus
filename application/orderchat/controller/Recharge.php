@@ -73,8 +73,6 @@ class Recharge extends BasicAdmin {
         $this->assign('tags', $tags);
     }
 
-
-
     /**
      * 充值记录
      */
@@ -262,13 +260,27 @@ class Recharge extends BasicAdmin {
     }
 
     /**
-     * 表单数据默认处理
-     * @param array $data
+     * 浙农信对账
      */
-    public function _form_filter($data) {
+    public function payorder(){
+        // 设置页面标题
+        $this->title = '充值对账';
+        // 获取到所有GET参数
+        $get = $this->request->get();
 
+        // 实例Query对象
+        $where=[];
+        $where['a.company_id']=session('user.company_id');
+        $db = Db::name('rechargeOrder_list')
+            ->alias('a')
+            ->join('Employee_list l','a.emp_id = l.emp_id and a.company_id = l.company_id','left')
+            ->field('a.*,emp_name')
+            ->where($where);
+
+        if (isset($get['Emp_Name']) && $get['Emp_Name'] !== '') {
+            $db->where('l.Emp_Name', 'like', "%{$get['Emp_Name']}%");
+        }
+        // 实例化并显示
+        return parent::_list($db);
     }
-
-
-
 }
