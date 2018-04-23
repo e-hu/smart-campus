@@ -3,8 +3,8 @@
 {block name="button"}
 
 <div class="nowrap pull-right" style="margin-top:10px">
-    {if auth("$classuri/synch")}
-    <button onclick="synch()" data-title="同步账单" class='layui-btn layui-btn-small'>同步账单</button>
+    {if auth("$classuri/order")}
+    <button data-load='{:url("$classuri/order")}'  data-title="同步账单" class='layui-btn layui-btn-small'>同步账单</button>
     {/if}
 </div>
 
@@ -25,45 +25,52 @@
 
         <div class="col-xs-3">
             <div class="form-group">
-                <input type="text" name="Emp_MircoMsg_Uid" value="{$Think.get.Emp_MircoMsg_Uid|default=''}" placeholder="手机号码" class="input-sm form-control">
+                <input type="text" name="MobileNo" value="{$Think.get.MobileNo|default=''}" placeholder="手机号码" class="input-sm form-control">
             </div>
         </div>
 
-        <!--<div class="col-xs-2">-->
-            <!--<div class="form-group">-->
-                <!--<select name="status" class="input-sm form-control">-->
-                    <!--<option value="">- 推送状态 -</option>-->
-                    <!--&lt;!&ndash;{if $Think.get.status eq '0'}&ndash;&gt;-->
-                    <!--<option selected value="0">未推送</option>-->
-                    <!--<option value="{$Think.get.company_id}">已推送</option>-->
-                    <!--&lt;!&ndash;{elseif $Think.get.status eq '' }&ndash;&gt;-->
-                    <!--<option value="0">未推送</option>-->
-                    <!--<option value="{$Think.get.company_id}">已推送</option>-->
-                    <!--&lt;!&ndash;{else}&ndash;&gt;-->
-                    <!--<option value="0">未推送</option>-->
-                    <!--<option selected value="{$Think.get.company_id}">已推送</option>-->
-                    <!--&lt;!&ndash;{/if}&ndash;&gt;-->
-                <!--</select>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="col-xs-4">
+            <div class="form-group">
+                <input name="create_time" id="create_time" value="{$Think.get.create_time|default=''}"
+                       placeholder="请选择订单生成日期" class="input-sm form-control">
+            </div>
+        </div>
 
-        <!--<div class="col-xs-2">-->
-            <!--<div class="form-group">-->
-                <!--<select name="status" class="input-sm form-control">-->
-                    <!--<option value="">- 订单状态 -</option>-->
-                    <!--&lt;!&ndash;{if $Think.get.status eq '0'}&ndash;&gt;-->
-                    <!--<option selected value="0">待付款</option>-->
-                    <!--<option value="1">付款成功</option>-->
-                    <!--&lt;!&ndash;{elseif $Think.get.status eq '1' }&ndash;&gt;-->
-                    <!--<option selected value="0">待付款</option>-->
-                    <!--<option value="1">待对账</option>-->
-                    <!--&lt;!&ndash;{else}&ndash;&gt;-->
-                    <!--<option value="0">未对账</option>-->
-                    <!--<option selected value="{$Think.get.company_id}">已对账</option>-->
-                    <!--&lt;!&ndash;{/if}&ndash;&gt;-->
-                <!--</select>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="status" class="input-sm form-control">
+                    <option value="">- 订单状态 -</option>
+                    <!--{if $Think.get.status eq '0'}-->
+                    <option selected value="0">- 待支付 -</option>
+                    <!--{else}-->
+                    <option value="0">- 待支付 -</option>
+                    <!--{/if}-->
+                    <!--{if $Think.get.status eq '1'}-->
+                    <option selected value="1">- 支付成功 -</option>
+                    <!--{else}-->
+                    <option value="1">- 支付成功 -</option>
+                    <!--{/if}-->
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="is_recon" class="input-sm form-control">
+                    <option value="">- 对账状态 -</option>
+                    <!--{if $Think.get.is_recon eq '0'}-->
+                    <option selected value="0">- 未对账 -</option>
+                    <!--{else}-->
+                    <option value="0">- 未对账 -</option>
+                    <!--{/if}-->
+                    <!--{if $Think.get.is_recon eq '1'}-->
+                    <option selected value="1">- 已对账 -</option>
+                    <!--{else}-->
+                    <option value="1">- 已对账 -</option>
+                    <!--{/if}-->
+                </select>
+            </div>
+        </div>
 
         <div class="col-xs-1">
             <div class="form-group">
@@ -72,6 +79,9 @@
         </div>
     </div>
 </form>
+<script>
+    window.laydate.render({range: true, elem: '#create_time', format: 'yyyy/MM/dd'});
+</script>
 <!-- 表单搜索 结束 -->
 
 <form onsubmit="return false;" data-auto="" method="POST">
@@ -79,11 +89,12 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <!--<th class='list-table-check-td'>-->
-                    <!--<input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>-->
-                <!--</th>-->
+                <th class='list-table-check-td'>
+                    <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+                </th>
                 <th class='text-center'>订单号</th>
                 <th class='text-center'>员工名称</th>
+                <th class='text-center'>订单生成时间</th>
                 <th class='text-center'>交易时间</th>
                 <th class='text-center'>商户总交易流水号</th>
                 <th class='text-center'>充值金额</th>
@@ -92,29 +103,44 @@
                 <th class='text-center'>支付平台流水号</th>
                 <th class='text-center'>结算日期</th>
                 <th class='text-center'>是否对账</th>
+                <th class='text-center'>对账日期</th>
                 <th class='text-center'>操作</th>
             </tr>
         </thead>
         <tbody>
             {foreach $list as $key=>$vo}
             <tr>
-                <!--<td class='list-table-check-td'>-->
-                    <!--<input class="list-check-box" value='{$vo.Emp_Id}' type='checkbox'/>-->
-                <!--</td>-->
-                <td class='text-center'>{$vo.Emp_Id}</td>
+                <td class='list-table-check-td'>
+                    <input class="list-check-box" value='{$vo.OrderId}' type='checkbox'/>
+                </td>
+                <td class='text-center'>{$vo.OrderId}</td>
                 <td class='text-center'>{$vo.Emp_Name}</td>
-                <td class='text-center'>{$vo.Emp_MircoMsg_Uid}</td>
-                <td class='text-center'>{$vo.meal_name|default="<span style='color:#ccc'>无</span>"}</td>
-                <td class='text-center'>{$vo.dept_name|default="<span style='color:#ccc'>无</span>"}</td>
-                <td class='text-center'>{$vo.Ic_Card|default="<span style='color:#ccc'>无</span>"}</td>
-                <td class='text-center'>{$vo.account_remain|default="<span style='color:#ccc'>无</span>"}</td>
-                <td class='text-center'>{$vo.account_remain_money|default="<span style='color:#ccc'>无</span>"}</td>
-                <td class='text-center'>{$vo.account_freeze|default="<span style='color:#ccc'>无</span>"}</td>
-                <td class='text-center'>{$vo.account_freeze_money|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.create_time|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.MerDateTime}</td>
+                <td class='text-center'>{$vo.MerSeqNo|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.TransAmt|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>
+                    {if $vo.status eq '0'}
+                    <span>待支付</span>
+                    {elseif $vo.status eq '1'}
+                    <span style="color:#090">支付成功</span>
+                    {/if}
+                </td>
+                <td class='text-center'>{$vo.MobileNo|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.TransSeqNo|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>{$vo.ClearDate|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>
+                    {if $vo.is_recon eq '0'}
+                    <span>未对账</span>
+                    {elseif $vo.is_recon eq '1'}
+                    <span style="color:#090">已对账</span>
+                    {/if}
+                </td>
+                <td class='text-center'>{$vo.synch_time|default="<span style='color:#ccc'>无</span>"}</td>
                 <td class='text-center nowrap'>
-                    {if auth("$classuri/charge")}
+                    {if auth("$classuri/search")}
                     <span class="text-explode">|</span>
-                    <a data-modal='{:url("$classuri/charge")}?Emp_Id={$vo.Emp_Id}'  data-title="充值" href="javascript:void(0)">充值</a>
+                    <a data-load='{:url("$classuri/search")}?OrderId={$vo.OrderId}'  data-title="查询交易" href="javascript:void(0)">查询交易</a>
                     {/if}
                 </td>
             </tr>
@@ -126,25 +152,4 @@
     </table>
     {if isset($page)}<p>{$page}</p>{/if}
 </form>
-<script>
-    function synch(){
-        layer.msg('是否同步对账订单', {
-            time: 0 //不自动关闭
-            ,btn: ['是', '否']
-            ,yes: function(index){
-                $.ajax({
-                    type: 'POST',
-                    url: "{:url('recharge/synch')}",  //保存
-                    async: false,
-                    success: function (data) {
-                        layer.close(index);
-                        layer.msg(data.msg, function() {
-                            history.go();
-                        });
-                    }
-                });
-            }
-        });
-    }
-</script>
 {/block}

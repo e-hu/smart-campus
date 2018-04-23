@@ -261,23 +261,23 @@ function request_post($url = '', $post_data = array()) {
 /**
  * 浙农信查询单笔交易
  */
-function paySearch($TransId = 'IQSR',$MerchantId,$SubMerchantId,$MerSeqNo,$MerTransDate){
+function paySearch($TransId = 'IQSR',$MerchantId,$SubMerchantId,$MerSeqNo,$MerTransDate,$TransAmt){
     $data = [];
     $data['TransId'] = $TransId;
     $data['MerchantId'] = $MerchantId;
     $data['SubMerchantId'] = $SubMerchantId;
     $data['MerSeqNo'] = $MerSeqNo;
     $data['MerTransDate'] = $MerTransDate;
+    $data['MerTransAmt'] = $TransAmt;
     $html = request_post('http://121.40.119.155:9001/helloworld/nongshang',$data);
-//    $xml = file_get_contents("php://input");
-//    $data = xml_to_json($xml);
-//    $arr = json_decode($data,true);
+    $arr = json_decode($html,true);
+    return $arr;
 }
 
 /**
  * 浙农信对账数据查询
  */
-function payOrder($TransId = 'QDZF',$MerchantId,$SubMerchantId,$Field='1',$StartTime,$EndTime,$Type='1',$PageNo='1',$PageSize='40'){
+function payOrder($TransId = 'QDZF',$MerchantId,$SubMerchantId,$Field='1',$StartTime,$EndTime,$Type='3',$PageNo='1',$PageSize='40'){
     $data = [];
     $data['TransId'] = $TransId;
     $data['MerchantId'] = $MerchantId;
@@ -289,7 +289,6 @@ function payOrder($TransId = 'QDZF',$MerchantId,$SubMerchantId,$Field='1',$Start
     $data['PageNo'] = $PageNo;
     $data['PageSize'] = $PageSize;
     $html = request_post('http://121.40.119.155:9001/helloworld/nongshang',$data);
-//    $xml = file_get_contents("php://input");
-//    $data = xml_to_json($xml);
-//    $arr = json_decode($data,true);
+    $arr = json_decode($html,true);
+    return $arr;
 }
