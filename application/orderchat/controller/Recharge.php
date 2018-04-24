@@ -353,22 +353,27 @@ class Recharge extends BasicAdmin
                 $start_time = date("Y-m-d", strtotime("-8 day"));
             }
         }
-        $start_time = '2018-07-31';
-        $end_time = '2018-07-31';
+//        $start_time = '2018-07-31';
+//        $end_time = '2018-07-31';
         for ($x = 1; $x <= 100; $x++) {
             $data = payOrder('QDZF', '20171207112800', 'TA2017120711280000', 'transseqnbr,mernbr,merseqnbr,cleardate,transtime,mertransdatetime,transstatus,transamt,feeamt,origmerseqnbr,origmerdate,payeracctnbr,transtypcd,currencycd,checkstatus,memo1,memo2', $start_time, $end_time, '3', $x, '40');
             if(!empty($data)&&$data['RespCode']='000000'){
-                foreach($data['ClearTransList'] as $key=>$val){
-
-                }
-                if ($data['TransCount'] < 40) {
-                    break;
-                }
+               if(empty($data['ClearTransList'])){
+                   $this->error('同步订单接口无数据,未跑批,联系管理员!','/admin.html#/orderchat/recharge/payorder');
+               }else{
+                   foreach($data['ClearTransList'] as $key=>$val){
+                       Db::name('recharge_order_list')->where($where)->where(['MerchantId'=>$val['mernbr'],'is_recon'=>'0','status'=>'1','SubMerSeqNo1'=>$val['merseqnbr'],'TransAmt'=>$val['transamt']])->update(['is_recon'=>'1','synch_time'=>date('Y-m-d H:i:s',time())]);
+                   }
+                   if ($data['TransCount'] < 40) {
+                       break;
+                   }
+               }
             }else{
                 $this->error('同步订单接口错误,联系管理员!','/admin.html#/orderchat/recharge/payorder');
             }
-
         }
+        $count = Db::name('recharge_order_list')->where($where)->where(['is_recon'=>'0','status'=>'1'])->count();
+        $this->success('对账成功,还有'.$count.'条记录未成功对账','/admin.html#/orderchat/recharge/payorder');
 
     }
 }
