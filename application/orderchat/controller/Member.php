@@ -93,12 +93,8 @@ class Member extends BasicAdmin
             $extendData['Emp_Id'] = $data[0][0]['id'];
             $extendData['company_id'] = session('user.company_id');
             $extendData['Emp_Status'] = 1;
-            $data = $this->request->post();
-            if ($data['Emp_MircoMsg_Upwd']) {
-                $extendData['Emp_MircoMsg_Upwd'] = md5($data['Emp_MircoMsg_Upwd']);
-            }
         }
-        return $this->_form($this->table, 'form', 'Emp_Id', '', $extendData);
+        return $this->_form($this->table, 'form', 'Emp_Id');
     }
 
     /**
@@ -110,8 +106,11 @@ class Member extends BasicAdmin
         $extendData = [];
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            if ($data['Emp_MircoMsg_Upwd']) {
+            if ($data['Emp_MircoMsg_Upwd']!='') {
                 $extendData['Emp_MircoMsg_Upwd'] = md5($data['Emp_MircoMsg_Upwd']);
+            }else{
+                $db = Db::name($this->table)->where(['Emp_Id'=>$data['Emp_Id']])->find();
+                $extendData['Emp_MircoMsg_Upwd'] = $db['Emp_MircoMsg_Upwd'];
             }
         }
         return $this->_form($this->table, 'form', 'Emp_Id', '', $extendData);

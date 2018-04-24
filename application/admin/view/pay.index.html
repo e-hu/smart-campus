@@ -1,0 +1,70 @@
+{extend name='extra@admin/content'}
+
+
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="Company_Name" value="{$Think.get.Company_Name|default=''}" placeholder="单位名称" class="input-sm form-control">
+            </div>
+        </div>
+
+
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th class='list-table-check-td'>
+                    <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+                </th>
+                <th class='text-center'>单位名称</th>
+                <th class='text-center'>支付方式</th>
+                <th class='text-center'>状态</th>
+                <th class='text-center'>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {foreach $list as $key=>$vo}
+            <tr>
+                <td class='list-table-check-td'>
+                    <input class="list-check-box" value='{$vo.company_id}' type='checkbox'/>
+                </td>
+                <td class='text-center'>{$vo.company_name}</td>
+                <td class='text-center'>{$vo.third_interface_name}</td>
+                <td class='text-center'>
+                    {if $vo.flag eq 0}
+                    <span>已禁用</span>
+                    {elseif $vo.flag eq 1}
+                    <span style="color:#090">使用中</span>
+                    {/if}
+                </td>
+                <td class='text-center nowrap'>
+                    {if auth("$classuri/edit")}
+                    <span class="text-explode">|</span>
+                    <a data-modal='{:url("$classuri/edit")}?company_id={$vo.company_id}' href="javascript:void(0)">编辑</a>
+                    {/if}
+                </td>
+            </tr>
+            {/foreach}
+            {if empty($list)}
+            <tr><td colspan="7" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+{/block}
