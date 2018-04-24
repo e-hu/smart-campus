@@ -194,6 +194,32 @@ function companyConf($name, $value = false)
     return isset($config[$name]) ? $config[$name] : '';
 }
 
+/**
+ * 设备或配置公司参数
+ * @param string $name 参数名称
+ * @param bool $value 默认是false为获取值，否则为更新
+ * @return string|bool
+ */
+function payConf($name, $value = false)
+{
+    static $config = [];
+    if ($value !== false) {
+        $config = [];
+        $data = ['param_value'=> $value];
+        return Db::name('company_third_interface_param_list')->where(['company_id' => session('company_id'),'param_name'=>$name])->update($data);
+    }
+    if (empty($config)) {
+        $list = Db::name('company_third_interface_param_list')->where(['company_id' => session('company_id')])->select();
+        if(!empty($list)){
+            foreach ($list as $vo => $val) {
+                $config[$val['param_name']] = $val['param_value'];
+            }
+        }
+    }
+    return isset($config[$name]) ? $config[$name] : '';
+}
+
+
 
 /**
  * POST请求https接口返回内容

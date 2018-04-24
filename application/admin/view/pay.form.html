@@ -1,63 +1,16 @@
 <form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+    {foreach $param_list as $list}
     <div class="layui-form-item">
-        <label class="layui-form-label">单位名称</label>
+        <label class="layui-form-label">{$list.param_name_cn}</label>
         <div class="layui-input-block">
-            {if $vo and isset($vo.Company_Name)}
-            <input type="text" readonly="" disabled="" name="Company_Name" value='{$vo.Company_Name|default=""}'
-                   required="required" title="请输入单位名称" placeholder="请输入单位名称" class="layui-input disabled">
-            {else}
-            <input type="text" name="Company_Name" value='{$vo.Company_Name|default=""}' pattern="^\S{4,}$"
-                   title="请输入4位及以上的字符" required="required" placeholder="请输入单位名称" class="layui-input">
-            {/if}
+            <input type="text" name="{$list.param_name}" value="{:payConf($list.param_name)}"
+                   required="required" class="layui-input disabled">
         </div>
     </div>
-    {if isset($company_type)}
-    <div class="layui-form-item">
-        <label class="layui-form-label label-required">单位类型</label>
-        <div class="layui-input-block">
-            {foreach $company_type as $types}
-            {if isset($vo.type) and $vo.type == $types.type_id}
-                <input type="radio" checked  name="type" value="{$types.type_id}" title="{$types.type_name}">
-            {else}
-                <input type="radio" name="type" value="{$types.type_id}" title="{$types.type_name}">
-            {/if}
-            {/foreach}
-        </div>
-    </div>
-    {/if}
-    {if isset($ic_type)}
-    <div class="layui-form-item">
-        <label class="layui-form-label">第三方IC卡接口</label>
-        <div class="layui-input-block">
-            {foreach $ic_type as $types}
-            {if isset($vo.type) and isset($ic_id) and $ic_id == $types.third_ic_id}
-            <input type="radio" checked  name="ic_type" value="{$types.third_ic_id}" title="{$types.third_company}">
-            {else}
-            <input type="radio" name="ic_type" value="{$types.third_ic_id}" title="{$types.third_company}">
-            {/if}
-            {/foreach}
-            <input type="radio" name="ic_type" value="0" title="无">
-        </div>
-    </div>
-    {/if}
-    {if isset($pay_type)}
-    <div class="layui-form-item">
-        <label class="layui-form-label">第三方支付接口</label>
-        <div class="layui-input-block">
-            {foreach $pay_type as $types}
-            {if isset($pay_ids) and in_array($types['third_ic_id'],$pay_ids)}
-            <input type="checkbox" checked  name="pay_type[]" value="{$types.third_ic_id}" title="{$types.third_company}">
-            {else}
-            <input type="checkbox" name="pay_type[]" value="{$types.third_ic_id}" title="{$types.third_company}">
-            {/if}
-            {/foreach}
-        </div>
-    </div>
-    {/if}
+    {/foreach}
     <div class="hr-line-dashed"></div>
 
     <div class="layui-form-item text-center">
-        {if isset($vo['company_id'])}<input type='hidden' value='{$vo.company_id}' name='company_id'/>{/if}
         <button class="layui-btn" type='submit'>保存数据</button>
         <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
     </div>
