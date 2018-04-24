@@ -356,7 +356,7 @@ class Recharge extends BasicAdmin
 //        $start_time = '2018-07-31';
 //        $end_time = '2018-07-31';
         for ($x = 1; $x <= 100; $x++) {
-            $data = payOrder('QDZF', '20171207112800', 'TA2017120711280000', 'transseqnbr,mernbr,merseqnbr,cleardate,transtime,mertransdatetime,transstatus,transamt,feeamt,origmerseqnbr,origmerdate,payeracctnbr,transtypcd,currencycd,checkstatus,memo1,memo2', $start_time, $end_time, '3', $x, '40');
+            $data = payOrder('QDZF', payConf('MerchantId'), payConf('SubMerchantId'), 'transseqnbr,mernbr,merseqnbr,cleardate,transtime,mertransdatetime,transstatus,transamt,feeamt,origmerseqnbr,origmerdate,payeracctnbr,transtypcd,currencycd,checkstatus,memo1,memo2', $start_time, $end_time, '3', $x, '40');
             if(!empty($data)&&$data['RespCode']='000000'){
                if(empty($data['ClearTransList'])){
                    $this->error('同步订单接口无数据,未跑批,联系管理员!','/admin.html#/orderchat/recharge/payorder');
