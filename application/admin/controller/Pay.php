@@ -75,6 +75,7 @@ class Pay extends BasicAdmin
             $this->success('数据修改成功！', '');
         } else {
             $this->assign('param_list', Db::name('third_interface_param_list')->where('third_interface_id',$_GET['third_interface_id'])->select());
+            session('pay_company_id',$_GET['company_id']);
             return $this->_form($this->table, 'form');
         }
     }

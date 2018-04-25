@@ -195,12 +195,37 @@ function companyConf($name, $value = false)
 }
 
 /**
- * 设备或配置公司参数
+ * 设备或配置支付参数
  * @param string $name 参数名称
  * @param bool $value 默认是false为获取值，否则为更新
  * @return string|bool
  */
 function payConf($name, $value = false)
+{
+    static $config = [];
+    if ($value !== false) {
+        $config = [];
+        $data = ['param_value'=> $value];
+        return Db::name('company_third_interface_param_list')->where(['company_id' => session('pay_company_id'),'param_name'=>$name])->update($data);
+    }
+    if (empty($config)) {
+        $list = Db::name('company_third_interface_param_list')->where(['company_id' => session('pay_company_id')])->select();
+        if(!empty($list)){
+            foreach ($list as $vo => $val) {
+                $config[$val['param_name']] = $val['param_value'];
+            }
+        }
+    }
+    return isset($config[$name]) ? $config[$name] : '';
+}
+
+/**
+ * 设备或配置支付参数
+ * @param string $name 参数名称
+ * @param bool $value 默认是false为获取值，否则为更新
+ * @return string|bool
+ */
+function paysConf($name, $value = false)
 {
     static $config = [];
     if ($value !== false) {
@@ -218,7 +243,6 @@ function payConf($name, $value = false)
     }
     return isset($config[$name]) ? $config[$name] : '';
 }
-
 
 
 /**
@@ -295,7 +319,7 @@ function paySearch($TransId = 'IQSR',$MerchantId,$SubMerchantId,$MerSeqNo,$MerTr
     $data['MerSeqNo'] = $MerSeqNo;
     $data['MerTransDate'] = $MerTransDate;
     $data['MerTransAmt'] = $TransAmt;
-    $html = request_post(payConf('PayInterFaceURL'),$data);
+    $html = request_post(payConf('InterFaceURL'),$data);
     $arr = json_decode($html,true);
     return $arr;
 }
@@ -314,7 +338,7 @@ function payOrder($TransId = 'QDZF',$MerchantId,$SubMerchantId,$Field='1',$Start
     $data['Type'] = $Type;
     $data['PageNo'] = $PageNo;
     $data['PageSize'] = $PageSize;
-    $html = request_post(payConf('PayInterFaceURL'),$data);
+    $html = request_post(payConf('InterFaceURL'),$data);
     $arr = json_decode($html,true);
     return $arr;
 }
