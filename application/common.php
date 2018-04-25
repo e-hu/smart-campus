@@ -319,7 +319,7 @@ function paySearch($TransId = 'IQSR',$MerchantId,$SubMerchantId,$MerSeqNo,$MerTr
     $data['MerSeqNo'] = $MerSeqNo;
     $data['MerTransDate'] = $MerTransDate;
     $data['MerTransAmt'] = $TransAmt;
-    $html = request_post(payConf('InterFaceURL'),$data);
+    $html = request_post(paysConf('InterFaceURL'),$data);
     $arr = json_decode($html,true);
     return $arr;
 }
@@ -338,7 +338,7 @@ function payOrder($TransId = 'QDZF',$MerchantId,$SubMerchantId,$Field='1',$Start
     $data['Type'] = $Type;
     $data['PageNo'] = $PageNo;
     $data['PageSize'] = $PageSize;
-    $html = request_post(payConf('InterFaceURL'),$data);
+    $html = request_post(paysConf('InterFaceURL'),$data);
     $arr = json_decode($html,true);
     return $arr;
 }
