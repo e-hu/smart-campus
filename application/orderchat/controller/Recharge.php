@@ -353,13 +353,10 @@ class Recharge extends BasicAdmin
                 $start_time = date("Y-m-d", strtotime("-8 day"));
             }
         }
-        $start_time='2018-09-30';
-        $end_time='2018-09-30';
         $pagesize = '40';
         $type = '1';
         for ($x = 1; $x <= 100; $x++) {
             $data = payOrder('QDZF', paysConf('MerSeqNo'), paysConf('SubMerSeqNo'), 'transseqnbr,mernbr,merseqnbr,cleardate,transtime,mertransdatetime,transstatus,transamt,feeamt,origmerseqnbr,origmerdate,payeracctnbr,transtypcd,currencycd,checkstatus,memo1,memo2', $start_time, $end_time, $type, $x, $pagesize);
-//            print_r($data);exit;
             if(!empty($data)&&$data['RespCode']='000000'){
                if(empty($data['ClearTransList'])){
                    $this->error('同步订单接口无数据,未跑批,联系管理员!');
