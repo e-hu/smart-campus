@@ -334,7 +334,7 @@ class Recharge extends BasicAdmin
     }
 
     /**
-     * 浙农信单笔交易查询
+     * 浙农信对账查询
      */
     public function order()
     {
@@ -353,18 +353,19 @@ class Recharge extends BasicAdmin
                 $start_time = date("Y-m-d", strtotime("-8 day"));
             }
         }
-//        $start_time = '2018-07-31';
-//        $end_time = '2018-07-31';
         for ($x = 1; $x <= 100; $x++) {
             $data = payOrder('QDZF', paysConf('MerchantId'), paysConf('SubMerchantId'), 'transseqnbr,mernbr,merseqnbr,cleardate,transtime,mertransdatetime,transstatus,transamt,feeamt,origmerseqnbr,origmerdate,payeracctnbr,transtypcd,currencycd,checkstatus,memo1,memo2', $start_time, $end_time, '3', $x, '40');
             if(!empty($data)&&$data['RespCode']='000000'){
                if(empty($data['ClearTransList'])){
                    $this->error('同步订单接口无数据,未跑批,联系管理员!');
                }else{
-                   print_r($data['ClearTransList']);exit;
                    foreach($data['ClearTransList'] as $key=>$val){
-                       Db::name('recharge_order_list')->where($where)->where(['MerchantId'=>$val['mernbr'],'is_recon'=>'0','SubMerSeqNo1'=>$val['merseqnbr'],'TransAmt'=>$val['transamt']])->update(['is_recon'=>'1','status'=>'1','synch_time'=>date('Y-m-d H:i:s',time())]);
-                   }
+                       if($val['transstatus'] = '0' && Db::name('recharge_order_list')->where($where)->where(['MerSeqNo'=>$val['merseqnbr']])->find()){
+                           Db::name('recharge_order_list')->where($where)
+                               ->where(['MerchantId'=>$val['mernbr'],'MerSeqNo'=>$val['merseqnbr'],'is_recon'=>'0','TransAmt'=>$val['transamt']])
+                               ->update(['is_recon'=>'1','status'=>'1','TransSeqNo'=>$val['transseqnbr'],'synch_time'=>date('Y-m-d H:i:s',time())]);
+                       }
+                    }
                    if ($data['TransCount'] < 40) {
                        break;
                    }
