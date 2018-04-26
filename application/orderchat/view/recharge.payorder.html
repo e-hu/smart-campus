@@ -4,7 +4,7 @@
 
 <div class="nowrap pull-right" style="margin-top:10px">
     {if auth("$classuri/order")}
-    <button data-load='{:url("$classuri/order")}'  data-title="同步账单" class='layui-btn layui-btn-small'>同步账单</button>
+    <button onclick="order()"  data-title="同步账单" class='layui-btn layui-btn-small'>同步账单</button>
     {/if}
 </div>
 
@@ -140,7 +140,7 @@
                 <td class='text-center nowrap'>
                     {if auth("$classuri/search")}
                     <span class="text-explode">|</span>
-                    <a data-load='{:url("$classuri/search")}?OrderId={$vo.OrderId}'  data-title="查询交易" href="javascript:void(0)">查询交易</a>
+                    <a onclick="search_button('{$vo.OrderId}')" data-title="查询交易" href="javascript:void(0)">查询交易</a>
                     {/if}
                 </td>
             </tr>
@@ -152,4 +152,55 @@
     </table>
     {if isset($page)}<p>{$page}</p>{/if}
 </form>
+<script>
+    function order(){
+        layer.msg('是否同步账单', {
+            time: 0 //不自动关闭
+            ,btn: ['是', '否']
+            ,yes: function(index){
+                $.ajax({
+                    type: 'POST',
+                    url: "{:url('recharge/order')}",  //保存
+                    async: false,
+                    success: function (data) {
+                        layer.close(index);
+                        if(data.code = '0'){
+                            layer.msg(data.msg);
+                        }else{
+                            layer.msg(data.msg, function() {
+                                history.go();
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+    function search_button(OrderId){
+        layer.msg('查询当前交易', {
+            time: 0 //不自动关闭
+            ,btn: ['是', '否']
+            ,yes: function(index){
+                $.ajax({
+                    type: 'POST',
+                    url: "{:url('recharge/search')}",  //保存
+                    data: {
+                        OrderId: OrderId
+                    },
+                    async: false,
+                    success: function (data) {
+                        layer.close(index);
+                        if(data.code = '0'){
+                            layer.msg(data.msg), function() {
+                                history.go();
+                            };
+                        }else{
+                            layer.msg(data.msg);
+                        }
+                    }
+                });
+            }
+        });
+    }
+</script>
 {/block}

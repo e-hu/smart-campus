@@ -329,7 +329,7 @@ class Recharge extends BasicAdmin
                 Db::name('recharge_order_list')
                     ->where($where)->update(['status' => '1', 'ClearDate' => $data['ClearDate'], 'TransSeqNo' => $data['TransSeqNo']]);
             }
-            $this->success($data['RespMessage'], '/admin.html#/orderchat/recharge/payorder');
+            $this->success($data['RespMessage']);
         }
     }
 
@@ -359,21 +359,21 @@ class Recharge extends BasicAdmin
             $data = payOrder('QDZF', paysConf('MerchantId'), paysConf('SubMerchantId'), 'transseqnbr,mernbr,merseqnbr,cleardate,transtime,mertransdatetime,transstatus,transamt,feeamt,origmerseqnbr,origmerdate,payeracctnbr,transtypcd,currencycd,checkstatus,memo1,memo2', $start_time, $end_time, '3', $x, '40');
             if(!empty($data)&&$data['RespCode']='000000'){
                if(empty($data['ClearTransList'])){
-                   $this->error('同步订单接口无数据,未跑批,联系管理员!','/admin.html#/orderchat/recharge/payorder');
+                   $this->error('同步订单接口无数据,未跑批,联系管理员!');
                }else{
+                   //print_r($data['ClearTransList']);exit;
                    foreach($data['ClearTransList'] as $key=>$val){
-                       Db::name('recharge_order_list')->where($where)->where(['MerchantId'=>$val['mernbr'],'is_recon'=>'0','status'=>'1','SubMerSeqNo1'=>$val['merseqnbr'],'TransAmt'=>$val['transamt']])->update(['is_recon'=>'1','synch_time'=>date('Y-m-d H:i:s',time())]);
+                       Db::name('recharge_order_list')->where($where)->where(['MerchantId'=>$val['mernbr'],'is_recon'=>'0','SubMerSeqNo1'=>$val['merseqnbr'],'TransAmt'=>$val['transamt']])->update(['is_recon'=>'1','status'=>'1','synch_time'=>date('Y-m-d H:i:s',time())]);
                    }
                    if ($data['TransCount'] < 40) {
                        break;
                    }
                }
             }else{
-                $this->error('同步订单接口错误,联系管理员!','/admin.html#/orderchat/recharge/payorder');
+                $this->error('同步订单接口错误,联系管理员!');
             }
         }
         $count = Db::name('recharge_order_list')->where($where)->where(['is_recon'=>'0','status'=>'1'])->count();
-        $this->success('对账成功,还有'.$count.'条记录未成功对账','/admin.html#/orderchat/recharge/payorder');
-
+        $this->success('对账成功,还有'.$count.'条记录未成功对账');
     }
 }
