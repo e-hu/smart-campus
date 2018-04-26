@@ -363,7 +363,7 @@ class Recharge extends BasicAdmin
                        if($val['transstatus'] = '0' && Db::name('recharge_order_list')->where($where)->where(['MerSeqNo'=>$val['merseqnbr']])->find()){
                            Db::name('recharge_order_list')->where($where)
                                ->where(['MerchantId'=>$val['mernbr'],'MerSeqNo'=>$val['merseqnbr'],'is_recon'=>'0','TransAmt'=>$val['transamt']])
-                               ->update(['is_recon'=>'1','status'=>'1','TransSeqNo'=>$val['transseqnbr'],'synch_time'=>date('Y-m-d H:i:s',time())]);
+                               ->update(['is_recon'=>'1','status'=>'1','TransSeqNo'=>$val['transseqnbr'],'payeracctnbr'=>$val['payeracctnbr'],'synch_time'=>date('Y-m-d H:i:s',time())]);
                        }
                     }
                    if ($data['TransCount'] < 40) {
