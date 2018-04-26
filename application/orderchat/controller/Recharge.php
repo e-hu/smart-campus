@@ -305,7 +305,7 @@ class Recharge extends BasicAdmin
         }
 
         if (isset($get['MobileNo']) && $get['MobileNo'] !== '') {
-            $db->where('a.MobileNo', 'like', "%{$get['Emp_Name']}%");
+            $db->where('a.MobileNo', 'like', "%{$get['MobileNo']}%");
         }
         // 实例化并显示
         return parent::_list($db);
@@ -361,7 +361,7 @@ class Recharge extends BasicAdmin
                if(empty($data['ClearTransList'])){
                    $this->error('同步订单接口无数据,未跑批,联系管理员!');
                }else{
-                   //print_r($data['ClearTransList']);exit;
+                   print_r($data['ClearTransList']);exit;
                    foreach($data['ClearTransList'] as $key=>$val){
                        Db::name('recharge_order_list')->where($where)->where(['MerchantId'=>$val['mernbr'],'is_recon'=>'0','SubMerSeqNo1'=>$val['merseqnbr'],'TransAmt'=>$val['transamt']])->update(['is_recon'=>'1','status'=>'1','synch_time'=>date('Y-m-d H:i:s',time())]);
                    }
