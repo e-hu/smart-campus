@@ -353,20 +353,25 @@ class Recharge extends BasicAdmin
                 $start_time = date("Y-m-d", strtotime("-8 day"));
             }
         }
+        $start_time='2018-09-30';
+        $end_time='2018-09-30';
+        $pagesize = '40';
+        $type = '1';
         for ($x = 1; $x <= 100; $x++) {
-            $data = payOrder('QDZF', paysConf('MerchantId'), paysConf('SubMerchantId'), 'transseqnbr,mernbr,merseqnbr,cleardate,transtime,mertransdatetime,transstatus,transamt,feeamt,origmerseqnbr,origmerdate,payeracctnbr,transtypcd,currencycd,checkstatus,memo1,memo2', $start_time, $end_time, '3', $x, '40');
+            $data = payOrder('QDZF', paysConf('MerSeqNo'), paysConf('SubMerSeqNo'), 'transseqnbr,mernbr,merseqnbr,cleardate,transtime,mertransdatetime,transstatus,transamt,feeamt,origmerseqnbr,origmerdate,payeracctnbr,transtypcd,currencycd,checkstatus,memo1,memo2', $start_time, $end_time, $type, $x, $pagesize);
+//            print_r($data);exit;
             if(!empty($data)&&$data['RespCode']='000000'){
                if(empty($data['ClearTransList'])){
                    $this->error('同步订单接口无数据,未跑批,联系管理员!');
                }else{
                    foreach($data['ClearTransList'] as $key=>$val){
-                       if($val['transstatus'] = '0' && Db::name('recharge_order_list')->where($where)->where(['MerSeqNo'=>$val['merseqnbr']])->find()){
+                       if($val['transstatus'] == '0' && Db::name('recharge_order_list')->where($where)->where(['MerSeqNo'=>$val['merseqnbr']])->find()){
                            Db::name('recharge_order_list')->where($where)
                                ->where(['MerchantId'=>$val['mernbr'],'MerSeqNo'=>$val['merseqnbr'],'is_recon'=>'0','TransAmt'=>$val['transamt']])
                                ->update(['is_recon'=>'1','status'=>'1','TransSeqNo'=>$val['transseqnbr'],'payeracctnbr'=>$val['payeracctnbr'],'synch_time'=>date('Y-m-d H:i:s',time())]);
                        }
                     }
-                   if ($data['TransCount'] < 40) {
+                   if ($data['TransCount'] < $pagesize) {
                        break;
                    }
                }
