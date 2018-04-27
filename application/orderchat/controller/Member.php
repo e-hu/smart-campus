@@ -76,6 +76,43 @@ class Member extends BasicAdmin
      */
     public function auth()
     {
+        if ($this->request->isPost()) {
+            $data = array_merge($this->request->post());
+            if (isset($data['dept']) && is_array($data['dept'])) {
+                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdept'])->delete();
+                foreach ($data['dept'] as $key => $val) {
+                    $result =   Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dept'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdept']);
+                }
+                unset($data['dept']);
+            } else {
+                $result = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdept'])->delete();
+            }
+
+            if (isset($data['dinner']) && is_array($data['dinner'])) {
+                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdinner'])->delete();
+                foreach ($data['dinner'] as $key => $val) {
+                    $result =  Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dinner'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdinner']);
+                }
+                unset($data['dinner']);
+            } else {
+                $result = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdinner'])->delete();
+            }
+            $result !== false ? $this->success('恭喜, 数据保存成功!', '') : $this->error('数据保存失败, 请稍候再试!');
+        }
+        //部门
+        $dept_list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id'],'dept_type'=>'userdept'])->select();
+        $dept_ids = array_column($dept_list, 'dept_id');
+        $this->assign('manager', $dept_ids);
+        //餐次
+        $dinner_list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id']])->select();
+        $dept_ids = array_column($dinner_list, 'dept_id');
+        $this->assign('manager_dinner', $dept_ids);
+        //部门
+        $db = Db::name('dept_info')->where('company_id', session('user.company_id'))->select();
+        $this->assign('depts', $db);
+        //餐次
+        $db_dinner = Db::name('dinner_base_info')->where('company_id', session('user.company_id'))->select();
+        $this->assign('dinners', $db_dinner);
         LogService::write('订餐管理', '执行人员授权操作');
         return $this->_form($this->table, 'auth', 'Emp_Id');
     }
@@ -93,8 +130,15 @@ class Member extends BasicAdmin
             $extendData['Emp_Id'] = $data[0][0]['id'];
             $extendData['company_id'] = session('user.company_id');
             $extendData['Emp_Status'] = 1;
+            $data = array_merge($this->request->post());
+            if (isset($data['Emp_MircoMsg_Uid']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Emp_MircoMsg_Uid', $data['Emp_MircoMsg_Uid'])->find()) {
+                $this->error('账号名称已经存在，请使用其它账号名称！');
+            } elseif (isset($data['Ic_Card'])  and !empty($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
+                $this->error('ID卡编号已经存在，请使用其它ID卡编号！');
+            }
         }
-        return $this->_form($this->table, 'form', 'Emp_Id');
+        $this->assign('dept_infos', Db::name("dept_info")->where('company_id', session('user.company_id'))->select());
+        return $this->_form($this->table, 'form', 'Emp_Id','',$extendData);
     }
 
     /**
@@ -112,65 +156,19 @@ class Member extends BasicAdmin
                 $db = Db::name($this->table)->where(['Emp_Id'=>$data['Emp_Id']])->find();
                 $extendData['Emp_MircoMsg_Upwd'] = $db['Emp_MircoMsg_Upwd'];
             }
-        }
-        return $this->_form($this->table, 'form', 'Emp_Id', '', $extendData);
-    }
-
-    /**
-     * 表单数据默认处理
-     * @param array $data
-     */
-    public function _form_filter(&$data)
-    {
-        if ($this->request->isPost()) {
-
-            if (isset($data['dept']) && is_array($data['dept'])) {
-                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdept'])->delete();
-                foreach ($data['dept'] as $key => $val) {
-                    Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dept'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdept']);
-                }
-                unset($data['dept']);
-            } else {
-                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdept'])->delete();
-            }
-
-            if (isset($data['dinner']) && is_array($data['dinner'])) {
-                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdinner'])->delete();
-                foreach ($data['dinner'] as $key => $val) {
-                    Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dinner'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdinner']);
-                }
-                unset($data['dinner']);
-            } else {
-                Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdinner'])->delete();
-            }
-
+            $data = array_merge($this->request->post());
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where(['Emp_Id' => $data['Emp_Id'], 'Emp_MircoMsg_Uid' => array('neq', '')])->find()) {
                 unset($data['Emp_MircoMsg_Uid']);
-            } elseif (isset($data['Emp_MircoMsg_Uid']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Emp_MircoMsg_Uid', $data['Emp_MircoMsg_Uid'])->find()) {
+            } else if (isset($data['Emp_MircoMsg_Uid']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Emp_MircoMsg_Uid', $data['Emp_MircoMsg_Uid'])->find()) {
                 $this->error('账号名称已经存在，请使用其它账号名称！');
             } elseif (isset($data['Ic_Card'])  and !empty($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('ID卡编号已经存在，请使用其它ID卡编号！');
             }
-        } else {
-            if(isset( $_GET['Emp_Id'])){
-                //部门
-                $dept_list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id'],'dept_type'=>'userdept'])->select();
-                $dept_ids = array_column($dept_list, 'dept_id');
-                $this->assign('manager', $dept_ids);
-                //餐次
-                $dinner_list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id']])->select();
-                $dept_ids = array_column($dinner_list, 'dept_id');
-                $this->assign('manager_dinner', $dept_ids);
-            }
-            //部门
-            $this->assign('dept_infos', Db::name("dept_info")->where('company_id', session('user.company_id'))->select());
-            $db = Db::name('dept_info')->where('company_id', session('user.company_id'))->select();
-            $this->assign('depts', $db);
-            //餐次
-            $db_dinner = Db::name('dinner_base_info')->where('company_id', session('user.company_id'))->select();
-            $this->assign('dinners', $db_dinner);
         }
+        $this->assign('dept_infos', Db::name("dept_info")->where('company_id', session('user.company_id'))->select());
+        return $this->_form($this->table, 'form', 'Emp_Id', '', $extendData);
     }
+    
 
     /**
      * 删除人员
