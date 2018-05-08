@@ -43,6 +43,7 @@ class Intface extends ApiBase
            Db::table("recharge_order_list")
                 ->where(['MerSeqNo'=>$arr['Message']['MerSeqNo'],'TransAmt'=>$arr['Message']['TransAmt'],'status'=>'0'])
                 ->update(['status'=>'1','TransSeqNo'=>$arr['Message']['TransSeqNo'],'ClearDate'=>$arr['Message']['ClearDate']]);
+            Db::query('exec up_sync_third_ic_data');//同步IC卡金额
             return json(['RespCode'=>'000000']);
         }else{
             return json(['RespCode'=>'000001']);
