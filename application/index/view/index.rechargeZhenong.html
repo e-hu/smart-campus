@@ -12,15 +12,30 @@
         <input type="hidden" name="MerURL1" value="{$MerURL1}">
         <input type="hidden" name="AppointedPayType" value="{$AppointedPayType}">
         <input type="hidden" name="SubMerchantId1" value="{$SubMerchantId}">
-        <input type="hidden" name="submit" value="提交">
+        <input type="hidden" name="TransAmt" id="TransAmt"  v-model="TransAmt">
         <div class="bgf p20-10 bbe F_">
-            <span>充值金额：</span>
+            <span>选择金额:</span>
+            <div class="button_sp_area">
+                <a @click="change(30)" class="weui-btn weui-btn_mini"
+                   :class="TransAmt == 30 ? 'weui-btn_primary' : 'weui-btn_default'">30元</a>
+                <a @click="change(50)" class="weui-btn weui-btn_mini"
+                   :class="TransAmt == 50 ? 'weui-btn_primary' : 'weui-btn_default'">50元</a>
+                <a @click="change(100)" class="weui-btn weui-btn_mini"
+                   :class="TransAmt == 100 ? 'weui-btn_primary' : 'weui-btn_default'">100元</a>
+                <a @click="change(200)" class="weui-btn weui-btn_mini"
+                   :class="TransAmt == 200 ? 'weui-btn_primary' : 'weui-btn_default'">200元</a>
+                <a @click="change(500)" class="weui-btn weui-btn_mini"
+                   :class="TransAmt == 500 ? 'weui-btn_primary' : 'weui-btn_default'">500元</a>
+            </div>
+        </div>
+        <div class="bgf p20-10 bbe F_">
+            <span>输入金额:</span>
             <span class="f ml20">
-				<input type="number" class="W bn" placeholder="请输入充值金额" name="TransAmt" id="TransAmt"/>
+				<input type="number" class="W bn" placeholder="自定义充值金额" v-model="TransAmt"/>
 			</span>
         </div>
         <div class="bgf p20-10 bbe F_">
-            <span>手机号码：</span>
+            <span>手机号码:</span>
             <span class="f ml20">
 				<input class="W bn" value="{$tel}" placeholder="请输入手机号码" name="MobileNo" id="MobileNo"/>
 			</span>
@@ -32,16 +47,30 @@
 </div>
 {include file="common/footer" /}
 <script type="text/javascript">
-    var submitBtn = document.getElementById("submit");
-    submitBtn.onclick = function (event) {
-        var TransAmt = $("#TransAmt").val();
-        if (TransAmt > 0) {
-            return true;
-        } else {
-            $.alert("充值金额必须大于0");
-            return false;
-        }
-    };
+    window.onload = function () {
+        new Vue({
+            el: '#app',
+            data: {
+                TransAmt: ''
+            },
+            methods: {
+                change: function (money) {  //跳转函数
+                    var self = this;
+                    self.TransAmt = money;
+                }
+            }
+        });
+        var submitBtn = document.getElementById("submit");
+        submitBtn.onclick = function (event) {
+            var money = $("#TransAmt").val();
+            if (money > 0) {
+                return true;
+            } else {
+                $.alert("充值金额必须大于0");
+                return false;
+            }
+        };
+    }
 </script>
 
 
