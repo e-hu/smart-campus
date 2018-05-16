@@ -35,11 +35,12 @@ class Member extends BasicAdmin
         // 实例Query对象
         $db = Db::name($this->table)
             ->alias('a')
-            ->field('a.*,dept_name,dinner_name')
-            ->join('t_user_manager_dept_id t','t.company_id = a.company_id  and t.u_id = a.Emp_Id and t.dept_type = :dinner_type','left')
-            ->bind('dinner_type','userdinner')
-            ->join('dinner_base_info i','i.company_id = a.company_id and i.dinner_no = t.dept_id','left')
-            ->join('dept_info c', 'a.Dept_Id = c.dept_no and a.company_id = c.company_id','left')
+            ->field('a.*,dept_name,dinner_name,grant_money')
+            ->join('t_user_manager_dept_id t', 't.company_id = a.company_id  and t.u_id = a.Emp_Id and t.dept_type = :dinner_type', 'left')
+            ->bind('dinner_type', 'userdinner')
+            ->join('dinner_base_info i', 'i.company_id = a.company_id and i.dinner_no = t.dept_id', 'left')
+            ->join('dept_info c', 'a.Dept_Id = c.dept_no and a.company_id = c.company_id', 'left')
+            ->join('v_grant_type v', 'v.company_id = a.company_id and v.grant_type = a.grant_type', 'left')
             ->where('a.company_id', session('user.company_id'));
         // 应用搜索条件ss
         foreach (['Emp_Name'] as $key) {
@@ -54,7 +55,7 @@ class Member extends BasicAdmin
         }
         if (isset($get['tag']) && $get['tag'] !== '') {
             //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
-            $db->where('dept_no',$get['tag']);
+            $db->where('dept_no', $get['tag']);
         }
         // 实例化并显示
         return parent::_list($db);
@@ -81,7 +82,7 @@ class Member extends BasicAdmin
             if (isset($data['dept']) && is_array($data['dept'])) {
                 Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdept'])->delete();
                 foreach ($data['dept'] as $key => $val) {
-                    $result =   Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dept'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdept']);
+                    $result = Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dept'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdept']);
                 }
                 unset($data['dept']);
             } else {
@@ -91,7 +92,7 @@ class Member extends BasicAdmin
             if (isset($data['dinner']) && is_array($data['dinner'])) {
                 Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['Emp_Id'], 'dept_type' => 'userdinner'])->delete();
                 foreach ($data['dinner'] as $key => $val) {
-                    $result =  Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dinner'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdinner']);
+                    $result = Db::name('t_user_manager_dept_id')->insert(['u_id' => $data['Emp_Id'], 'dept_id' => $data['dinner'][$key], 'company_id' => session('user.company_id'), 'dept_type' => 'userdinner']);
                 }
                 unset($data['dinner']);
             } else {
@@ -100,7 +101,7 @@ class Member extends BasicAdmin
             $result !== false ? $this->success('恭喜, 数据保存成功!', '') : $this->error('数据保存失败, 请稍候再试!');
         }
         //部门
-        $dept_list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id'],'dept_type'=>'userdept'])->select();
+        $dept_list = Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $_GET['Emp_Id'], 'dept_type' => 'userdept'])->select();
         $dept_ids = array_column($dept_list, 'dept_id');
         $this->assign('manager', $dept_ids);
         //餐次
@@ -133,12 +134,12 @@ class Member extends BasicAdmin
             $data = array_merge($this->request->post());
             if (isset($data['Emp_MircoMsg_Uid']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Emp_MircoMsg_Uid', $data['Emp_MircoMsg_Uid'])->find()) {
                 $this->error('账号名称已经存在，请使用其它账号名称！');
-            } elseif (isset($data['Ic_Card'])  and !empty($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
+            } elseif (isset($data['Ic_Card']) and !empty($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('ID卡编号已经存在，请使用其它ID卡编号！');
             }
         }
         $this->assign('dept_infos', Db::name("dept_info")->where('company_id', session('user.company_id'))->select());
-        return $this->_form($this->table, 'form', 'Emp_Id','',$extendData);
+        return $this->_form($this->table, 'form', 'Emp_Id', '', $extendData);
     }
 
     /**
@@ -150,10 +151,10 @@ class Member extends BasicAdmin
         $extendData = [];
         if ($this->request->isPost()) {
             $data = $this->request->post();
-            if ($data['Emp_MircoMsg_Upwd']!='') {
+            if ($data['Emp_MircoMsg_Upwd'] != '') {
                 $extendData['Emp_MircoMsg_Upwd'] = md5($data['Emp_MircoMsg_Upwd']);
-            }else{
-                $db = Db::name($this->table)->where(['Emp_Id'=>$data['Emp_Id']])->find();
+            } else {
+                $db = Db::name($this->table)->where(['Emp_Id' => $data['Emp_Id']])->find();
                 $extendData['Emp_MircoMsg_Upwd'] = $db['Emp_MircoMsg_Upwd'];
             }
             $data = array_merge($this->request->post());
@@ -161,15 +162,34 @@ class Member extends BasicAdmin
                 unset($data['Emp_MircoMsg_Uid']);
             } else if (isset($data['Emp_MircoMsg_Uid']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Emp_MircoMsg_Uid', $data['Emp_MircoMsg_Uid'])->find()) {
                 $this->error('账号名称已经存在，请使用其它账号名称！');
-            } elseif (isset($data['Ic_Card'])  and !empty($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
+            } elseif (isset($data['Ic_Card']) and !empty($data['Ic_Card']) and !empty($data['Emp_MircoMsg_Uid']) and Db::name($this->table)->where('Ic_Card', $data['Ic_Card'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('ID卡编号已经存在，请使用其它ID卡编号！');
             }
         }
         $this->assign('dept_infos', Db::name("dept_info")->where('company_id', session('user.company_id'))->select());
         return $this->_form($this->table, 'form', 'Emp_Id', '', $extendData);
     }
-    
 
+
+    /**
+     * 补贴类型管理
+     * @return array|string
+     */
+    public function type()
+    {
+        if ($this->request->isPost()) {
+            $data = $this->request->post();
+            $return = Db::name($this->table)->where('company_id', session('user.company_id'))
+                ->where(['Emp_Id' => $data['Emp_Id']])->update(['enrollment_date'=>$data['enrollment_date'],'grant_type'=>$data['grant_type']]);
+            if($return == 'true'){
+                $this->success('补贴入录修改成功','');
+            }else{
+                $this->error('补贴入录修改失败！');
+            }
+       }
+        $this->assign('type_infos', Db::name("v_grant_type")->where('company_id', session('user.company_id'))->select());
+        return $this->_form($this->table, 'type', 'Emp_Id');
+    }
     /**
      * 删除人员
      */

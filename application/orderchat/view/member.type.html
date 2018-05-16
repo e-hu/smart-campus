@@ -1,0 +1,51 @@
+<form class="layui-form layui-box" style='padding:25px 30px 20px 0' action="__SELF__" data-auto="true" method="post">
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">真实姓名</label>
+        <div class="layui-input-block">
+            {if $vo and isset($vo.Emp_Name)}
+            <input type="text" readonly="" disabled="" name="Emp_Name" value='{$vo.Emp_Name|default=""}'
+                   required="required" title="请输入真实姓名" placeholder="请输入真实姓名" class="layui-input disabled">
+            {else}
+            <input type="text" name="Emp_Name" value='{$vo.Emp_Name|default=""}' pattern="^\S{2,}$"
+                   title="请输入2位及以上的字符" required="required" placeholder="请输入真实姓名" class="layui-input">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label label-required">补贴类型</label>
+        <div class="layui-input-block">
+            {foreach $type_infos as $type_info}
+            {if isset($vo.grant_type) and $vo.grant_type == $type_info.grant_type}
+            <input type="radio" checked  name="grant_type" value="{$type_info.grant_type}" title="{$type_info.grant_name}:{$type_info.grant_money}">
+            {else}
+            <input type="radio" name="grant_type" value="{$type_info.grant_type}" title="{$type_info.grant_name}:{$type_info.grant_money}">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label label-required">入职日期</label>
+        <div class="layui-inline">
+            {if $vo and isset($vo.enrollment_date)}
+            <input name="enrollment_date" id="enrollment_date" value="{:date('Y-m-d',strtotime($vo['enrollment_date']))}"
+                   placeholder="请选择时间" class="input-sm form-control">
+            {else}
+            <input name="enrollment_date" id="enrollment_date"
+                   placeholder="请选择时间" class="input-sm form-control" value="">
+            {/if}
+        </div>
+    </div>
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        {if isset($vo['Emp_Id'])}<input type='hidden' value='{$vo.Emp_Id}' name='Emp_Id'/>{/if}
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+    <script>window.form.render();</script>
+</form>
+<script>
+    window.laydate.render({range: false, elem: '#enrollment_date', format: 'yyyy-MM-dd'});
+</script>

@@ -66,6 +66,8 @@
                 <th class='text-center'>联系电话</th>
                 <th class='text-center'>IC卡编号</th>
                 <th class='text-center'>账号名称</th>
+                <th class='text-center'>入职日期</th>
+                <th class='text-center'>补贴金额</th>
                 <th class='text-center'>餐次授权</th>
                 <th class='text-center'>状态</th>
                 <th class='text-center'>操作</th>
@@ -82,6 +84,12 @@
                 <td class='text-center'>{$vo.Default_Tel}</td>
                 <td class='text-center'>{$vo.Ic_Card}</td>
                 <td class='text-center'>{$vo.Emp_MircoMsg_Uid}</td>
+                {if $vo.enrollment_date}
+                <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['enrollment_date']))}</td>
+                {else}
+                <td class='text-center'><span style='color:#ccc'>无</span></td>
+                {/if}
+                <td class='text-center'>{$vo.grant_money|default="<span style='color:#ccc'>无</span>"}</td>
                 <td class='text-center'>{$vo.dinner_name|default="<span style='color:#ccc'>无</span>"}</td>
                 <td class='text-center'>
                     {if $vo.Emp_Status eq 0}
@@ -94,6 +102,10 @@
                     {if auth("$classuri/edit")}
                     <span class="text-explode">|</span>
                     <a data-modal='{:url("$classuri/edit")}?Emp_Id={$vo.Emp_Id}' href="javascript:void(0)">编辑</a>
+                    {/if}
+                    {if auth("$classuri/type")}
+                    <span class="text-explode">|</span>
+                    <a data-modal='{:url("$classuri/type")}?Emp_Id={$vo.Emp_Id}' href="javascript:void(0)">补贴录入</a>
                     {/if}
                     {if auth("$classuri/auth")}
                     <span class="text-explode">|</span>
