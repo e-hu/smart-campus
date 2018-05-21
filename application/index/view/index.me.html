@@ -180,7 +180,7 @@
                             } else {
                                 self.name = ret.Emp_Name;
                                 self.dept_type = ret.dept_type;
-                                if(ret.third_type > 0 && ret.Ic_Card !== null){
+                                if(ret.third_type > 0 && ret.Ic_Card !== null && ret.Ic_Card !== ''){
                                     self.third_type = '2';
                                 }else{
                                     self.third_type = '1';
