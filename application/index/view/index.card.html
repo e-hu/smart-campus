@@ -70,7 +70,7 @@
                 cardBing: function () {
                     var self = this;
                     $.ajax({
-                        url: SCapiDic.cardBind,
+                        url: '/index/mallapi/cardBind',
                         type: "POST",
                         data:{card:self.card},
                         dataType: "json",
