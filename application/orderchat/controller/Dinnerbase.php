@@ -31,7 +31,7 @@ class DinnerBase extends BasicAdmin {
         // 获取到所有GET参数
         $get = $this->request->get();
         // 实例Query对象
-        $db = Db::name($this->table)->where(['company_id'=>session('user.company_id')]);
+        $db = Db::name($this->table)->where(['company_id'=>session('user.company_id')])->order('dinner_flag asc');
         // 应用搜索条件
         foreach (['dinner_name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {

@@ -43,7 +43,8 @@ class Equipment extends BasicAdmin
             ->join('canteen_base_info c', 's.company_id = c.company_id and s.canteen_no = c.canteen_no', 'left')
             ->join('canteen_sale_window_base_info w', 's.company_id = w.company_id and s.window_no = w.sale_window_no', 'left')
             ->field('machine_list.*,canteen_name,sale_window_name,company_name')
-            ->where($where);
+            ->where($where)
+            ->order('window_no asc');
         if (session('user.create_by') != '10001') {
             $db->where(' exists (select 1 from t_user_manager_dept_id b where s.canteen_no=b.dept_id and s.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }

@@ -40,7 +40,7 @@ class CbPrice extends BasicAdmin
             ->join('dinner_base_info b', 'a.dinner_flag = b.dinner_flag and a.company_id = b.company_id', 'left')
             ->group('a.sale_datetime,a.canteen_no,a.dinner_flag,canteen_name,dinner_name')
             ->where(['a.company_id'=>session('user.company_id'),'a.sale_datetime'=>array('egt',date("Y-m-d"))])
-            ->order('sale_datetime desc');
+            ->order('sale_datetime asc');
 
         if (isset($get['sale_datetime']) && $get['sale_datetime'] !== '') {
             list($start, $end) = explode('-', str_replace(' ', '', $get['sale_datetime']));
@@ -195,7 +195,7 @@ class CbPrice extends BasicAdmin
             ->group('a.sale_datetime,a.canteen_no,a.cookbook_no,a.dinner_flag,canteen_name,cookbook_name,dinner_name,position_id,sale_window_name')
             ->having('count(dinner_status)>0')
             ->where(['a.company_id' => session('user.company_id'), 'a.status' => '1','a.sale_datetime'=>array('egt',date("Y-m-d"))])
-            ->order('sale_datetime desc,canteen_no,dinner_flag,dinner_count desc');
+            ->order('sale_datetime asc,dinner_flag asc,dinner_count desc');
 
         if (isset($get['sale_datetime']) && $get['sale_datetime'] !== '') {
             list($start, $end) = explode('-', str_replace(' ', '', $get['sale_datetime']));
@@ -241,14 +241,13 @@ class CbPrice extends BasicAdmin
         }
         $get = $this->request->get();
         $list = Db::name('canteen_cookbook_window_position')
-            ->where(['canteen_no' => $get['canteen_no'], 'sale_datetime' => $get['sale_datetime'], 'dinner_flag' => $get['dinner_flag'], 'cookbook_no' => $get['cookbook_no']])
+            ->where(['canteen_no' => $get['canteen_no'], 'sale_datetime' => $get['sale_datetime'], 'dinner_flag' => $get['dinner_flag'], 'cookbook_no' => $get['cookbook_no'],'company_id'=>session('user.company_id')])
             ->select();
         $info = [];
         foreach ($list as $key => $val) {
             $info['windows_no'][$val['windows_no']] = $val['windows_no'];
             $info['position_id'][$val['windows_no']] = $val['position_id'];
         }
-        //print_r($info);exit;
         $this->assign('info', $info);
         $this->assign('data', $get);
         return $this->_form('canteen_cookbook_window_position', 'positionform');
@@ -271,9 +270,13 @@ class CbPrice extends BasicAdmin
         $this->assign('dinnerbases', $dinnerBases->select()); //菜谱列表
 
         $windowBases = Db::name('canteen_sale_window_base_info')
-            ->where('company_id', session('user.company_id'));
+            ->alias('a')
+            ->join('machine_list l',"l.machine_sn = a.machine_sn and l.machine_type = '1' and  l.window_no = a.sale_window_no and l.company_id = a.company_id",'right')
+            ->where('a.company_id', session('user.company_id'))
+            ->field('a.*')
+            ->order('sale_window_machine_no asc');
         if (isset($_GET['canteen_no'])) {
-            $this->assign('windowbases', $windowBases->where('canteen_no', $_GET['canteen_no'])->select());//窗口列表
+            $this->assign('windowbases', $windowBases->where('a.canteen_no', $_GET['canteen_no'])->select());//窗口列表
         } else {
             $this->assign('windowbases', $windowBases->select());//窗口列表
         }

@@ -37,7 +37,8 @@ class WindowBase extends BasicAdmin
         $db = Db::name($this->table)
             ->field('canteen_sale_window_base_info.*,canteen_name')
             ->join('canteen_base_info', 'canteen_sale_window_base_info.canteen_no = canteen_base_info.canteen_no', 'left')
-            ->where('canteen_sale_window_base_info.company_id', session('user.company_id'));
+            ->where('canteen_sale_window_base_info.company_id', session('user.company_id'))
+            ->order('sale_window_no asc');
         // 应用搜索条件
         foreach (['sale_window_name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {

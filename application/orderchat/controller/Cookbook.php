@@ -35,7 +35,7 @@ class CookBook extends BasicAdmin {
             ->field('cookbook_base_info.*,cookbook_typename,meal_name')
             ->join('cookbook_type', 'cookbook_base_info.cookbook_type = cookbook_type.cookbook_typeid','left')
             ->join('cookbook_meal_type', 'cookbook_base_info.meal_id = cookbook_meal_type.meal_id','left')
-            ->where('cookbook_base_info.company_id',session('user.company_id'));
+            ->where('cookbook_base_info.company_id',session('user.company_id'))->order('cookbook_no desc');
         // 应用搜索条件
         foreach (['cookbook_name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
