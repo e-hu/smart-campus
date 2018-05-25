@@ -45,6 +45,7 @@
                 <th class='text-center'>真实姓名</th>
                 <th class='text-center'>所属部门</th>
                 <th class='text-center'>打卡时间</th>
+                <th class='text-center'>设备序列号</th>
             </tr>
         </thead>
         <tbody>
@@ -53,6 +54,7 @@
                 <td class='text-center'>{$vo.Emp_Name}</td>
                 <td class='text-center'>{$vo.dept_name}</td>
                 <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['att_datetime']))}</td>
+                <td class='text-center'>{$vo.machine_id}</td>
             </tr>
             {/foreach}
             {if empty($list)}
