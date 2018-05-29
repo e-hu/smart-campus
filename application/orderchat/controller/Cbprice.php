@@ -263,11 +263,11 @@ class CbPrice extends BasicAdmin
         if (session('user.create_by') != '10001') {
             $canteens->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }
-        $this->assign('canteens', $canteens->select());  //餐厅列表
+        $this->assign('canteens', $canteens->order('canteen_no asc')->select());  //餐厅列表
 
         $dinnerBases = Db::name('dinner_base_info')
             ->where('company_id', session('user.company_id'));
-        $this->assign('dinnerbases', $dinnerBases->select()); //菜谱列表
+        $this->assign('dinnerbases', $dinnerBases->order('dinner_flag asc')->select()); //菜谱列表
 
         $windowBases = Db::name('canteen_sale_window_base_info')
             ->alias('a')

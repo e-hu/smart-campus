@@ -83,4 +83,14 @@ class Cbpushed extends BasicAdmin
         $this->error("推荐菜谱启用失败，请稍候再试！");
     }
 
+    /**
+     * 日历
+     */
+    public function calender()
+    {
+        // 设置页面标题
+        $this->title = '推荐菜谱日历管理';
+        $this->assign('title', $this->title);
+        return $this->fetch();
+    }
 }

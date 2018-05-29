@@ -7,5 +7,6 @@
 /nbproject
 /composer.lock
 /static/upload
+/thinkphp
 application/database.php
 webhook.php
