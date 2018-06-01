@@ -16,13 +16,15 @@
     <div class="layui-form-item">
         <label class="layui-form-label">所属部门</label>
         <div class="layui-input-block">
-            {foreach $dept_infos as $dept_info}
-            {if isset($vo.Dept_Id) and $vo.Dept_Id == $dept_info.dept_no}
-            <input type="radio" checked  name="Dept_Id" value="{$dept_info.dept_no}" title="{$dept_info.dept_name}">
-            {else}
-            <input type="radio" name="Dept_Id" value="{$dept_info.dept_no}" title="{$dept_info.dept_name}">
-            {/if}
-            {/foreach}
+            <select name="Dept_Id" id="Dept_Id" required title="请选择所属部门">
+                {foreach $dept_infos as $dept_info}
+                {if isset($vo.Dept_Id) and $vo.Dept_Id == $dept_info.dept_no}
+                <option value="{$dept_info.dept_no}" selected>{$dept_info.dept_name}</option>
+                {else}
+                <option value="{$dept_info.dept_no}">{$dept_info.dept_name}</option>
+                {/if}
+                {/foreach}
+            </select>
         </div>
     </div>
 
