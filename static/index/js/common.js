@@ -26,6 +26,8 @@ var SCapiDic = {
     getRecordList:'/index/mallapi/getRecordList'+ran,
     rechargeTypeList:'/index/mallapi/rechargeTypeList'+ran,
     getmydept: '/index/mallapi/getmydept'+ran,
+    getmyorder: '/index/mallapi/getmyorder'+ran,
+    refundList:'/index/mallapi/refundList'+ran,
     getDeptEmpList: '/index/mallapi/getDeptEmpList'+ran,
     changePw:'/index/mallapi/changePw'+ran,
     logout:'/index/mallapi/logout'+ran,
