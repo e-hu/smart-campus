@@ -39,7 +39,7 @@
             data: data,
             methods: {
                 refundOrder: function (id,status,status_name) {  //跳转函数
-                    if(status > 0){
+                    if(status !== '0'){
                         $.alert(status_name);
                         return false;
                     }
