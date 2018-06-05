@@ -281,6 +281,7 @@ class Recharge extends BasicAdmin
         // 实例Query对象
         $where = [];
         $where['a.company_id'] = session('user.company_id');
+        $where['a.status'] = '1';
         $db = Db::name('recharge_order_list')
             ->alias('a')
             ->join('Employee_list l', 'a.emp_id = l.emp_id and a.company_id = l.company_id', 'left')
