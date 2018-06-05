@@ -1,0 +1,150 @@
+{extend name='extra@admin/content'}
+
+{block name="content"}
+
+<!-- 表单搜索 开始 -->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="canteen_name" value="{$Think.get.canteen_name|default=''}" placeholder="真实姓名"
+                       class="input-sm form-control">
+            </div>
+        </div>
+        <div class="col-xs-4">
+            <div class="form-group">
+                <input name="dinner_datetime" id="dinner_datetime" value="{$Think.get.dinner_datetime|default=''}"
+                       placeholder="请选择就餐日期" class="input-sm form-control">
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <select name="canteen_no" class="input-sm form-control">
+                    <option value="">- 餐厅列表 -</option>
+                    <!--{foreach $canteens as $key=>$canteen}-->
+                    <!--{if $Think.get.canteen_no eq $key}-->
+                    <option selected value="{$key}">{$canteen.canteen_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$canteen.canteen_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <select name="dinner_flag" class="input-sm form-control">
+                    <option value="">- 餐次列表 -</option>
+                    <!--{foreach $dinnerbases as $key=>$dinnerbase}-->
+                    <!--{if $Think.get.dinner_flag eq $key}-->
+                    <option selected value="{$key}">{$dinnerbase.dinner_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$dinnerbase.dinner_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <input type="text" name="cookbook_name" value="{$Think.get.cookbook_name|default=''}" placeholder="菜品名称"
+                       class="input-sm form-control">
+            </div>
+        </div>
+
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 表单搜索 结束 -->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <input type="hidden" value="resort" name="action"/>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <!--<th class='list-table-check-td'>-->
+            <!--<input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>-->
+            <!--</th>-->
+            <th class='text-center'>部门</th>
+            <th class='text-center'>真实名称</th>
+            <th class='text-center'>就餐日期</th>
+            <th class='text-center'>餐厅名称</th>
+            <th class='text-center'>餐次</th>
+            <th class='text-center'>菜品名称</th>
+            <th class='text-center'>订餐数量</th>
+            <th class='text-center'>金额</th>
+            <th class='text-center'>订餐状态</th>
+            <th class='text-center'>下单时间</th>
+            <th class='text-center'>审核人</th>
+            <th class='text-center'>审核时间</th>
+            <th class='text-center'>审批人</th>
+            <th class='text-center'>审批时间</th>
+            <th class='text-center'>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <!--<td class='list-table-check-td'>-->
+            <!--<input class="list-check-box" value='{$vo.canteen_no}' type='checkbox'/>-->
+            <!--</td>-->
+            <td class='text-center'>{$vo.dept_name}</td>
+            <td class='text-center'>{$vo.emp_name}</td>
+            <td class='text-center'>{:date('Y-m-d',strtotime($vo['dinner_datetime']))}</td>
+            <td class='text-center'>{$vo.canteen_name}</td>
+            <td class='text-center'>{$vo.dinner_name}</td>
+            <td class='text-center'>{$vo.cookbook_name}</td>
+            <td class='text-center'>{$vo.dinner_quantity}</td>
+            <td class='text-center'>{$vo.cook_money}</td>
+            {if $vo.dinner_status == '0'}
+            <td class='text-center'>已选未付</td>
+            {elseif $vo.dinner_status == '1'}
+            <td class='text-center'>已付款</td>
+            {elseif $vo.dinner_status == '2'}
+            <td class='text-center'>已取餐</td>
+            {else}
+            <td class='text-center'>无</td>
+            {/if}
+            <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['dinner_createtime']))}</td>
+            <td class='text-center'>{$vo.shenhe_name|default="<span style='color:#ccc'>无</span>"}</td>
+            <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['check1_datetime']))}</td>
+            <td class='text-center'>{$vo.username|default="<span style='color:#ccc'>无</span>"}</td>
+            <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['checker2_datetime']))}</td>
+            <td class='text-center nowrap'>
+                {if auth("$classuri/shenhe") && $vo.check_status == '2'}
+                <span class="text-explode">|</span>
+                <a data-update="{$vo.id}" data-action='{:url("$classuri/shenhe")}' data-field='check_status'
+                   data-value="4" href="javascript:void(0)">同意</a>
+                {/if}
+                <!--{if auth("$classuri/shenhe") && $vo.check_status < 2}-->
+                <!--<span class="text-explode">|</span>-->
+                <!--<a data-update="{$vo.id}" data-action='{:url("$classuri/shenhe")}' data-field='check_status'-->
+                   <!--data-value="4" href="javascript:void(0)">拒绝</a>-->
+                <!--{/if}-->
+                {if $vo.check_status == '4'}
+                <span style="color: green">已批准</span>
+                {/if}
+                <!--{if $vo.check_status == '3'}-->
+                <!--<span style="color: red">已拒绝</span>-->
+                <!--{/if}-->
+            </td>
+        </tr>
+        {/foreach}
+        {if empty($list)}
+        <tr>
+            <td colspan="17" style="text-align:center">没 有 记 录 了 哦 !</td>
+        </tr>
+        {/if}
+        </tbody>
+    </table>
+    {if isset($page)}<p>{$page}</p>{/if}
+</form>
+<script>
+    window.laydate.render({range: true, elem: '#dinner_datetime', format: 'yyyy/MM/dd'});
+</script>
+{/block}

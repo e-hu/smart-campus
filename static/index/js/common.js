@@ -19,6 +19,14 @@ var SCapiDic = {
     orderList: '/index/mallapi/orderList'+ran,
     orderProductList: '/index/mallapi/orderProductList'+ran,
     orderCartList: '/index/mallapi/ordercartList'+ran,
+    /*退补餐接口*/
+    refundList: '/index/mallapi/refundList'+ran,
+    patchList: '/index/mallapi/patchList'+ran,
+    checkList:'/index/mallapi/checkList'+ran,
+    patchcartProductList: '/index/mallapi/patchcartProductList'+ran,
+    patchcartList: '/index/mallapi/patchcartList'+ran,
+    patchaddCart: '/index/mallapi/patchaddCart'+ran,
+    patchdelCart: '/index/mallapi/patchdelCart'+ran,
     /*个人中心接口*/
     getmyinfo: '/index/mallapi/getmyinfo'+ran,
     getmymoney:'/index/mallapi/getmymoney'+ran,
@@ -26,8 +34,6 @@ var SCapiDic = {
     getRecordList:'/index/mallapi/getRecordList'+ran,
     rechargeTypeList:'/index/mallapi/rechargeTypeList'+ran,
     getmydept: '/index/mallapi/getmydept'+ran,
-    getmyorder: '/index/mallapi/getmyorder'+ran,
-    refundList:'/index/mallapi/refundList'+ran,
     getDeptEmpList: '/index/mallapi/getDeptEmpList'+ran,
     changePw:'/index/mallapi/changePw'+ran,
     logout:'/index/mallapi/logout'+ran,

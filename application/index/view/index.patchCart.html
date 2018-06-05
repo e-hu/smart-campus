@@ -1,0 +1,458 @@
+{include file="common/header" title="菜谱详情" keywords="菜谱详情" description="" /}
+<div id="app" class="f fr6 H scroll" v-cloak>
+    <ul class="bgf clear W SSheader">
+        <li class="hl50 F_ bbd bgf">
+            <p class='f pl10'>{{date}}</p>
+        </li>
+    </ul>
+    <!--<ul class="tc bgf SSorder bgf clear bbe W mt50 SSheader">-->
+        <!--<li v-for="item in dinnerBaseList" class="h40 lh40 "-->
+            <!--:class="[dinnerBaseCount,{'Spactive': dinner_type == item.dinner_flag}]" @click='changeSp(item.dinner_flag)'-->
+            <!--value="{{item.dinner_flag}}">-->
+            <!--<div>{{item.dinner_name}}</div>-->
+        <!--</li>-->
+    <!--</ul>-->
+    <div class="tc pt100" v-if="cartGetCount == '0'">
+        <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
+        <p class="c9 mb15">今日菜谱空空如也！</p>
+        <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
+    </div>
+    <div v-else class="W H mt50">
+        <ul v-if="cartChoiceProductList !=''">
+            <li class="hl50 F_ bbd bgdefault tc">
+                <p class='f SScwhite'>单选列表</p>
+            </li>
+        </ul>
+        <ul class="tc clear H5">
+            <li class="H W5 fl ptinfo" v-for="item in cartProductList">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W"
+                     @click="popup(item.cookbook_name,item.cookbook_info)">
+                <div class="bgf H3 W">
+                    <div class="tl W3 fl tr H">
+                        <div class="weui-cells_checkbox W H ptcheck">
+                            <label class="weui-cell W H">
+                                <input type="checkbox" class="weui-check" name="radio"
+                                       @click='changeCa(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
+                                       :checked="item.order_index == 1">
+                                <i class="weui-icon-checked"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="W7 H tc ptcheckinfo_div">
+                        <div class="W H ptcheckinfo">
+                            <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span
+                                class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <ul v-if="cartChoiceProductList !=''">
+            <li class="hl50 F_ bbd bgdefault tc">
+                <p class='f SScwhite'>多选列表</p>
+            </li>
+        </ul>
+        <ul class="tc clear H5" v-if="cartChoiceProductList !=''">
+            <li class="H W5 fl ptinfo" v-for="item in cartChoiceProductList">
+                <img :src="item.cookbook_image+'?imageslim'" class="H7 W"
+                     @click="popup(item.cookbook_name,item.cookbook_info)">
+                <div class="bgf H3 W">
+                    <div class="tl W3 fl tr H">
+                        <div class="weui-cells_checkbox W H ptcheck">
+                            <label class="weui-cell W H">
+                                <input type="checkbox" class="weui-check" name="checkbox"
+                                       @click='changeCb(item.canteen_no,item.dinner_flag,item.cookbook_no,item.price_id,item.cookbook_price,$event)'
+                                       :checked="item.order_index == 1">
+                                <i class="weui-icon-checked"></i>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="W7 H tc ptcheckinfo_div">
+                        <div class="W H ptcheckinfo">
+                            <span>{{item.canteen_name}}</span><br><span>{{item.cookbook_name}}</span><br/> <span
+                                class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+<div id="price_total" class="bgf btd tc f12 c9 h60 SSfooter" v-cloak>
+    <div class="W15 h60 tr c0 Cz"><span>合计：</span></div>
+    <div class="W2 h60 lh25 pt10 tl"><span class="Pn">{{price_num}}</span> 个菜品</span><br/><span class="Pr">{{price_total}}</span>元
+    </div>
+    <div class="W15 h60 Cz tl" v-if="now_num == '0'"><span>(未预定)</span></div>
+    <div class="W15 h60 Cz tl" v-else><span>(已预定)</span></div>
+    <div class="W2 h60 Cz tl">
+        <div class="W H lh30" v-if="now_num !== '0' "><span>{{now_flag}}</span><br/><span>{{now_name}}</span></div>
+    </div>
+    <div class="W3 h60 Cz">
+        <div class="W H ptcheck">
+            <button class="bgdefault w90 r5 SScwhite" @click="notice()">注意事项</button>
+        </div>
+
+    </div>
+</div>
+<div id="report" class="weui-popup__container popup-bottom">
+    <div class="weui-popup__overlay"></div>
+    <div class="weui-popup__modal">
+        <div id="cbInfo" class="tc lh25" style="width:100vw;height:10vh;"><span class="f20" style="font-weight:bold">{{select_cbname}}</span><br><span
+                class="f15">{{select_cbinfo}}</span></div>
+        <div id="main" style="width:100vw;height:50vh;"></div>
+    </div>
+</div>
+{include file="common/footer" /}
+<script src="__PUBLIC__/static/index/js/echarts.min.js"></script>
+<script type="text/javascript">
+    window.onload = function () {
+        var data = {
+            day: getUrlParam('day'),
+            dinner_flag: getUrlParam('dinner_flag'),
+            cartProductList: [],
+            cartChoiceProductList:[],
+            cartGetCount: '0',
+            date: '',
+            dinnerBaseList: [],
+            dinnerBaseCount: [],
+            dinner_type: '',
+            cart_priceId: ''
+        };
+        var vm = new Vue({
+            el: '#price_total',
+            data: {
+                price_total: '',
+                price_num: '',
+                now_num: '0',
+                now_flag: '',
+                now_name: ''
+            },
+            methods: {
+                notice: function () {
+                    $.alert("选中菜品即下单成功,并冻结商品金额。");
+                }
+            }
+        });
+        var report = new Vue({
+            el: '#report',
+            data: {
+                select_cbname: '',
+                select_cbinfo: ''
+            }
+        });
+        new Vue({
+            el: '#app',
+            data: data,
+            methods: {
+                popup: function (name, info) {
+                    var self = this;
+                    report.select_cbname = name;
+                    report.select_cbinfo = info;
+                    $.ajax({
+                        url: '/index/mallapi/boohee_food',
+                        type: "GET",
+                        dataType: "json",
+                        data: {
+                            name: name
+                        },
+                        success: function (ret) {
+                            self.report = ret['ingredient'];
+                            var myChart = echarts.init(document.getElementById('main'));
+                            var option = {
+                                title: {
+                                    text: '营养比例',
+                                    subtext: '以每100克计算,毫克(mg)为单位',
+                                    x: 'right',
+                                    textStyle: {
+                                        fontSize: 15
+                                    }
+                                },
+                                tooltip: {
+                                    trigger: 'item',
+                                    formatter: "{a}(每100g) <br/>{b} : {c}mg ({d}%)"
+                                },
+                                legend: {
+                                    orient: 'vertical',
+                                    left: 'left',
+                                    data: [
+                                        ret['types_name']['calcium'],
+                                        ret['types_name']['cholesterol'],
+                                        ret['types_name']['copper'],
+                                        ret['types_name']['iron'],
+                                        ret['types_name']['kalium'],
+                                        ret['types_name']['lactoflavin'],
+                                        ret['types_name']['magnesium'],
+                                        ret['types_name']['manganese'],
+                                        ret['types_name']['natrium'],
+                                        ret['types_name']['niacin'],
+                                        ret['types_name']['selenium'],
+                                        ret['types_name']['thiamine'],
+                                        ret['types_name']['vitamin_a'],
+                                        ret['types_name']['vitamin_c'],
+                                        ret['types_name']['vitamin_e'],
+                                        ret['types_name']['zinc']
+                                    ]
+                                },
+                                series: [
+                                    {
+                                        name: '营养比例',
+                                        type: 'pie',
+                                        radius: '35%',
+                                        center: ['65%', '65%'],
+                                        data: [
+                                            {value: ret['ingredient']['calcium'], name: ret['types_name']['calcium']},
+                                            {
+                                                value: ret['ingredient']['cholesterol'],
+                                                name: ret['types_name']['cholesterol']
+                                            },
+                                            {value: ret['ingredient']['copper'], name: ret['types_name']['copper']},
+                                            {value: ret['ingredient']['iron'], name: ret['types_name']['iron']},
+                                            {value: ret['ingredient']['kalium'], name: ret['types_name']['kalium']},
+                                            {
+                                                value: ret['ingredient']['lactoflavin'],
+                                                name: ret['types_name']['lactoflavin']
+                                            },
+                                            {
+                                                value: ret['ingredient']['magnesium'],
+                                                name: ret['types_name']['magnesium']
+                                            },
+                                            {
+                                                value: ret['ingredient']['manganese'],
+                                                name: ret['types_name']['manganese']
+                                            },
+                                            {value: ret['ingredient']['natrium'], name: ret['types_name']['natrium']},
+                                            {value: ret['ingredient']['niacin'], name: ret['types_name']['niacin']},
+                                            {value: ret['ingredient']['selenium'], name: ret['types_name']['selenium']},
+                                            {value: ret['ingredient']['thiamine'], name: ret['types_name']['thiamine']},
+                                            {
+                                                value: ret['ingredient']['vitamin_a'],
+                                                name: ret['types_name']['vitamin_a']
+                                            },
+                                            {
+                                                value: ret['ingredient']['vitamin_c'],
+                                                name: ret['types_name']['vitamin_c']
+                                            },
+                                            {
+                                                value: ret['ingredient']['vitamin_e'],
+                                                name: ret['types_name']['vitamin_e']
+                                            },
+                                            {value: ret['ingredient']['zinc'], name: ret['types_name']['zinc']},
+                                        ],
+                                        itemStyle: {
+                                            emphasis: {
+                                                shadowBlur: 10,
+                                                shadowOffsetX: 0,
+                                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                            }
+                                        }
+                                    }
+                                ]
+                            };
+                            myChart.setOption(option);
+                        }
+                    });
+                    $("#report").popup();
+                },
+                initClassObj: function () {
+                    var self = this;
+                    $.ajax({
+                        url: SCapiDic.patchcartProductList,
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            day: self.day
+                        },
+                        success: function (ret) {
+                            if (ret.code == '0') {
+                                self.date = ret.data.date;
+                            } else {
+                                self.date = ret.date;
+                                self.dinnerBaseList = ret.dinnerBaseList;
+                                self.dinnerBaseCount = ret.dinnerBaseCount;
+                                vm.price_total = ret.price_total;
+                                vm.price_num = ret.price_num;
+                                self.dinner_type = ret.dinnerBaseList[0]['dinner_flag'];
+                                self.initCartObj(self.dinner_flag);
+                            }
+                        }
+                    });
+                },
+                initCartObj: function (dinner) {
+                    var self = this;
+                    vm.now_num = '0';
+                    vm.now_falg = '';
+                    vm.now_name = '';
+                    $.ajax({
+                        url: SCapiDic.patchcartList,
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            dinner: dinner,
+                            day: self.day
+                        },
+                        success: function (ret) {
+                            if (ret.code == '0') {
+                                self.date = ret.data.date;
+                            } else {
+                                self.cartProductList = ret.cartList;
+                                self.cartChoiceProductList = ret.cartChoiceList;
+                                self.cartGetCount = ret.cartCount;
+                                self.cart_priceId = ret.cart_priceId;
+                                if (ret.dinner_name) {
+                                    vm.now_num = ret.dinner_name.length;
+                                }
+                                vm.now_flag = ret.dinner_name;
+                                vm.now_name = ret.cookbook_name;
+                            }
+                        }
+                    });
+                },
+                changeSp: function (Sp) {
+                    var self = this;
+                    self.dinner_type = Sp;
+                    self.cartProductList = [];
+                    self.cartChoiceProductList=[];
+                    self.initCartObj(Sp);
+                },
+                changeCa: function (Tn, Df, Cn, Pi, Cp, $event) { //单选添加商品
+                    var self = this;
+                    if ($event.target.checked) {
+                        $.ajax({ //增加商品
+                            url: SCapiDic.patchaddCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                is_choice:'0',
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = false;
+                                } else {
+                                    $('input:checkbox[name="radio"]').removeAttr('checked');
+                                    $event.target.checked = true;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        });
+                    } else {
+                        $.ajax({ //删除商品
+                            url: SCapiDic.patchdelCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                is_choice:'0',
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = true;
+                                } else {
+                                    $('input:checkbox[name="radio"]').removeAttr('checked');
+                                    $event.target.checked = false;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        })
+                    }
+                },
+                changeCb: function (Tn, Df, Cn, Pi, Cp, $event) { //多选添加商品
+                    var self = this;
+                    if ($event.target.checked) {
+                        $.ajax({ //增加商品
+                            url: SCapiDic.patchaddCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                is_choice:'1',
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = false;
+                                } else {
+                                    $event.target.checked = true;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        });
+                    } else {
+                        $.ajax({ //删除商品
+                            url: SCapiDic.patchdelCart,
+                            type: "POST",
+                            dataType: "json",
+                            data: {
+                                is_choice:'1',
+                                canteen_no: Tn,
+                                dinner_flag: Df,
+                                cookbook_no: Cn,
+                                price_id: Pi,
+                                cookbook_price: Cp,
+                                day: self.day
+                            },
+                            success: function (ret) {
+                                if (ret.code == '0') {
+                                    $.alert(ret.msg);
+                                    $event.target.checked = true;
+                                } else {
+                                    $event.target.checked = false;
+                                    vm.price_total = ret.data.price_total;
+                                    vm.price_num = ret.data.price_num;
+                                    if (ret.data.dinner_name !== 'null') {
+                                        vm.now_num = '1';
+                                    }
+                                    vm.now_flag = ret.data.dinner_name;
+                                    vm.now_name = ret.data.cookbook_name;
+                                }
+                            }
+                        })
+                    }
+                }
+
+            },
+            mounted: function () {
+                this.$nextTick(function () {
+                    this.initClassObj();
+                })
+            }
+        });
+    };
+</script>
+
+

@@ -1,26 +1,26 @@
-{include file="common/header" title="退餐管理" keywords="退餐管理" description="" /}
+{include file="common/header" title="退补餐审核" keywords="退补餐审核" description="" /}
 <div id="app" class="f H scroll oh" v-cloak>
     <ul class="bgf clear SSheader W">
         <li class="hl50 F_ bbd bgf tc bgdefault cf fr6">
+            <p class='f C2'>类型</p>
+            <p class='f C2'>姓名</p>
             <p class='f C2'>日期</p>
-            <p class='f C2'>餐厅</p>
             <p class='f C2'>餐次</p>
-            <p class='f C2'>菜品</p>
             <p class='f C2'>状态</p>
         </li>
     </ul>
     <div class="tc pt100" v-if="orderGetCount == '0'">
         <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
-        <p class="c9 mb15">退餐管理空空如也！</p>
+        <p class="c9 mb15">退补餐审核空空如也！</p>
         <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
     </div>
     <div v-else class="W H mt50">
         <ul class="bgf clear" v-for="item in orderList">
-            <li class="hl50 F_ bbd bgf tc fr6" @click="refundOrder(item.id,item.status,item.status_name)">
+            <li class="hl50 F_ bbd bgf tc fr6" @click="refundOrder(item.id,item.check_status,item.status_name)">
+                <p class="f C2">{{item.oper_typename}}</p>
+                <p class="f C2">{{item.emp_name}}</p>
                 <p class="f C2">{{item.date_str}}</p>
-                <p class="f C2">{{item.canteen_name}}</p>
                 <p class="f C2">{{item.dinner_name}}</p>
-                <p class="f C2">{{item.cookbook_name}}</p>
                 <p class="f C2">{{item.status_name}}</p>
             </li>
         </ul>
@@ -38,17 +38,17 @@
             el: '#app',
             data: data,
             methods: {
-                refundOrder: function (id,status,status_name) {  //跳转函数
-                    if(status > 0){
+                refundOrder: function (id,check_status,status_name) {  //跳转函数
+                    if(check_status == '4'){
                         $.alert(status_name);
                         return false;
                     }
                     $.confirm({
                         title: '确认提交?',
-                        text: '您确定要退订该笔订单?',
+                        text: '您确定要审核通过该笔订单?',
                         onOK: function () {
                             $.ajax({
-                                url: '/index/mallapi/refundOrder',
+                                url: '/index/mallapi/checkOrder',
                                 type: "POST",
                                 data:{'id':id},
                                 dataType: "json",
@@ -67,10 +67,10 @@
                         }
                     });
                 },
-                initrefundObj: function () {
+                initDeptObj: function () {
                     var self = this;
                     $.ajax({
-                        url: SCapiDic.refundList,
+                        url: SCapiDic.checkList,
                         type: "POST",
                         dataType: "json",
                         success: function (ret) {
@@ -83,7 +83,7 @@
             },
             mounted: function () {
                 this.$nextTick(function () {
-                    this.initrefundObj();
+                    this.initDeptObj();
                 })
             }
         })
