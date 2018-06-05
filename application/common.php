@@ -16,6 +16,8 @@ use service\DataService;
 use service\NodeService;
 use Wechat\Loader;
 use think\Db;
+use think\Log;
+use think\Request;
 
 /**
  * 打印输出数据到文件
@@ -341,5 +343,46 @@ function payOrder($TransId = 'QDZF',$MerchantId,$SubMerchantId,$Field='1',$Start
     $html = request_post(paysConf('InterFaceURL'),$data);
     $arr = json_decode($html,true);
     return $arr;
+}
+
+/**
+ * 发送模板消息
+ * @param $userOpenId
+ * @param null $shortId
+ * @param null $data
+ * @param null $url
+ */
+function sendMSC($userOpenId,$shortId=null,$data=null,$url=null){
+    $template=Db::table("wechat_notice_template")->where("shortId",$shortId)->where('company_id',session('company_id'))->find();
+    if($template) {
+        $template_id = $template['templateId'];
+    }else{
+        $template_info = load_wechat("Receive")->addTemplateMessage($shortId);
+        $template_id=$template_info['template_id'];
+        Db::table("wechat_notice_template")->insert(['shortId'=>$shortId,'templateId'=>$template_id,'company_id'=>session('company_id')]);
+    }
+    try {
+        $content = [];
+        $content['touser'] = $userOpenId;
+        $content['template_id'] = $template_id;
+        $content['url'] = $url;
+        $content['data'] = $data;
+        load_wechat("Receive")->sendTemplateMessage($content);
+    }catch (Exception $e) {
+        Log::error($e->getMessage());
+        Log::error($e->getTraceAsString());
+    }
+}
+
+/**
+ * 生成退补餐审核记录发送模板信息
+ * @param $openid
+ */
+function refundMSC($openid)
+{
+    sendMSC($openid,'OPENTM406110441',array(
+        'first'=>'您好，您有退补餐申请记录需要审核!',
+        'remark'=>'点击本条信息进行操作。'
+    ),Request::instance()->domain().'/index/index/checkList');
 }
 
