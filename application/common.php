@@ -359,6 +359,9 @@ function sendMSC($userOpenId,$shortId=null,$data=null,$url=null){
     }else{
         $template_info = load_wechat("Receive")->addTemplateMessage($shortId);
         $template_id=$template_info['template_id'];
+        if(empty($template_id)){
+            return false;
+        }
         Db::table("wechat_notice_template")->insert(['shortId'=>$shortId,'templateId'=>$template_id,'company_id'=>session('company_id')]);
     }
     try {
