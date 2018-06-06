@@ -391,7 +391,7 @@ class Recharge extends BasicAdmin
         $company_id = session('company_id');
         $user_id = session('user.id');
 
-        $reportType = Db::name('report_param_detail')->where(['company_id' => $company_id, 'report_type' => '套餐统计报表'])->column('report_id,report_name');
+        $reportType = Db::name('report_param_detail')->where(['company_id' => $company_id, 'report_type' => '充值统计报表'])->column('report_id,report_name');
         $this->assign('reportTypes', $reportType);
 
         $canteens = Db::name('canteen_base_info')->where('company_id', $company_id);
