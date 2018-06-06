@@ -357,8 +357,7 @@ function sendMSC($userOpenId,$shortId=null,$data=null,$url=null){
     if($template) {
         $template_id = $template['templateId'];
     }else{
-        $template_info = load_wechat("Message")->addTemplateMessage($shortId);
-        $template_id=$template_info['template_id'];
+        $template_id = load_wechat("Message")->addTemplateMessage($shortId);
         if(empty($template_id)){
             return false;
         }
