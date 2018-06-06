@@ -357,7 +357,7 @@ function sendMSC($userOpenId,$shortId=null,$data=null,$url=null){
     if($template) {
         $template_id = $template['templateId'];
     }else{
-        $template_info = load_wechat("Receive")->addTemplateMessage($shortId);
+        $template_info = load_wechat("Message")->addTemplateMessage($shortId);
         $template_id=$template_info['template_id'];
         if(empty($template_id)){
             return false;
@@ -370,7 +370,7 @@ function sendMSC($userOpenId,$shortId=null,$data=null,$url=null){
         $content['template_id'] = $template_id;
         $content['url'] = $url;
         $content['data'] = $data;
-        load_wechat("Receive")->sendTemplateMessage($content);
+        load_wechat("Message")->sendTemplateMessage($content);
     }catch (Exception $e) {
         Log::error($e->getMessage());
         Log::error($e->getTraceAsString());
