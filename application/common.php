@@ -383,8 +383,10 @@ function sendMSC($userOpenId,$shortId=null,$data=null,$url=null){
  */
 function refundMSC($openid)
 {
-    sendMSC($openid,'OPENTM406110441',array(
-        'first'=>'您好，您有退补餐申请记录需要审核!',
+    sendMSC($openid,'OPENTM407446439',array(
+        'first'=>'您好！有新发布的退补餐需要您审核',
+        'keyword1'=>'管理员审核',
+        'keyword2'=>date('Y-m-d H:i'),
         'remark'=>'点击本条信息进行操作。'
     ),Request::instance()->domain().'/index/index/checkList');
 }
