@@ -93,6 +93,7 @@
                     <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
                 </th>
                 <th class='text-center'>订单号</th>
+                <th class='text-center'>部门名称</th>
                 <th class='text-center'>员工名称</th>
                 <th class='text-center'>订单生成时间</th>
                 <th class='text-center'>交易时间</th>
@@ -114,6 +115,7 @@
                     <input class="list-check-box" value='{$vo.OrderId}' type='checkbox'/>
                 </td>
                 <td class='text-center'>{$vo.OrderId}</td>
+                <td class='text-center'>{$vo.dept_name}</td>
                 <td class='text-center'>{$vo.Emp_Name}</td>
                 <td class='text-center'>{$vo.create_time|default="<span style='color:#ccc'>无</span>"}</td>
                 <td class='text-center'>{$vo.MerDateTime}</td>

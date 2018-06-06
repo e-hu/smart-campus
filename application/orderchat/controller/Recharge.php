@@ -287,7 +287,8 @@ class Recharge extends BasicAdmin
         $db = Db::name('recharge_order_list')
             ->alias('a')
             ->join('Employee_list l', 'a.emp_id = l.emp_id and a.company_id = l.company_id', 'left')
-            ->field('a.*,Emp_Name')
+            ->join('dept_info k', 'l.Dept_Id = k.dept_no and a.company_id = k.company_id', 'left')
+            ->field('a.*,Emp_Name,dept_name')
             ->order('create_time desc,OrderId desc')
             ->where($where);
         // 应用搜索条件

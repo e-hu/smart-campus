@@ -88,7 +88,7 @@ class WindowBase extends BasicAdmin
         if ($this->request->isPost()) {
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where('sale_window_no', $data['sale_window_no'])->find()) {
                 unset($data['sale_window_name']);
-            } elseif (isset($data['sale_window_name']) and Db::name($this->table)->where('sale_window_name', $data['sale_window_name'])->where('company_id', session('user.company_id'))->find()) {
+            } elseif (isset($data['sale_window_name']) and Db::name($this->table)->where('sale_window_name', $data['sale_window_name'])->where('canteen_no', $data['canteen_no'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('窗口名称已经存在，请使用其它窗口名称！');
             }
         } else {
