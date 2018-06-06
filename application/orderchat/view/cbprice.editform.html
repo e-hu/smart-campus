@@ -143,12 +143,12 @@
                         if (v.choice_flag > 0) {
                             html += '<td class="text-center selected" data-value="choice"><span  value="' + v.price_id + '" ></span></td></td>';
                         } else {
-                            html += '<td class="text-center selecte" data-value="choice"><span value="' + v.price_id + '"></span></td></tr>';
+                            html += '<td class="text-center selecte" data-value="choice"><span value="' + v.price_id + '"></span></td></td>';
                         }
                         if (v.status > 0) {
                             html += '<td class="text-center selected" data-value="status"><span  value="' + v.price_id + '" ></span></td></td>';
                         } else {
-                            html += '<td class="text-center selecte" data-value="status"><span value="' + v.price_id + '"></span></td></tr>';
+                            html += '<td class="text-center selecte" data-value="status"><span value="' + v.price_id + '"></span></td></td>';
                         }
                         $('#content').html(html);
                     });
