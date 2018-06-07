@@ -1,0 +1,78 @@
+{include file="common/header" title="人员餐次管理" keywords="人员餐次管理" description="" /}
+<div id="app" class="f H scroll oh" v-cloak>
+    <ul class="bgf clear SSheader W">
+        <li class="hl50 F_ bbd bgf tc bgdefault cf fr6">
+            <p class='C3'>学号</p>
+            <p class='C2'>姓名</p>
+            <p class='C7'>餐次</p>
+        </li>
+    </ul>
+    <div class="tc pt100" v-if="dinnerGetCount == '0'">
+        <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
+        <p class="c9 mb15">订餐管理空空如也！</p>
+        <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
+    </div>
+    <div v-else class="W H mt50">
+        <ul class="bgf clear" v-for="(item,index) in dinnerDeptList">
+            <li class="hl50 F_ bbd bgf tc fr6">
+                <p class="C3">{{item[0].emp_id}}</p>
+                <p class="C2">{{index}}</p>
+                <button class="W r2 cf p5" :class=" item2.choose_flag == '1' ? 'bg9' : 'bgdefault '" :style="{width: dinnerGetWidth}" v-for="(item2,index2) in item" @click="userdinner(item2.dinner_no,item2.emp_id,item2.choose_flag)">{{item2.dinner_name}}</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- 底部导航栏 -->
+{include file="common/footer" /}
+<script type="text/javascript">
+    window.onload = function () {
+        var data = {
+            dinnerDeptList: [],
+            dinnerGetCount: '0',
+            dinnerGetWidth: '0',
+        };
+        new Vue({
+            el: '#app',
+            data: data,
+            methods: {
+                userdinner:function($dinner_no,$user_id,$chose_flag){
+                    var self = this;
+                    $.ajax({
+                        url: '/index/mallapi/deptdinner',
+                        type: "POST",
+                        data:{dinner_no:$dinner_no,user_id:$user_id,chose_flag:$chose_flag},
+                        dataType: "json",
+                        success: function (ret) {
+                            $.alert(ret.msg, function() {
+                                openWin(ret.url,'');
+                            });
+                        }
+                    });
+                },
+                initDeptObj: function () {
+                    var self = this;
+                    $.ajax({
+                        url: SCapiDic.getmydeptdinner,
+                        type: "POST",
+                        dataType: "json",
+                        success: function (ret) {
+                            self.dinnerDeptList = ret['dinnerList'];
+                            self.dinnerGetCount = self.dinnerDeptList.length;
+                            self.dinnerGetWidth = ret['dinnerBaseCount']+'%';
+                            console.log(self.dinnerDeptList);
+                        }
+                    });
+                }
+            },
+            mounted: function () {
+                this.$nextTick(function () {
+                    this.initDeptObj();
+                })
+            }
+        })
+        ;
+    };
+</script>
+
+
+

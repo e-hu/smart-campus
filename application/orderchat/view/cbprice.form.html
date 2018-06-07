@@ -86,6 +86,7 @@
             <thead>
             <tr>
                 <th class='text-center'>菜品名称</th>
+                <th class='text-center'>组合名称</th>
                 <th class='text-center'>菜品价格</th>
                 <th class='text-center'>限制数量</th>
                 <th class='text-center'>状态</th>
@@ -133,6 +134,7 @@
                     var html = '';
                     $.each(result, function (k, v) {
                         html += '<tr><td class="text-center">' + v.cookbook_name + '</td>';
+                        html += '<td class="text-center"><input class="layui-input layui-input-inline title-input info" name="' + v.price_id + '" value="' + v.cookbook_info + '" style="width: 200px;height: 32px;"/></td>';
                         if (v.price_flag > 0) {
                             html += '<td class="text-center"><input class="layui-input layui-input-inline title-input price" pattern="^[0-9a-z]$" name="' + v.price_id + '" value="' + v.cookbook_price + '" style="width: 72px;height: 32px;"/></td>';
                         } else {
@@ -200,7 +202,7 @@
             }
         });
     });
-    $("#list").on('blur', ".price", function () {
+    $("#list").on('change', ".price", function () {
         var id = this.name;
         var price = this.value;
         $.ajax({
@@ -223,7 +225,30 @@
         });
 
     });
-    $("#list").on('blur', ".number", function () {
+    $("#list").on('change', ".info", function () {
+        var id = this.name;
+        var info = this.value;
+        $.ajax({
+            type: 'POST',
+            url: "{:url('cbprice/save')}",  //保存
+            data: {
+                'price_id': id,
+                'cookbook_info': info
+            },
+            async: false,
+            success: function (data) {
+                if (data.flag = 1) {
+                    layer.msg('组合名称修改成功');
+
+                } else {
+                    layer.msg('组合名称修改失败');
+                }
+
+            }
+        });
+
+    });
+    $("#list").on('change', ".number", function () {
         var id = this.name;
         var num = this.value;
         $.ajax({

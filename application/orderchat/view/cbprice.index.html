@@ -2,9 +2,11 @@
 
 {block name="button"}
 <div class="nowrap pull-right" style="margin-top:10px">
-    <button data-open='{:url("$classuri/import")}' data-title="导入菜谱" class='layui-btn layui-btn-small'>导入菜谱
+    <button type="button" class="layui-btn layui-btn-small" id="upload">
+        <i class="layui-icon">&#xe67c;</i>上传菜谱
     </button>
-    <button data-open='{:url("$classuri/generate")}' data-title="生成菜谱" class='layui-btn layui-btn-small'> 生成菜谱
+    <button data-open='{:url("$classuri/generate")}' data-title="生成菜谱" class='layui-btn layui-btn-small'><i
+            class="layui-icon">&#xe608;</i>生成菜谱
     </button>
 </div>
 
@@ -100,5 +102,24 @@
 </form>
 <script>
     window.laydate.render({range: true, elem: '#sale_datetime', format: 'yyyy/MM/dd'});
+</script>
+<script>
+    layui.use('upload', function () {
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#upload' //绑定元素
+            , url: '/report/' //上传接口
+            , done: function (res) {
+                //上传完毕回调
+                layer.msg('成功');
+            }
+            , error: function () {
+                //请求异常回调
+                layer.msg('失败');
+            }
+        });
+    });
 </script>
 {/block}
