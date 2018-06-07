@@ -7,9 +7,9 @@
     </ul>
     <ul class="bgf clear SSheader W mt50">
         <li class="hl50 F_ bbd bgf tc bgdefault cf">
-            <p class='f C4'>真实姓名</p>
-            <p class='f C4'>联系电话</p>
-            <p class='f C4'>账户余额</p>
+            <p class='C4'>真实姓名</p>
+            <p class='C4'>联系电话</p>
+            <p class='C4'>账户余额</p>
         </li>
     </ul>
     <div class="tc pt150" v-if="memberGetCount == '0'">
@@ -20,9 +20,9 @@
     <div v-else class="W H mt100">
         <ul class="bgf clear" v-for="item in memberDeptList">
             <li class="hl50 F_ bbd bgf tc fr5" @click="deptCart(sale_datetime,item.emp_id)">
-                <p class="f C4">{{item.emp_name}}</p>
-                <p class="f C4">{{item.default_tel}}</p>
-                <p class="f C4">{{item.account_remain_money}}</p>
+                <p class="C4">{{item.emp_name}}</p>
+                <p class="C4">{{item.default_tel}}</p>
+                <p class="C4">{{item.account_remain_money}}</p>
             </li>
         </ul>
     </div>
