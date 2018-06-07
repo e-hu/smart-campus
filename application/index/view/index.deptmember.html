@@ -57,10 +57,16 @@
                             dept_id: getUrlParam('dept_id')
                         },
                         success: function (ret) {
-                            self.memberDeptList = ret.memberDeptList;
-                            self.memberGetCount = self.memberDeptList.length;
-                            self.dept_name = ret.dept_name;
-                            self.dinner_name = ret.dinner_name;
+                            if (ret.code == '0') {
+                                $.alert(ret.msg, function () {
+                                    openWin(ret.url, {});
+                                });
+                            } else {
+                                self.memberDeptList = ret.memberDeptList;
+                                self.memberGetCount = self.memberDeptList.length;
+                                self.dept_name = ret.dept_name;
+                                self.dinner_name = ret.dinner_name;
+                            }
                         }
                     });
                 }
