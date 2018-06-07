@@ -3,11 +3,11 @@
     <ul class="bgf clear SSheader W">
         <li class="hl50 F_ bbd bgf tc bgdefault cf fr6">
             <p class='C2'>日期</p>
-            <p class='C2'>餐次</p>
-            <p class='C2'>部门</p>
-            <p class='C2'>总人数</p>
-            <p class='C2'>已订人数</p>
-            <p class='C2'>未订人数</p>
+            <p class='C1'>餐次</p>
+            <p class='C4'>部门</p>
+            <p class='C1'>总数</p>
+            <p class='C1'>已订</p>
+            <p class='C1'>未订</p>
         </li>
     </ul>
     <div class="tc pt100" v-if="orderGetCount == '0'">
@@ -19,11 +19,11 @@
         <ul class="bgf clear" v-for="item in orderDeptList">
             <li class="hl50 F_ bbd bgf tc fr6" @click="deptMember(item.sale_datetime,item.dinner_flag,item.dept_id)">
                 <p class="C2">{{item.datetime}}</p>
-                <p class="C2">{{item.dinner_name}}</p>
-                <p class="C2">{{item.dept_name}}</p>
-                <p class="C2">{{item.emp_count}}</p>
-                <p class="C2">{{item.dinner_count}}({{item.dinner_count1}})</p>
-                <p class="C2">{{item.dinner_remain_count}}</p>
+                <p class="C1">{{item.dinner_name}}</p>
+                <p class="C4">{{item.dept_name}}</p>
+                <p class="C1">{{item.emp_count}}</p>
+                <p class="C1">{{item.dinner_count}}({{item.dinner_count1}})</p>
+                <p class="C1">{{item.dinner_remain_count}}</p>
             </li>
         </ul>
     </div>
