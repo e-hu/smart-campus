@@ -2,11 +2,11 @@
 <div id="app" class="f H scroll oh" v-cloak>
     <ul class="bgf clear SSheader W">
         <li class="hl50 F_ bbd bgf tc bgdefault cf fr6">
-            <p class='f C2'>类型</p>
-            <p class='f C2'>姓名</p>
-            <p class='f C2'>日期</p>
-            <p class='f C2'>餐次</p>
-            <p class='f C2'>状态</p>
+            <p class='C2'>类型</p>
+            <p class='C2'>姓名</p>
+            <p class='C3'>日期</p>
+            <p class='C2'>餐次</p>
+            <p class='C2'>状态</p>
         </li>
     </ul>
     <div class="tc pt100" v-if="orderGetCount == '0'">
@@ -17,11 +17,11 @@
     <div v-else class="W H mt50">
         <ul class="bgf clear" v-for="item in orderList">
             <li class="hl50 F_ bbd bgf tc fr6" @click="refundOrder(item.id,item.check_status,item.status_name)">
-                <p class="f C2">{{item.oper_typename}}</p>
-                <p class="f C2">{{item.emp_name}}</p>
-                <p class="f C2">{{item.date_str}}</p>
-                <p class="f C2">{{item.dinner_name}}</p>
-                <p class="f C2">{{item.status_name}}</p>
+                <p class="C2">{{item.oper_typename}}</p>
+                <p class="C2">{{item.emp_name}}</p>
+                <p class="C3">{{item.date_str}}</p>
+                <p class="C2">{{item.dinner_name}}</p>
+                <p class="C2">{{item.status_name}}</p>
             </li>
         </ul>
     </div>
