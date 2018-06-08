@@ -154,13 +154,15 @@ return [
     // +----------------------------------------------------------------------
     'log'                    => [
         // 日志记录方式，内置 file socket 支持扩展
-        'type'        => 'File',
+        'type'        => 'test',       //File    test不写入日志
         // 日志保存目录
         'path'        => LOG_PATH,
         // 日志记录级别 log,error,info,sql,notice,alert,debug
         'level'       => ['error', 'log', 'info', 'sql', 'notice', 'alert', 'debug'],
         // error和sql日志单独记录
         'apart_level' => ['error', 'sql'],
+        //最大文件数
+        'max_files'	=> 30,
     ],
     // +----------------------------------------------------------------------
     // | Trace设置 开启 app_trace 后 有效
