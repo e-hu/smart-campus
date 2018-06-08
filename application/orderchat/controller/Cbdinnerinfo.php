@@ -145,6 +145,12 @@ class Cbdinnerinfo extends BasicAdmin
         $where['company_id'] = session('user.company_id');
         if (DataService::update($this->table2, $where, 'id')) {
             Db::table('emp_cookbook_dinner_info_modi')->where('id',$_POST['id'])->update(['checker2_id'=>session('user.id'),'checker2_datetime'=>date("Y-m-d H:i:s")]);
+            $modi_info = Db::table('emp_cookbook_dinner_info_modi')
+                ->alias('a')
+                ->join('employee_list b','b.emp_id = a.emp_id')
+                ->field('a.*,Emp_MircoMsg_Id')
+                ->where('id',$_POST['id'])->find();
+            refundMSC($modi_info['Emp_MircoMsg_Id']);
             $this->success("订单审核成功！", '');
         }
         $this->error("订单审核失败，请稍候再试！");

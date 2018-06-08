@@ -390,3 +390,30 @@ function refundMSC($openid)
     ),Request::instance()->domain().'/index/index/checkList');
 }
 
+/**
+ * 退补餐审核记录解过发送模板信息
+ * @param $openid
+ */
+function returnMSC($openid)
+{
+    sendMSC($openid,'OPENTM407446439',array(
+        'first'=>array('value'=>'您好！您申请的退餐审核已有结果','color'=>'#173177'),
+        'keyword1'=>array('value'=>'申请结果通知'),
+        'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
+        'remark'=>array('value'=>'点击本条信息进行操作。')
+    ),Request::instance()->domain().'/index/index/refund');
+}
+
+/**
+ * 补餐审核记录解过发送模板信息
+ * @param $openid
+ */
+function patchMSC($openid)
+{
+    sendMSC($openid,'OPENTM407446439',array(
+        'first'=>array('value'=>'您好！您申请的补餐审核已有结果','color'=>'#173177'),
+        'keyword1'=>array('value'=>'申请结果通知'),
+        'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
+        'remark'=>array('value'=>'点击本条信息进行操作。')
+    ),Request::instance()->domain().'/index/index/patch');
+}
