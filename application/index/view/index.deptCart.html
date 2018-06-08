@@ -6,19 +6,19 @@
             <p class='f pl10 tc'>{{emp_name}} {{user_name}}</p>
         </li>
     </ul>
-    <ul class="tc bgf SSorder bgf clear bbe W mt50 SSheader">
-        <li v-for="item in dinnerBaseList" class="h40 lh40 "
-            :class="[dinnerBaseCount,{'Spactive': dinner_type == item.dinner_flag}]" @click='changeSp(item.dinner_flag)'
-            value="{{item.dinner_flag}}">
-            <div>{{item.dinner_name}}</div>
-        </li>
-    </ul>
-    <div class="tc pt140" v-if="cartGetCount == '0'">
+    <!--<ul class="tc bgf SSorder bgf clear bbe W mt50 SSheader">-->
+        <!--<li v-for="item in dinnerBaseList" class="h40 lh40 "-->
+            <!--:class="[dinnerBaseCount,{'Spactive': dinner_type == item.dinner_flag}]" @click='changeSp(item.dinner_flag)'-->
+            <!--value="{{item.dinner_flag}}">-->
+            <!--<div>{{item.dinner_name}}</div>-->
+        <!--</li>-->
+    <!--</ul>-->
+    <div class="tc pt100" v-if="cartGetCount == '0'">
         <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
         <p class="c9 mb15">今日菜谱空空如也！</p>
         <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
     </div>
-    <div v-else class="W H mt90 pb90 scroll oh">
+    <div v-else class="W H mt50 pb50 scroll oh">
         <ul v-if="cartChoiceProductList !=''">
             <li class="hl50 F_ bbd bgdefault tc">
                 <p class='f SScwhite'>单选列表</p>
@@ -110,6 +110,7 @@
     window.onload = function () {
         var data = {
             day: getUrlParam('day'),
+            dinner_flag: getUrlParam('dinner_flag'),
             cartProductList: [],
             cartChoiceProductList:[],
             cartGetCount: '0',
@@ -299,7 +300,7 @@
                                 vm.price_total = ret.price_total;
                                 vm.price_num = ret.price_num;
                                 self.dinner_type = ret.dinnerBaseList[0]['dinner_flag'];
-                                self.initCartObj(self.dinner_type);
+                                self.initCartObj(self.dinner_flag);
                             }
                         }
                     });

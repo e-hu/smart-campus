@@ -2,7 +2,7 @@
 <div id="app" class="f H oh" v-cloak>
     <ul class="bgf clear SSheader W">
         <li class="hl50 F_ bbd bgf">
-            <p class='f pl10'>{{sale_datetime}} {{dept_name}} {{dinner_name}}</p>
+            <p class='f pl10'>{{sale_datetime}} [{{dept_name}}] [{{dinner_name}}]</p>
         </li>
     </ul>
     <ul class="bgf clear SSheader W mt50">
@@ -19,7 +19,7 @@
     </div>
     <div v-else class="W H scroll mt100 oh">
         <ul class="bgf clear" v-for="item in memberDeptList">
-            <li class="hl50 F_ bbd bgf tc fr5" @click="deptCart(sale_datetime,item.emp_id)">
+            <li class="hl50 F_ bbd bgf tc fr5" @click="deptCart(sale_datetime,item.emp_id,dinner_flag)">
                 <p class="C4">{{item.emp_name}}</p>
                 <p class="C4">{{item.default_tel}}</p>
                 <p class="C4">{{item.account_reamin_money}}</p>
@@ -36,14 +36,15 @@
             memberGetCount: '0',
             sale_datetime: getUrlParam('sale_datetime'),
             dept_name: '',
-            dinner_name: ''
+            dinner_name: '',
+            dinner_flag:getUrlParam('dinner_flag'),
         };
         new Vue({
             el: '#app',
             data: data,
             methods: {
-                deptCart: function (sale_datetime, emp_id) {  //跳转函数
-                    openWin('/index/index/deptCart', {day: sale_datetime, emp_id: emp_id});
+                deptCart: function (sale_datetime, emp_id,dinner_flag) {  //跳转函数
+                    openWin('/index/index/deptCart', {day: sale_datetime, emp_id: emp_id, dinner_flag: dinner_flag});
                 },
                 initDeptObj: function () {
                     var self = this;
