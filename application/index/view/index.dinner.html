@@ -2,9 +2,9 @@
 <div id="app" class="f H scroll oh" v-cloak>
     <ul class="bgf clear SSheader W">
         <li class="hl50 F_ bbd bgf tc bgdefault cf fr6">
-            <p class='C3'>学号</p>
+            <p class='C4'>学号</p>
             <p class='C2'>姓名</p>
-            <p class='C7'>餐次</p>
+            <p class='C5'>餐次</p>
         </li>
     </ul>
     <div class="tc pt100" v-if="dinnerGetCount == '0'">
@@ -15,7 +15,7 @@
     <div v-else class="W H mt50">
         <ul class="bgf clear" v-for="(item,index) in dinnerDeptList">
             <li class="hl50 F_ bbd bgf tc fr6">
-                <p class="C3">{{item[0].emp_id}}</p>
+                <p class="C4">{{item[0].emp_id}}</p>
                 <p class="C2">{{index}}</p>
                 <button class="W r2 cf p5" :class=" item2.choose_flag == '1' ? 'bg9' : 'bgdefault '" :style="{width: dinnerGetWidth}" v-for="(item2,index2) in item" @click="userdinner(item2.dinner_no,item2.emp_id,item2.choose_flag)">{{item2.dinner_name}}</button>
             </li>
