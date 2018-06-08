@@ -150,7 +150,7 @@ class Cbdinnerinfo extends BasicAdmin
                 ->join('Employee_List b','a.emp_id = b.Emp_Id','left')
                 ->field('Emp_MircoMsg_Id')
                 ->where('a.id',$_POST['id'])->find();
-            refundMSC($modi_info['Emp_MircoMsg_Id']);
+            patchMSC($modi_info['Emp_MircoMsg_Id']);
             $this->success("订单审核成功！", '');
         }
         $this->error("订单审核失败，请稍候再试！");
