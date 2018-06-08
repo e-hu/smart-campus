@@ -2,7 +2,7 @@
 <div id="app" class="f H scroll oh" v-cloak>
     <ul class="bgf clear SSheader W">
         <li class="hl50 F_ bbd bgf tc bgdefault cf fr6">
-            <p class='C2'>日期</p>
+            <p class='C3'>日期</p>
             <p class='C2'>餐厅</p>
             <p class='C2'>餐次</p>
             <p class='C3'>菜品</p>
@@ -17,7 +17,7 @@
     <div v-else class="W H mt50">
         <ul class="bgf clear" v-for="item in orderList">
             <li class="hl50 F_ bbd bgf tc fr6" @click="refundOrder(item.id,item.status,item.status_name)">
-                <p class="C2">{{item.date_str}}</p>
+                <p class="C3">{{item.date_str}}</p>
                 <p class="C2">{{item.canteen_name}}</p>
                 <p class="C2">{{item.dinner_name}}</p>
                 <p class="C3">{{item.cookbook_name}}</p>
