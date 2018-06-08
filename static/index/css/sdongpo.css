@@ -323,6 +323,12 @@ html, body {
 .mt90{
     margin-top: 90px;
 }
+.pb90{
+    padding-bottom: 90px;
+}
+.pb120{
+    padding-bottom: 120px;
+}
 .mt100{
     margin-top: 100px;
 }
