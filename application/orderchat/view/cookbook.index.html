@@ -64,7 +64,7 @@
             <th class='text-center'>是否允许修改价格</th>
             <th class='text-center'>开始日期</th>
             <th class='text-center'>菜品套餐图片</th>
-            <th class='text-center'>菜品套餐类型</th>
+            <!--<th class='text-center'>菜品套餐类型</th>-->
             {if auth("orderchat/mealtype/index")}
             <th class='text-center'>套餐名称</th>
             {/if}
@@ -91,7 +91,7 @@
             {else/}
             <td class='text-center'>无</td>
             {/if}
-            <td class='text-center'>{$vo.cookbook_typename|default="<span style='color:#ccc'>无</span>"}</td>
+            <!--<td class='text-center'>{$vo.cookbook_typename|default="<span style='color:#ccc'>无</span>"}</td>-->
             {if auth("orderchat/mealtype/index")}
             <td class='text-center'>{$vo.meal_name|default="<span style='color:#ccc'>无</span>"}</td>
             {/if}

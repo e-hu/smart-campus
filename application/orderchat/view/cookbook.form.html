@@ -55,24 +55,24 @@
         </div>
     </div>
 
-    {if isset($cookbook_types)}
-    <div class="layui-form-item">
-        <label class="layui-form-label label-required">菜品套餐类别</label>
-        <div class="layui-input-block">
-            {foreach $cookbook_types as $key=>$cookbook_type}
-            {if isset($vo.cookbook_type) and $vo.cookbook_type == $cookbook_type.cookbook_typeid}
-            <input type="radio" checked  name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">
-            {else}
-            {if $key == 0}
-            <input type="radio" checked name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">
-            {else}
-            <input type="radio" name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">
-            {/if}
-            {/if}
-            {/foreach}
-        </div>
-    </div>
-    {/if}
+    <!--{if isset($cookbook_types)}-->
+    <!--<div class="layui-form-item">-->
+        <!--<label class="layui-form-label label-required">菜品套餐类别</label>-->
+        <!--<div class="layui-input-block">-->
+            <!--{foreach $cookbook_types as $key=>$cookbook_type}-->
+            <!--{if isset($vo.cookbook_type) and $vo.cookbook_type == $cookbook_type.cookbook_typeid}-->
+            <!--<input type="radio" checked  name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">-->
+            <!--{else}-->
+            <!--{if $key == 0}-->
+            <!--<input type="radio" checked name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">-->
+            <!--{else}-->
+            <!--<input type="radio" name="cookbook_type" value="{$cookbook_type.cookbook_typeid}" title="{$cookbook_type.cookbook_typename}">-->
+            <!--{/if}-->
+            <!--{/if}-->
+            <!--{/foreach}-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--{/if}-->
 
     <div class="layui-form-item">
         <label class="layui-form-label label-required">开始时间</label>
