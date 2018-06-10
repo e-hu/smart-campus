@@ -63,6 +63,13 @@ class Cbdinnerinfo extends BasicAdmin
                 $db->where('i.cookbook_name', $get[$key]);
             }
         }
+
+        foreach (['Emp_Name'] as $key) {
+            if (isset($get[$key]) && $get[$key] !== '') {
+                $db->where('e.Emp_Name', 'like', "%{$get[$key]}%");
+            }
+        }
+
         if (session('user.create_by') != '10001') {
             $db->where(' exists (select 1 from t_user_manager_dept_id b where a.canteen_no=b.dept_id and a.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }
@@ -89,12 +96,12 @@ class Cbdinnerinfo extends BasicAdmin
     }
 
     /**
-     * 订单列表
+     * 审核订单列表
      */
     public function refund()
     {
         // 设置页面标题
-        $this->title = '订单列表管理';
+        $this->title = '审核列表管理';
         // 获取到所有GET参数
         $get = $this->request->get();
         // 实例Query对象
@@ -126,6 +133,11 @@ class Cbdinnerinfo extends BasicAdmin
         foreach (['cookbook_name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
                 $db->where('i.cookbook_name', $get[$key]);
+            }
+        }
+        foreach (['Emp_Name'] as $key) {
+            if (isset($get[$key]) && $get[$key] !== '') {
+                $db->where('h.Emp_Name', 'like', "%{$get[$key]}%");
             }
         }
         if (session('user.create_by') != '10001') {
