@@ -56,8 +56,8 @@ class CookBook extends BasicAdmin {
      * @param type $list
      */
     protected function _data_filter(&$list) {
-        $tags = Db::name('cookbook_type')->where('company_id', session('company_id'))->column('cookbook_typeid,cookbook_typename');
-        $this->assign('tags', $tags);
+//        $tags = Db::name('cookbook_type')->where('company_id', session('company_id'))->column('cookbook_typeid,cookbook_typename');
+//        $this->assign('tags', $tags);
     }
 
     /**
@@ -92,12 +92,12 @@ class CookBook extends BasicAdmin {
     public function _form_filter(&$data) {
         if ($this->request->isPost()) {
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where('cookbook_no', $data['cookbook_no'])->find()) {
-//                unset($data['cookbook_name']);
+                unset($data['cookbook_name']);
             } elseif (Db::name($this->table)->where('company_id', session('user.company_id'))->where('cookbook_name', $data['cookbook_name'])->find()) {
                 $this->error('菜品套餐名称已经存在，请使用其它名称！');
             }
         }else{
-            $this->assign('cookbook_types', Db::name('cookbook_type')->where('company_id', session('user.company_id'))->select());  //菜品套餐类别列表
+//            $this->assign('cookbook_types', Db::name('cookbook_type')->where('company_id', session('user.company_id'))->select());  //菜品套餐类别列表
             $this->assign('cookbook_meal_types', Db::name('cookbook_meal_type')->where('company_id', session('user.company_id'))->select());  //套餐列表
         }
     }

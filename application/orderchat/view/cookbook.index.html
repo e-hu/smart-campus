@@ -18,28 +18,11 @@
 <form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
 
     <div class="row">
-
-        <div class="col-xs-2">
-            <div class="form-group">
-                <select name="tag" class="input-sm form-control">
-                    <option value="">- 类别列表 -</option>
-                    <!--{foreach $tags as $key=>$tag}-->
-                    <!--{if $Think.get.tag eq $key}-->
-                    <option selected value="{$key}">{$tag.cookbook_typename}</option>
-                    <!--{else}-->
-                    <option value="{$key}">{$tag.cookbook_typename}</option>
-                    <!--{/if}-->
-                    <!--{/foreach}-->
-                </select>
-            </div>
-        </div>
-
         <div class="col-xs-3">
             <div class="form-group">
                 <input type="text" name="cookbook_name" value="{$Think.get.cookbook_name|default=''}" placeholder="菜品套餐名" class="input-sm form-control">
             </div>
         </div>
-
 
         <div class="col-xs-1">
             <div class="form-group">
@@ -81,7 +64,7 @@
             <td class='text-center'>{$vo.cookbook_info|default="<span style='color:#ccc'>还没有设置套餐组合</span>"}</td>
             <td class='text-center'>{$vo.price|default="<span style='color:#ccc'>还没有设置菜品套餐价格</span>"}元</td>
             {if $vo.price_flag == '0'}
-            <td class='text-center'>不允许</td>
+            <td class='text-center'>拒绝</td>
             {else/}
             <td class='text-center'>允许</td>
             {/if}
