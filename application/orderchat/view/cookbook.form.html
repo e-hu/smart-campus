@@ -5,7 +5,7 @@
             <label class="layui-form-label">菜品套餐名称</label>
             <div class="layui-input-inline">
                 {if $vo and isset($vo.cookbook_name)}
-                <input type="text"  name="cookbook_name" value='{$vo.cookbook_name|default=""}'
+                <input type="text" name="cookbook_name" value='{$vo.cookbook_name|default=""}'
                        required="required" title="请输入2位及以上的字符" placeholder="请输入菜品套餐名称" class="layui-input disabled">
                 {else}
                 <input type="text" name="cookbook_name" value='' pattern="^\S{2,}$"
@@ -13,18 +13,47 @@
                 {/if}
             </div>
         </div>
-        <div class="layui-inline">
-            <label class="layui-form-label">套餐组合</label>
-            <div class="layui-input-inline">
-                {if $vo and isset($vo.cookbook_info)}
-                <input type="text"  name="cookbook_info" value='{$vo.cookbook_info|default=""}'
-                       title="请输入2位及以上的字符" placeholder="请输入套餐组合" class="layui-input disabled">
-                {else}
-                <input type="text" name="cookbook_info" value='' pattern="^\S{2,}$"
-                       title="请输入2位及以上的字符"  placeholder="请输入套餐组合" class="layui-input">
-                {/if}
-            </div>
+        <!--<div class="layui-inline">-->
+            <!--<label class="layui-form-label">套餐组合</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--{if $vo and isset($vo.cookbook_info)}-->
+                <!--<input type="text" name="cookbook_info" value='{$vo.cookbook_info|default=""}'-->
+                       <!--title="请输入2位及以上的字符" placeholder="请输入套餐组合" class="layui-input disabled">-->
+                <!--{else}-->
+                <!--<input type="text" name="cookbook_info" value='' pattern="^\S{2,}$"-->
+                       <!--title="请输入2位及以上的字符" placeholder="请输入套餐组合" class="layui-input">-->
+                <!--{/if}-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+
+    <div class="layui-form-item" id="cookbook">
+        <label class="layui-form-label">选择菜品</label>
+        <div class="layui-input-inline">
+            <select name="cookbook[]" lay-verify="" lay-search>
+                <option value="">直接选择或搜索选择</option>
+                {foreach $cookbook_list as $key=>$val}
+                <option value="{$val.cookbook_no}">{$val.cookbook_name}</option>
+                {/foreach}
+            </select>
         </div>
+        <div class="layui-input-inline">
+            <select name="cookbook[]" lay-verify="" lay-search>
+                <option value="">直接选择或搜索选择</option>
+                {foreach $cookbook_list as $key=>$val}
+                <option value="{$val.cookbook_no}">{$val.cookbook_name}</option>
+                {/foreach}
+            </select>
+        </div>
+        <div class="layui-input-inline">
+            <select name="cookbook[]" lay-verify="" lay-search>
+                <option value="">直接选择或搜索选择</option>
+                {foreach $cookbook_list as $key=>$val}
+                <option value="{$val.cookbook_no}">{$val.cookbook_name}</option>
+                {/foreach}
+            </select>
+        </div>
+        <button type="button" class="layui-btn" onClick="addCook()">增加菜品</button>
     </div>
 
     <div class="layui-form-item">
@@ -32,9 +61,11 @@
             <label class="layui-form-label">价格</label>
             <div class="layui-input-inline">
                 {if $vo and isset($vo.price)}
-                <input type="text" required name="price" value='{$vo.price|default=""}' pattern="^\d+(\.\d+)?$" title="请输入正确的数字"  placeholder="请输入价格" class="layui-input">
+                <input type="text" required name="price" value='{$vo.price|default=""}' pattern="^\d+(\.\d+)?$"
+                       title="请输入正确的数字" placeholder="请输入价格" class="layui-input">
                 {else}
-                <input type="text" required name="price" value='' pattern="^\d+(\.\d+)?$" title="请输入正确的数字" placeholder="请输入价格" class="layui-input">
+                <input type="text" required name="price" value='' pattern="^\d+(\.\d+)?$" title="请输入正确的数字"
+                       placeholder="请输入价格" class="layui-input">
                 {/if}
             </div>
         </div>
@@ -42,7 +73,8 @@
             <label class="layui-form-label">开始时间</label>
             <div class="layui-input-inline">
                 {if $vo and isset($vo.start_datetime)}
-                <input name="start_datetime" id="start_datetime" value="{:date('Y-m-d',strtotime($vo['start_datetime']))}"
+                <input name="start_datetime" id="start_datetime"
+                       value="{:date('Y-m-d',strtotime($vo['start_datetime']))}"
                        placeholder="请选择时间" class="layui-input">
                 {else}
                 <input name="start_datetime" id="start_datetime"
@@ -75,23 +107,26 @@
             <div class="layui-input-inline">
                 {foreach $cookbook_meal_types as $key=>$cookbook_meal_type}
                 {if isset($vo.meal_id) and $vo.meal_id == $cookbook_meal_type.meal_id}
-                <input type="radio" checked  name="meal_id" value="{$cookbook_meal_type.meal_id}" title="{$cookbook_meal_type.meal_name}">
+                <input type="radio" checked name="meal_id" value="{$cookbook_meal_type.meal_id}"
+                       title="{$cookbook_meal_type.meal_name}">
                 {else}
                 {if $key == '0'}
-                <input type="radio" checked name="meal_id" value="{$cookbook_meal_type.meal_id}" title="{$cookbook_meal_type.meal_name}">
+                <input type="radio" checked name="meal_id" value="{$cookbook_meal_type.meal_id}"
+                       title="{$cookbook_meal_type.meal_name}">
                 {else}
-                <input type="radio" name="meal_id" value="{$cookbook_meal_type.meal_id}" title="{$cookbook_meal_type.meal_name}">
+                <input type="radio" name="meal_id" value="{$cookbook_meal_type.meal_id}"
+                       title="{$cookbook_meal_type.meal_name}">
                 {/if}
                 {/if}
                 {/foreach}
             </div>
         </div>
     </div>
-
     <div class="layui-form-item">
         <label class="layui-form-label">菜品套餐图片</label>
         <div class="layui-input-block">
-            <img data-tips-image style="height:auto;max-height:100px;min-width:100px" src='{$vo.cookbook_image|default=""}'/>
+            <img data-tips-image style="height:auto;max-height:100px;min-width:100px"
+                 src='{$vo.cookbook_image|default=""}'/>
             <input type="hidden" name="cookbook_image" onchange="$(this).prev('img').attr('src', this.value)"
                    value="{$vo.cookbook_image|default=''}" class="layui-input">
             <a class="btn btn-link" data-file="one" data-type="jpg,jpeg,png" data-field="cookbook_image">上传图片</a>
@@ -109,4 +144,18 @@
 </form>
 <script>
     window.laydate.render({range: false, elem: '#start_datetime', format: 'yyyy-MM-dd'});
+
+    function addCook() {
+        var newTextBoxDiv = $(document.createElement('div')).addClass('layui-input-inline');
+        newTextBoxDiv.after().html(
+            '<select name="cookbook[]" lay-verify="" lay-search>' +
+            '<option value="">直接选择或搜索选择</option>' +
+            '{foreach $cookbook_list as $key=>$val}' +
+            '<option value="{$val.cookbook_no}">{$val.cookbook_name}</option>' +
+            '{/foreach}' +
+            '</select>'
+        );
+        newTextBoxDiv.appendTo("#cookbook");
+        form.render('select');
+    }
 </script>

@@ -71,6 +71,15 @@ class CookBook extends BasicAdmin {
             $data = Db::query($sqlstr, ['', 'cookbook', 'COBOK', 0]);
             $extendData['cookbook_no'] = $data[0][0]['id'];
             $extendData['company_id'] = session('user.company_id');
+            $cookbook = [];
+            foreach($_POST['cookbook'] as $key=>$val){
+                  if(!empty($val)){
+                      Db::table('cookbook_base_info_detail')->insert(['cookbook_no'=>$val,'company_id'=>session('user.company_id'),'cookbook_list_no'=>$extendData['cookbook_no']]);
+                      $info = Db::table('cookbook_base_info_list')->where('cookbook_no',$val)->find();
+                      array_push($cookbook,$info['cookbook_name']);
+                  }
+            }
+            $extendData['cookbook_info'] = implode("+",$cookbook);
         }
         return $this->_form($this->table, 'form','cookbook_no',['company_id'=> session('user.company_id')],$extendData);
     }
@@ -96,9 +105,11 @@ class CookBook extends BasicAdmin {
             } elseif (Db::name($this->table)->where('company_id', session('user.company_id'))->where('cookbook_name', $data['cookbook_name'])->find()) {
                 $this->error('菜品套餐名称已经存在，请使用其它名称！');
             }
+            unset($data['cookbook']);
         }else{
 //            $this->assign('cookbook_types', Db::name('cookbook_type')->where('company_id', session('user.company_id'))->select());  //菜品套餐类别列表
             $this->assign('cookbook_meal_types', Db::name('cookbook_meal_type')->where('company_id', session('user.company_id'))->select());  //套餐列表
+            $this->assign('cookbook_list', Db::name('cookbook_base_info_list')->where('company_id', session('user.company_id'))->select());  //菜品列表
         }
     }
 
