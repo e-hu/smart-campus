@@ -23,7 +23,7 @@ class CookBook extends BasicAdmin {
     public $table = 'cookbook_base_info';
 
     /**
-     * 菜品列表
+     * 菜品套餐列表
      */
     public function index() {
         // 设置页面标题
@@ -61,10 +61,10 @@ class CookBook extends BasicAdmin {
     }
 
     /**
-     * 菜品添加
+     * 菜品套餐添加
      */
     public function add() {
-        LogService::write('订餐管理', '执行菜品添加操作');
+        LogService::write('订餐管理', '执行菜品套餐添加操作');
         $extendData = [];
         if ($this->request->isPost()) {
             $sqlstr = "exec [up_get_max_id] ?,?,?,?";
@@ -76,10 +76,10 @@ class CookBook extends BasicAdmin {
     }
 
     /**
-     * 菜品编辑
+     * 菜品套餐编辑
      */
     public function edit() {
-        LogService::write('订餐管理', '执行菜品编辑操作');
+        LogService::write('订餐管理', '执行菜品套餐编辑操作');
         return $this->_form($this->table, 'form','cookbook_no',['company_id'=> session('user.company_id')]);
     }
 
@@ -94,47 +94,47 @@ class CookBook extends BasicAdmin {
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where('cookbook_no', $data['cookbook_no'])->find()) {
 //                unset($data['cookbook_name']);
             } elseif (Db::name($this->table)->where('company_id', session('user.company_id'))->where('cookbook_name', $data['cookbook_name'])->find()) {
-                $this->error('菜品名称已经存在，请使用其它名称！');
+                $this->error('菜品套餐名称已经存在，请使用其它名称！');
             }
         }else{
-            $this->assign('cookbook_types', Db::name('cookbook_type')->where('company_id', session('user.company_id'))->select());  //菜品类别列表
+            $this->assign('cookbook_types', Db::name('cookbook_type')->where('company_id', session('user.company_id'))->select());  //菜品套餐类别列表
             $this->assign('cookbook_meal_types', Db::name('cookbook_meal_type')->where('company_id', session('user.company_id'))->select());  //套餐列表
         }
     }
 
     /**
-     * 删除菜品
+     * 删除菜品套餐
      */
     public function del() {
-        LogService::write('订餐管理', '执行删除菜品操作');
+        LogService::write('订餐管理', '执行删除菜品套餐操作');
         $where = [];
         $where['company_id'] = session('user.company_id');
         if (DataService::update($this->table,$where,'cookbook_no')) {
-            $this->success("菜品删除成功！", '');
+            $this->success("菜品套餐删除成功！", '');
         }
-        $this->error("菜品删除失败，请稍候再试！");
+        $this->error("菜品套餐删除失败，请稍候再试！");
     }
 
     /**
-     * 菜品禁用
+     * 菜品套餐禁用
      */
     public function forbid() {
-        LogService::write('订餐管理', '执行菜品禁用操作');
+        LogService::write('订餐管理', '执行菜品套餐禁用操作');
         if (DataService::update($this->table)) {
-            $this->success("菜品禁用成功！", '');
+            $this->success("菜品套餐禁用成功！", '');
         }
-        $this->error("菜品禁用失败，请稍候再试！");
+        $this->error("菜品套餐禁用失败，请稍候再试！");
     }
 
     /**
-     * 菜品启用
+     * 菜品套餐启用
      */
     public function resume() {
-        LogService::write('订餐管理', '执行菜品启用操作');
+        LogService::write('订餐管理', '执行菜品套餐启用操作');
         if (DataService::update($this->table)) {
-            $this->success("菜品启用成功！", '');
+            $this->success("菜品套餐启用成功！", '');
         }
-        $this->error("菜品启用失败，请稍候再试！");
+        $this->error("菜品套餐启用失败，请稍候再试！");
     }
 
 
