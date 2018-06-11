@@ -84,14 +84,14 @@
                 {/if}
                 {if auth("$classuri/del")}
                 <span class="text-explode">|</span>
-                <a data-update="{$vo.cookbook_no}" data-field='delete' data-action='{:url("$classuri/del")}'
+                <a data-update="{$vo.id}" data-field='delete' data-action='{:url("$classuri/del")}'
                    href="javascript:void(0)">删除</a>
                 {/if}
             </td>
         </tr>
         {/foreach}
         {if empty($list)}
-        <tr><td colspan="4" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+        <tr><td colspan="5" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
         {/if}
         </tbody>
     </table>
