@@ -29,6 +29,24 @@
 
     <div class="layui-form-item" id="cookbook">
         <label class="layui-form-label">选择菜品</label>
+        {if !empty($cookbook_list_choice)}
+        {foreach $cookbook_list_choice as $keyword=>$value}
+        <div class="layui-input-inline">
+            <select name="cookbook[]" lay-verify="" lay-search>
+                <option value="">直接选择或搜索选择</option>
+                {foreach $cookbook_list as $key=>$val}
+                {if !empty($cookbook_list_choice)&&$value['cookbook_list_no'] == $val.cookbook_no}
+                <option selected value="{$val.cookbook_no}">{$val.cookbook_name}</option>
+                {else}
+                <option value="{$val.cookbook_no}">{$val.cookbook_name}</option>
+                {/if}
+                {/foreach}
+            </select>
+        </div>
+        {/foreach}
+
+        {else}
+
         <div class="layui-input-inline">
             <select name="cookbook[]" lay-verify="" lay-search>
                 <option value="">直接选择或搜索选择</option>
@@ -40,19 +58,16 @@
         <div class="layui-input-inline">
             <select name="cookbook[]" lay-verify="" lay-search>
                 <option value="">直接选择或搜索选择</option>
-                {foreach $cookbook_list as $key=>$val}
                 <option value="{$val.cookbook_no}">{$val.cookbook_name}</option>
-                {/foreach}
             </select>
         </div>
         <div class="layui-input-inline">
             <select name="cookbook[]" lay-verify="" lay-search>
                 <option value="">直接选择或搜索选择</option>
-                {foreach $cookbook_list as $key=>$val}
                 <option value="{$val.cookbook_no}">{$val.cookbook_name}</option>
-                {/foreach}
             </select>
         </div>
+        {/if}
         <button type="button" class="layui-btn" onClick="addCook()">增加菜品</button>
     </div>
 
@@ -104,7 +119,7 @@
         </div>
         <div class="layui-inline">
             <label class="layui-form-label">套餐指定</label>
-            <div class="layui-input-inline">
+            <div class="layui-input-block">
                 {foreach $cookbook_meal_types as $key=>$cookbook_meal_type}
                 {if isset($vo.meal_id) and $vo.meal_id == $cookbook_meal_type.meal_id}
                 <input type="radio" checked name="meal_id" value="{$cookbook_meal_type.meal_id}"
