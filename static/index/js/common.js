@@ -35,6 +35,10 @@ var SCapiDic = {
     rechargeTypeList:'/index/mallapi/rechargeTypeList'+ran,
     getmydept: '/index/mallapi/getmydept'+ran,
     getmydeptdinner: '/index/mallapi/getmydeptdinner'+ran,
+    /*订餐分析*/
+    getmyanalysis: '/index/mallapi/getmyanalysis'+ran,
+    getAnalysisEmpList: '/index/mallapi/getAnalysisEmpList'+ran,
+
     getDeptEmpList: '/index/mallapi/getDeptEmpList'+ran,
     changePw:'/index/mallapi/changePw'+ran,
     logout:'/index/mallapi/logout'+ran,
