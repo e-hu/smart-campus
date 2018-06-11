@@ -182,13 +182,14 @@ class Cbdinnerinfo extends BasicAdmin
         if (DataService::update($this->table2, $where, 'id')) {
             $request = Request::instance();
             $ids = explode(',', $request->post('id', ''));
-            $where['a.id'] = ['in', $ids];
-            Db::table('emp_cookbook_dinner_info_modi')->alias('a')->where($where)->update(['checker2_id'=>session('user.id'),'checker2_datetime'=>date("Y-m-d H:i:s")]);
+            $where['id'] = ['in',$ids];
+            $data['a.id'] = ['in',$ids];
+            Db::table('emp_cookbook_dinner_info_modi')->where($where)->update(['checker2_id'=>session('user.id'),'checker2_datetime'=>date("Y-m-d H:i:s")]);
             $modi_list = Db::table('emp_cookbook_dinner_info_modi')
                 ->alias('a')
                 ->join('Employee_List b','a.emp_id = b.Emp_Id','left')
                 ->field('Emp_MircoMsg_Id')
-                ->where($where)->select();
+                ->where($data)->select();
             foreach ($modi_list as $val){
                 patchMSC($val['Emp_MircoMsg_Id']);
             }
