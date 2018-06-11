@@ -1,5 +1,12 @@
 {extend name='extra@admin/content'}
 
+{block name="button"}
+<div class="nowrap pull-right" style="margin-top:10px">
+    <button data-update data-action='{:url("$classuri/shenhe")}' data-field='check_status' data-value="4" class='layui-btn layui-btn-small'>一键审核</button>
+</div>
+
+{/block}
+
 {block name="content"}
 
 <!-- 表单搜索 开始 -->
@@ -38,7 +45,23 @@
                 </select>
             </div>
         </div>
-
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="status" class="input-sm form-control">
+                    <option value="">- 审核状态 -</option>
+                    <!--{if $Think.get.status eq 1}-->
+                    <option selected value="1">- 已审核 -</option>
+                    <!--{else}-->
+                    <option value="1">- 已审核 -</option>
+                    <!--{/if}-->
+                    <!--{if $Think.get.status eq 2}-->
+                    <option selected value="2">- 未审核 -</option>
+                    <!--{else}-->
+                    <option value="2">- 未审核 -</option>
+                    <!--{/if}-->
+                </select>
+            </div>
+        </div>
         <div class="col-xs-3">
             <div class="form-group">
                 <input type="text" name="Emp_Name" value="{$Think.get.Emp_Name|default=''}" placeholder="真实姓名"
@@ -100,9 +123,9 @@
     <table class="table table-hover">
         <thead>
         <tr>
-            <!--<th class='list-table-check-td'>-->
-            <!--<input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>-->
-            <!--</th>-->
+            <th class='list-table-check-td'>
+            <input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>
+            </th>
             <th class='text-center'>部门</th>
             <th class='text-center'>审核类型</th>
             <th class='text-center'>真实名称</th>
@@ -124,9 +147,13 @@
         <tbody>
         {foreach $list as $key=>$vo}
         <tr>
-            <!--<td class='list-table-check-td'>-->
-            <!--<input class="list-check-box" value='{$vo.canteen_no}' type='checkbox'/>-->
-            <!--</td>-->
+            {if auth("$classuri/shenhe") && $vo.check_status == '2'}
+            <td class='list-table-check-td'>
+            <input class="list-check-box" value='{$vo.id}' type='checkbox'/>
+            </td>
+            {else}
+            <td class='list-table-check-td'></td>
+            {/if}
             <td class='text-center'>{$vo.dept_name}</td>
             {if !empty($vo.source_id)}
             <td class='text-center'><span style='color:red'>退餐</span></td>
@@ -164,17 +191,9 @@
                 <a data-update="{$vo.id}" data-action='{:url("$classuri/shenhe")}' data-field='check_status'
                    data-value="4" href="javascript:void(0)">同意</a>
                 {/if}
-                <!--{if auth("$classuri/shenhe") && $vo.check_status < 2}-->
-                <!--<span class="text-explode">|</span>-->
-                <!--<a data-update="{$vo.id}" data-action='{:url("$classuri/shenhe")}' data-field='check_status'-->
-                   <!--data-value="4" href="javascript:void(0)">拒绝</a>-->
-                <!--{/if}-->
                 {if $vo.check_status == '4'}
                 <span style="color: green">已批准</span>
                 {/if}
-                <!--{if $vo.check_status == '3'}-->
-                <!--<span style="color: red">已拒绝</span>-->
-                <!--{/if}-->
             </td>
         </tr>
         {/foreach}

@@ -6,6 +6,7 @@ use controller\BasicAdmin;
 use service\LogService;
 use service\DataService;
 use think\Db;
+use think\Request;
 
 /**
  * 系统用户管理控制器
@@ -132,6 +133,12 @@ class Cbdinnerinfo extends BasicAdmin
             $db->where('source_id', 'null');
         }
 
+        if(!empty($get['status'])&&$get['status'] == '1'){
+            $db->where('check_status != 2');
+        }elseif(!empty($get['status'])&&$get['status'] == '2'){
+            $db->where('check_status', '2');
+        }
+
         if (isset($get['dinner_datetime']) && $get['dinner_datetime'] !== '') {
             list($start, $end) = explode('-', str_replace(' ', '', $get['dinner_datetime']));
             $db->whereBetween('a.dinner_datetime', ["{$start} 00:00:00", "{$end} 23:59:59"]);
@@ -173,13 +180,18 @@ class Cbdinnerinfo extends BasicAdmin
         $where = [];
         $where['company_id'] = session('user.company_id');
         if (DataService::update($this->table2, $where, 'id')) {
-            Db::table('emp_cookbook_dinner_info_modi')->where('id',$_POST['id'])->update(['checker2_id'=>session('user.id'),'checker2_datetime'=>date("Y-m-d H:i:s")]);
-            $modi_info = Db::table('emp_cookbook_dinner_info_modi')
+            $request = Request::instance();
+            $ids = explode(',', $request->post('id', ''));
+            $where['a.id'] = ['in', $ids];
+            Db::table('emp_cookbook_dinner_info_modi')->alias('a')->where($where)->update(['checker2_id'=>session('user.id'),'checker2_datetime'=>date("Y-m-d H:i:s")]);
+            $modi_list = Db::table('emp_cookbook_dinner_info_modi')
                 ->alias('a')
                 ->join('Employee_List b','a.emp_id = b.Emp_Id','left')
                 ->field('Emp_MircoMsg_Id')
-                ->where('a.id',$_POST['id'])->find();
-            patchMSC($modi_info['Emp_MircoMsg_Id']);
+                ->where($where)->select();
+            foreach ($modi_list as $val){
+                patchMSC($val['Emp_MircoMsg_Id']);
+            }
             $this->success("订单审核成功！", '');
         }
         $this->error("订单审核失败，请稍候再试！");
