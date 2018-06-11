@@ -6,6 +6,22 @@
 <form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
 
     <div class="row">
+
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="tag" class="input-sm form-control">
+                    <option value="">- 部门列表 -</option>
+                    <!--{foreach $tags as $key=>$tag}-->
+                    <!--{if $Think.get.tag eq $key}-->
+                    <option selected value="{$key}">{$tag.dept_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$tag.dept_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+
         <div class="col-xs-3">
             <div class="form-group">
                 <input type="text" name="Emp_Name" value="{$Think.get.Emp_Name|default=''}" placeholder="真实姓名"

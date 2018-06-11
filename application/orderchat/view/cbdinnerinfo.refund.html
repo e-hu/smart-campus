@@ -6,6 +6,39 @@
 <form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
 
     <div class="row">
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="tag" class="input-sm form-control">
+                    <option value="">- 部门列表 -</option>
+                    <!--{foreach $tags as $key=>$tag}-->
+                    <!--{if $Think.get.tag eq $key}-->
+                    <option selected value="{$key}">{$tag.dept_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$tag.dept_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+
+        <div class="col-xs-2">
+            <div class="form-group">
+                <select name="source_id" class="input-sm form-control">
+                    <option value="">- 审核类型 -</option>
+                    <!--{if $Think.get.source_id eq 1}-->
+                    <option selected value="1">- 退餐 -</option>
+                    <!--{else}-->
+                    <option value="1">- 退餐 -</option>
+                    <!--{/if}-->
+                    <!--{if $Think.get.source_id eq 2}-->
+                    <option selected value="2">- 补餐 -</option>
+                    <!--{else}-->
+                    <option value="2">- 补餐 -</option>
+                    <!--{/if}-->
+                </select>
+            </div>
+        </div>
+
         <div class="col-xs-3">
             <div class="form-group">
                 <input type="text" name="Emp_Name" value="{$Think.get.Emp_Name|default=''}" placeholder="真实姓名"
@@ -71,6 +104,7 @@
             <!--<input data-none-auto="" data-check-target='.list-check-box' type='checkbox'/>-->
             <!--</th>-->
             <th class='text-center'>部门</th>
+            <th class='text-center'>审核类型</th>
             <th class='text-center'>真实名称</th>
             <th class='text-center'>就餐日期</th>
             <th class='text-center'>餐厅名称</th>
@@ -94,6 +128,11 @@
             <!--<input class="list-check-box" value='{$vo.canteen_no}' type='checkbox'/>-->
             <!--</td>-->
             <td class='text-center'>{$vo.dept_name}</td>
+            {if !empty($vo.source_id)}
+            <td class='text-center'><span style='color:red'>退餐</span></td>
+            {else}
+            <td class='text-center'><span style='color:green'>补餐</span></td>
+            {/if}
             <td class='text-center'>{$vo.emp_name}</td>
             <td class='text-center'>{:date('Y-m-d',strtotime($vo['dinner_datetime']))}</td>
             <td class='text-center'>{$vo.canteen_name}</td>
@@ -108,13 +147,17 @@
             {elseif $vo.dinner_status == '2'}
             <td class='text-center'>已取餐</td>
             {else}
-            <td class='text-center'>无</td>
+            <td class='text-center'><span style='color:#ccc'>无</span></td>
             {/if}
             <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['dinner_createtime']))}</td>
             <td class='text-center'>{$vo.shenhe_name|default="<span style='color:#ccc'>无</span>"}</td>
             <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['check1_datetime']))}</td>
             <td class='text-center'>{$vo.username|default="<span style='color:#ccc'>无</span>"}</td>
+            {if $vo['checker2_datetime']}
             <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['checker2_datetime']))}</td>
+            {else}
+            <td class='text-center'><span style='color:#ccc'>无</span></td>
+            {/if}
             <td class='text-center nowrap'>
                 {if auth("$classuri/shenhe") && $vo.check_status == '2'}
                 <span class="text-explode">|</span>

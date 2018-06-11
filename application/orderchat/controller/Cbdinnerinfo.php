@@ -69,7 +69,10 @@ class Cbdinnerinfo extends BasicAdmin
                 $db->where('e.Emp_Name', 'like', "%{$get[$key]}%");
             }
         }
-
+        if (isset($get['tag']) && $get['tag'] !== '') {
+            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
+            $db->where('k.dept_no', $get['tag']);
+        }
         if (session('user.create_by') != '10001') {
             $db->where(' exists (select 1 from t_user_manager_dept_id b where a.canteen_no=b.dept_id and a.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }
@@ -92,6 +95,9 @@ class Cbdinnerinfo extends BasicAdmin
 
         $dinnerbases = Db::name('dinner_base_info')->where('company_id', session('company_id'))->column('dinner_flag,dinner_name');
         $this->assign('dinnerbases', $dinnerbases);
+
+        $tags = Db::name('dept_info')->where('company_id', session('company_id'))->column('dept_no,dept_name');
+        $this->assign('tags', $tags);
 
     }
 
@@ -117,8 +123,15 @@ class Cbdinnerinfo extends BasicAdmin
             ->join('system_user g', 'g.id = a.checker2_id and g.company_id = a.company_id', 'left')
             ->field('a.*,dept_name,canteen_name,cookbook_name,dinner_name,sale_window_name,e.emp_name,h.emp_name as shenhe_name,g.username')
             ->where(['a.company_id' => session('user.company_id'), 'e.Emp_Status' => '1','checker1_id'=>array('NEQ','null')])
-            ->order('check_status desc');
+            ->order('check_status asc');
         // 应用搜索条件
+
+        if(!empty($get['source_id'])&&$get['source_id'] == '1'){
+            $db->where('source_id is not null');
+        }elseif(!empty($get['source_id'])&&$get['source_id'] == '2'){
+            $db->where('source_id', 'null');
+        }
+
         if (isset($get['dinner_datetime']) && $get['dinner_datetime'] !== '') {
             list($start, $end) = explode('-', str_replace(' ', '', $get['dinner_datetime']));
             $db->whereBetween('a.dinner_datetime', ["{$start} 00:00:00", "{$end} 23:59:59"]);
@@ -137,8 +150,12 @@ class Cbdinnerinfo extends BasicAdmin
         }
         foreach (['Emp_Name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
-                $db->where('h.Emp_Name', 'like', "%{$get[$key]}%");
+                $db->where('e.Emp_Name', 'like', "%{$get[$key]}%");
             }
+        }
+        if (isset($get['tag']) && $get['tag'] !== '') {
+            //$db->where("concat(',',tagid_list,',') like :tag", ['tag' => "%,{$get['tag']},%"]);   //mysql存在contcat内置函数
+            $db->where('k.dept_no', $get['tag']);
         }
         if (session('user.create_by') != '10001') {
             $db->where(' exists (select 1 from t_user_manager_dept_id b where a.canteen_no=b.dept_id and a.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
