@@ -120,8 +120,6 @@ class CookBook extends BasicAdmin
         if ($this->request->isPost()) {
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where('cookbook_no', $data['cookbook_no'])->find()) {
                 unset($data['cookbook_name']);
-            } elseif (Db::name($this->table)->where('company_id', session('user.company_id'))->where('cookbook_name', $data['cookbook_name'])->find()) {
-                $this->error('菜品套餐名称已经存在，请使用其它名称！');
             }
             unset($data['cookbook']);
         } else {
