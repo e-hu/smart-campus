@@ -1,0 +1,84 @@
+{extend name='extra@admin/content'}
+
+{block name="button"}
+<div class="nowrap pull-right" style="margin-top:10px">
+    <button data-modal='{:url("$classuri/generate")}' data-title="生成周菜谱" class='layui-btn layui-btn-small'><i
+            class="layui-icon">&#xe608;</i>生成周菜谱
+    </button>
+</div>
+
+{/block}
+
+{block name="content"}
+
+<!-- 表单搜索 开始-->
+<form class="animated form-search" action="__SELF__" onsubmit="return false" method="get">
+
+    <div class="row">
+        <div class="col-xs-4">
+            <div class="form-group">
+                <select name="week_id" class="input-sm form-control">
+                    <option value="">- 周数列表 -</option>
+                    <!--{foreach $weeks as $key=>$week}-->
+                    <!--{if $Think.get.week_id eq $key}-->
+                    <option selected value="{$week.week_num}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}</option>
+                    <!--{else}-->
+                    <option value="{$week.week_num}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-3">
+            <div class="form-group">
+                <select name="canteen_no" class="input-sm form-control">
+                    <option value="">- 餐厅列表 -</option>
+                    <!--{foreach $canteens as $key=>$canteen}-->
+                    <!--{if $Think.get.canteen_no eq $key}-->
+                    <option selected value="{$key}">{$canteen.canteen_name}</option>
+                    <!--{else}-->
+                    <option value="{$key}">{$canteen.canteen_name}</option>
+                    <!--{/if}-->
+                    <!--{/foreach}-->
+                </select>
+            </div>
+        </div>
+        <div class="col-xs-1">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-white"><i class="fa fa-search"></i> 搜索</button>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- 表单搜索 结束-->
+
+<form onsubmit="return false;" data-auto="" method="POST">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class='text-center'>餐厅名称</th>
+            <th class='text-center'>周数</th>
+            <th class='text-center'>操作</th>
+        </tr>
+        </thead>
+        {foreach $list as $key=>$vo}
+        <tr>
+            <td class='text-center'>{$vo.canteen_name}</td>
+            <td class='text-center'>第{$vo.week_num}周 {$vo.start_datetime} - {$vo.end_datetime}</td>
+            <td class='text-center nowrap'>
+                {if auth("$classuri/edit")}
+                <span class="text-explode">|</span>
+                <a data-open='{:url("$classuri/edit")}?week_num={$vo.week_num}' href="javascript:void(0)">编辑周菜谱</a>
+                {/if}
+            </td>
+        </tr>
+        {/foreach}
+        {if empty($list)}
+        <tr>
+            <td colspan="3" style="text-align:center">没 有 记 录 了 哦 !</td>
+        </tr>
+        {/if}
+        </tbody>
+    </table>
+</form>
+{/block}

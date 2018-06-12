@@ -8,6 +8,9 @@
     <button data-update data-field='delete' data-action='{:url("$classuri/del")}'
             class='layui-btn layui-btn-small layui-btn-danger'><i class='fa fa-remove'></i> 删除菜品
     </button>
+    <button type="button" class="layui-btn layui-btn-small" id="upload">
+        <i class="layui-icon">&#xe67c;</i>批量上传菜品
+    </button>
 </div>
 
 {/block}
@@ -97,4 +100,23 @@
     </table>
     {if isset($page)}<p>{$page}</p>{/if}
 </form>
+<script>
+    layui.use('upload', function () {
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#upload' //绑定元素
+            , url: '/report/' //上传接口
+            , done: function (res) {
+                //上传完毕回调
+                layer.msg('成功');
+            }
+            , error: function () {
+                //请求异常回调
+                layer.msg('失败');
+            }
+        });
+    });
+</script>
 {/block}
