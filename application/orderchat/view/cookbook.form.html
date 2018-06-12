@@ -58,13 +58,17 @@
         <div class="layui-input-inline">
             <select name="cookbook[]" lay-verify="" lay-search>
                 <option value="">直接选择或搜索选择</option>
+                {foreach $cookbook_list as $key=>$val}
                 <option value="{$val.cookbook_no}">{$val.cookbook_name}</option>
+                {/foreach}
             </select>
         </div>
         <div class="layui-input-inline">
             <select name="cookbook[]" lay-verify="" lay-search>
                 <option value="">直接选择或搜索选择</option>
+                {foreach $cookbook_list as $key=>$val}
                 <option value="{$val.cookbook_no}">{$val.cookbook_name}</option>
+                {/foreach}
             </select>
         </div>
         {/if}
