@@ -35,7 +35,7 @@
             <select name="cookbook[]" lay-verify="" lay-search>
                 <option value="">直接选择或搜索选择</option>
                 {foreach $cookbook_list as $key=>$val}
-                {if !empty($cookbook_list_choice)&&$value['cookbook_list_no'] == $val.cookbook_no}
+                {if $value['cookbook_list_no'] == $val.cookbook_no}
                 <option selected value="{$val.cookbook_no}">{$val.cookbook_name}</option>
                 {else}
                 <option value="{$val.cookbook_no}">{$val.cookbook_name}</option>

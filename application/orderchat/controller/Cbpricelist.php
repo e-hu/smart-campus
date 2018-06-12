@@ -76,12 +76,11 @@ class CbPricelist extends BasicAdmin
             if(empty($data)){
                 $this->error('数据不存在');
             }
-            $json = [];
+            $list = [];
             foreach($data[0] as $val){
-                $json[$val['start_datetime']][$val['dinner_name']][] = $val;
+                $list[$val['week_name']][$val['dinner_name']][$val['meal_id']] = $val;
             }
-            print_r($json);exit;
-            $this->assign('list',  json);
+            $this->assign('list',  $list);
         }else{
             print_r($_POST);exit;
         }
