@@ -91,6 +91,8 @@ class CookBooklist extends BasicAdmin {
     public function _form_filter(&$data) {
         if ($this->request->isPost()) {
             if (Db::name($this->table)->where('company_id', session('user.company_id'))->where('cookbook_name', $data['cookbook_name'])->find()) {
+                unset($data['cookbook_name']);
+            }else if(Db::name($this->table)->where('company_id', session('user.company_id'))->where('cookbook_name', $data['cookbook_name'])->find()) {
                 $this->error('菜品名称已经存在，请使用其它名称！');
             }
         }else{

@@ -68,8 +68,12 @@
             <td class='text-center nowrap'>
                 {if auth("$classuri/edit")}
                 <span class="text-explode">|</span>
-                <a data-open='{:url("$classuri/edit")}?week_num={$vo.week_num}' href="javascript:void(0)">编辑周菜谱</a>
+                <a data-open='{:url("$classuri/edit")}?week_num={$vo.week_num}&canteen_no={$vo.canteen_no}' href="javascript:void(0)">编辑</a>
                 {/if}
+                <!--{if auth("$classuri/copy")}-->
+                <!--<span class="text-explode">|</span>-->
+                <!--<a data-open='{:url("$classuri/copy")}?week_num={$vo.week_num}&canteen_no={$vo.canteen_no}' href="javascript:void(0)">复制</a>-->
+                <!--{/if}-->
             </td>
         </tr>
         {/foreach}

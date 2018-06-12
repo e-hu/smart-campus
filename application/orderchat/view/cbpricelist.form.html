@@ -1,7 +1,7 @@
 <form class="layui-form layui-box" style='padding:20px 30px 20px 30px' action="__SELF__" data-auto="true" method="post">
 
     <table class="layui-table">
-        <caption style="text-align: center;font-size: 24px;">技师学院17学年第二学期学生菜单 第14周（6.4——6.8）</caption>
+        <caption style="text-align: center;font-size: 24px;">学生菜单 一餐厅 第14周（6.4——6.8）</caption>
         <colgroup>
             <col width="100">
             <col width="50">
@@ -16,9 +16,10 @@
         </tr>
         </thead>
         <tbody>
+        {foreach $list as $a=>$b}
         <tr>
-            <td>周一</td>
-            <td>中餐</td>
+            <td>{$list.$a}</td>
+            <td>{$list.$a.dinner_name}</td>
             {foreach $meals as $val}
             <td id="{$val.meal_id}">
                 <select name="cookbook_no[]" lay-verify="" lay-search lay-filter="cookbook_no[]">
@@ -27,39 +28,10 @@
                     <option value="{$value.cookbook_no}">[{$value.cookbook_name}] [{$value.cookbook_info}]</option>
                     <?php endforeach; ?>
                 </select>
-                <div class="layui-input-inline" style="width: 180px;">
-                    <input type="text" name="price" placeholder="请输入价格" value="{$val.meal_base_price}" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-input-inline" style="width: 180px;">
-                    <input type="text" name="count" placeholder="请输入限制数量" value="10000" autocomplete="off" class="layui-input">
-                </div>
-                <select name="cookbook_no[]" lay-verify="" lay-search lay-filter="cookbook_no[]">
-                    <option value="">直接选择或搜索选择</option>
-                    <?php foreach(${'cookbooks'.$val['meal_id']} as $value): ?>
-                    <option value="{$value.cookbook_no}">[{$value.cookbook_name}] [{$value.cookbook_info}]</option>
-                    <?php endforeach; ?>
-                </select>
-                <div class="layui-input-inline" style="width: 180px;">
-                    <input type="text" name="price" placeholder="请输入价格" value="{$val.meal_base_price}" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-input-inline" style="width: 180px;">
-                    <input type="text" name="count" placeholder="请输入限制数量" value="10000" autocomplete="off" class="layui-input">
-                </div>
-                <select name="cookbook_no[]" lay-verify="" lay-search lay-filter="cookbook_no[]">
-                    <option value="">直接选择或搜索选择</option>
-                    <?php foreach(${'cookbooks'.$val['meal_id']} as $value): ?>
-                    <option value="{$value.cookbook_no}">[{$value.cookbook_name}] [{$value.cookbook_info}]</option>
-                    <?php endforeach; ?>
-                </select>
-                <div class="layui-input-inline" style="width: 180px;">
-                    <input type="text" name="price" placeholder="请输入价格" value="{$val.meal_base_price}" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-input-inline" style="width: 180px;">
-                    <input type="text" name="count" placeholder="请输入限制数量" value="10000" autocomplete="off" class="layui-input">
-                </div>
             </td>
             {/foreach}
         </tr>
+        {/foreach}
         </tbody>
     </table>
 

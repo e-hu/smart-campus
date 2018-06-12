@@ -70,6 +70,21 @@ class CbPricelist extends BasicAdmin
     public function edit()
     {
         LogService::write('订餐管理', '执行周菜谱编辑操作');
+        if($this->request->isGet()){
+            $sqlstr = "exec [up_canteen_week_detail] ?,?,?,?";
+            $data = Db::query($sqlstr,[session('company_id'),$_GET['canteen_no'],$_GET['week_num'],session('user.id')]);
+            if(empty($data)){
+                $this->error('数据不存在');
+            }
+            $json = [];
+            foreach($data[0] as $val){
+                $json[$val['start_datetime']][$val['dinner_name']][] = $val;
+            }
+            print_r($json);exit;
+            $this->assign('list',  json);
+        }else{
+            print_r($_POST);exit;
+        }
         return $this->_form($this->table, 'form', 'id');
     }
 
