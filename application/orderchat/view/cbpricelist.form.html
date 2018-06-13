@@ -1,7 +1,12 @@
 <form class="layui-form layui-box" style='padding:20px 30px 20px 30px' action="__SELF__" data-auto="true" method="post">
-
+    <input type="hidden" name="canteen_no" value="{$canteens.canteen_no}">
+    <input type="hidden" name="week_num" value="{$weeks.week_num}">
+    <input type="hidden" name="start_datetime" value="{$weeks.start_datetime}">
+    <input type="hidden" name="end_datetime" value="{$weeks.end_datetime}">
     <table class="layui-table">
-        <caption style="text-align: center;font-size: 24px;">学生菜单 一餐厅 第14周（6.4——6.8）</caption>
+        <caption style="text-align: center;font-size: 24px;">学生菜单 {$canteens.canteen_name}
+            第{$weeks.week_num}周（{$weeks.start_datetime}——{$weeks.end_datetime}）
+        </caption>
         <colgroup>
             <col width="100">
             <col width="50">
@@ -23,11 +28,12 @@
             <td>{$c}</td>
             {foreach $meals as $val}
             <td id="{$val.meal_id}">
-                <select name="cookbook_no[]" lay-verify="" lay-search lay-filter="cookbook_no[]">
+                <select name="{$a}{$c}{$val.meal_id}" lay-verify="" lay-search lay-filter="cookbook_no[]">
                     <option value="">直接选择或搜索选择</option>
                     <?php foreach(${'cookbooks'.$val['meal_id']} as $value): ?>
                     {if !empty($d[$val.meal_id]['cookbook_no']) and $d[$val.meal_id]['cookbook_no'] == $value['cookbook_no']}
-                    <option selected value="{$value.cookbook_no}">[{$value.cookbook_name}] [{$value.cookbook_info}]</option>
+                    <option selected value="{$value.cookbook_no}">[{$value.cookbook_name}] [{$value.cookbook_info}]
+                    </option>
                     {else}
                     <option value="{$value.cookbook_no}">[{$value.cookbook_name}] [{$value.cookbook_info}]</option>
                     {/if}
