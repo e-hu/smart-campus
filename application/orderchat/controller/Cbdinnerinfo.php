@@ -123,7 +123,7 @@ class Cbdinnerinfo extends BasicAdmin
             ->join('Employee_list h', 'h.emp_id = a.checker1_id and a.company_id = h.company_id', 'left')
             ->join('system_user g', 'g.id = a.checker2_id and g.company_id = a.company_id', 'left')
             ->field('a.*,dept_name,canteen_name,cookbook_name,dinner_name,sale_window_name,e.emp_name,h.emp_name as shenhe_name,g.username')
-            ->where(['a.company_id' => session('user.company_id'), 'e.Emp_Status' => '1','checker1_id'=>array('NEQ','null')])
+            ->where(['a.company_id' => session('user.company_id'), 'e.Emp_Status' => '1'])
             ->order('check_status asc');
         // 应用搜索条件
 
@@ -134,9 +134,9 @@ class Cbdinnerinfo extends BasicAdmin
         }
 
         if(!empty($get['status'])&&$get['status'] == '1'){
-            $db->where('check_status != 2');
+            $db->where('a.check_status != 2');
         }elseif(!empty($get['status'])&&$get['status'] == '2'){
-            $db->where('check_status', '2');
+            $db->where('a.check_status = 2');
         }
 
         if (isset($get['dinner_datetime']) && $get['dinner_datetime'] !== '') {

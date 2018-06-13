@@ -194,6 +194,9 @@
                 {if $vo.check_status == '4'}
                 <span style="color: green">已批准</span>
                 {/if}
+                {if $vo.check_status == '1'}
+                <span style="color: green">待部门审核</span>
+                {/if}
             </td>
         </tr>
         {/foreach}
