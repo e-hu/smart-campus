@@ -97,6 +97,10 @@ class CbPricelist extends BasicAdmin
                 foreach ($date as $val) {
                     $week[] = '周' . $weekarray[date("w", strtotime($val))];
                 }
+                $date_time = [];
+                foreach ($date as $val){
+                    $date_time['周' . $weekarray[date("w", strtotime($val))]] = $val;
+                }
                 $canteen_no = $_POST['canteen_no'];
 
                 $dinner_list = Db::table('dinner_base_info')->where('company_id', session('company_id'))->select();
@@ -112,7 +116,7 @@ class CbPricelist extends BasicAdmin
                                 $data['cookbook_no'] = $_POST[$val . $value['dinner_name'] . $meal['meal_id']];
                                 $cookbook_info =  Db::table('cookbook_base_info')->where(['cookbook_no'=>$data['cookbook_no'],'company_id'=>session('company_id')])->find();
                                 $data['cookbook_price'] = $cookbook_info['price'];
-                                $data['sale_datetime'] = $cookbook_info['start_datetime'];
+                                $data['sale_datetime'] = $date_time[$val];
                                 $price_id = Db::query('select dbo.a_get_datetimestrguid()');
                                 $data['price_id'] = $price_id[0][''];
                                 $data['status'] = '1';
