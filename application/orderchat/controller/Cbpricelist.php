@@ -124,7 +124,11 @@ class CbPricelist extends BasicAdmin
                                 $data['dinner_flag'] =$value['dinner_flag'];
                                 $data['cookbook_info'] = $cookbook_info['cookbook_info'];
                                 $data['company_id'] = session('company_id');
+                                $data['meal_id'] = $meal['meal_id'];
                                 Db::table('canteen_cookbook_price')->insert($data);
+                            }else{
+                                Db::table('canteen_cookbook_price')->where(['company_id'=>session('company_id'),'canteen_no'=>$canteen_no,'sale_datetime'=>$date_time[$val]
+                                    ,'dinner_flag'=>$value['dinner_flag'],'meal_id'=>$meal['meal_id']])->delete();
                             }
                         }
                     }
