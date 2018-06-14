@@ -74,7 +74,7 @@ class Recharge extends BasicAdmin
      */
     protected function _data_filter(&$list)
     {
-        $tags = Db::name('dept_info')->where('company_id', session('company_id'))->column('dept_no,dept_name');
+        $tags = Db::name('dept_info')->where('company_id', session('user.company_id'))->column('dept_no,dept_name');
         $this->assign('tags', $tags);
     }
 
@@ -141,7 +141,7 @@ class Recharge extends BasicAdmin
         if (!$this->request->isPost()) {
             $this->title = '账户充值';
             $this->assign('title', $this->title);
-            $tags = Db::name('cookbook_meal_type')->where('company_id', session('company_id'))->select();
+            $tags = Db::name('cookbook_meal_type')->where('company_id', session('user.company_id'))->select();
             $this->assign('tags', $tags);
             return $this->fetch('form', ['vo' => $formdata]);
         }
@@ -389,7 +389,7 @@ class Recharge extends BasicAdmin
     {
         // 设置页面标题
         $this->title = '充值统计报表管理';
-        $company_id = session('company_id');
+        $company_id = session('user.company_id');
         $user_id = session('user.id');
 
         $reportType = Db::name('report_param_detail')->where(['company_id' => $company_id, 'report_type' => '充值统计报表'])->column('report_id,report_name');
@@ -444,7 +444,7 @@ class Recharge extends BasicAdmin
         if (!isset($_GET['start']) && !isset($_GET['end'])&& !isset($_GET['report_id']) && !isset($_GET['keyword'])) {
             $this->error('条件不正确');
         }
-        $company_id = session('company_id');
+        $company_id = session('user.company_id');
         $user_id = session('user.id');
         $start = $_GET['start'];
         $end = $_GET['end'];

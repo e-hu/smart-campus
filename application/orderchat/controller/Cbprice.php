@@ -69,13 +69,13 @@ class CbPrice extends BasicAdmin
      */
     protected function _data_filter(&$list)
     {
-        $canteens = Db::name('canteen_base_info')->where('company_id', session('company_id'));
+        $canteens = Db::name('canteen_base_info')->where('company_id', session('user.company_id'));
         if (session('user.create_by') != '10001') {
             $canteens->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }
         $this->assign('canteens', $canteens->column('canteen_no,canteen_name'));
 
-        $dinnerbases = Db::name('dinner_base_info')->where('company_id', session('company_id'))->column('dinner_flag,dinner_name');
+        $dinnerbases = Db::name('dinner_base_info')->where('company_id', session('user.company_id'))->column('dinner_flag,dinner_name');
         $this->assign('dinnerbases', $dinnerbases);
 
     }

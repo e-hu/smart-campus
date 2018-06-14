@@ -85,7 +85,7 @@ class Cookpush extends BasicAdmin
      */
     protected function _data_filter(&$list)
     {
-        $tags = Db::name('cookbook_type')->where('company_id', session('company_id'))->column('cookbook_typeid,cookbook_typename');
+        $tags = Db::name('cookbook_type')->where('company_id', session('user.company_id'))->column('cookbook_typeid,cookbook_typename');
         $company_lists = Db::name('company_list')->where('status', 1)->column('company_id,Company_Name');
         $this->assign('tags', $tags);
         $this->assign('company_lists', $company_lists);
@@ -113,7 +113,7 @@ class Cookpush extends BasicAdmin
         LogService::write('订餐管理', '执行菜品推送启用操作');
         if (empty($_GET['company_id']))
             $this->error("推送公司不存在，请稍候再试！");
-        $data = Db::name($this->table)->where(['company_id' => session('company_id'), 'cookbook_no' => $_GET['cookbook_no']])->find();
+        $data = Db::name($this->table)->where(['company_id' => session('user.company_id'), 'cookbook_no' => $_GET['cookbook_no']])->find();
         $data['source_flag'] = '2';
         $data['company_id'] = $_GET['company_id'];
         unset($data['ROW_NUMBER']);

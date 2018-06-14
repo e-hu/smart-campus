@@ -55,7 +55,7 @@ class CookBooklist extends BasicAdmin {
      * @param type $list
      */
     protected function _data_filter(&$list) {
-        $tags = Db::name('cookbook_type')->where('company_id', session('company_id'))->column('cookbook_typeid,cookbook_typename');
+        $tags = Db::name('cookbook_type')->where('company_id', session('user.company_id'))->column('cookbook_typeid,cookbook_typename');
         $this->assign('tags', $tags);
     }
 

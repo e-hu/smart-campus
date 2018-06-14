@@ -32,7 +32,7 @@ class Report extends BasicAdmin
     {
         // 设置页面标题
         $this->title = '统计报表管理';
-        $company_id = session('company_id');
+        $company_id = session('user.company_id');
         $user_id = session('user.id');
 
         $reportType = Db::name($this->table)->where(['company_id' => $company_id, 'report_type' => '套餐统计报表'])->column('report_id,report_name');
@@ -87,7 +87,7 @@ class Report extends BasicAdmin
         if (!isset($_GET['start']) && !isset($_GET['end'])&& !isset($_GET['report_id']) && !isset($_GET['keyword'])) {
             $this->error('条件不正确');
         }
-        $company_id = session('company_id');
+        $company_id = session('user.company_id');
         $user_id = session('user.id');
         $start = $_GET['start'];
         $end = $_GET['end'];

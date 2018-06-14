@@ -67,7 +67,7 @@ class Member extends BasicAdmin
      */
     protected function _data_filter(&$list)
     {
-        $tags = Db::name('dept_info')->where('company_id', session('company_id'))->column('dept_no,dept_name');
+        $tags = Db::name('dept_info')->where('company_id', session('user.company_id'))->column('dept_no,dept_name');
         $this->assign('tags', $tags);
     }
 
