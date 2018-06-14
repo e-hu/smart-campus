@@ -47,11 +47,11 @@ class CbPricelist extends BasicAdmin
             $week_id = ' ';
         }
         $sqlstr = "exec [up_canteen_week_count] ?,?,?,?";
-        $return = Db::query($sqlstr, [session('company_id'), $canteen_no, $week_id, session('user.id')]);
+        $return = Db::query($sqlstr, [session('user.company_id'), $canteen_no, $week_id, session('user.id')]);
         if (empty($return[0])) {
             $this->error('数据不存在');
         }
-        $canteens = Db::name('canteen_base_info')->where('company_id', session('company_id'));
+        $canteens = Db::name('canteen_base_info')->where('company_id', session('user.company_id'));
         if (session('user.create_by') != '10001') {
             $canteens->where(' exists (select 1 from t_user_manager_dept_id b where canteen_base_info.canteen_no=b.dept_id and canteen_base_info.company_id=b.company_id and u_id=:emp_id)')->bind(['emp_id' => session('user.id')]);
         }
@@ -72,7 +72,7 @@ class CbPricelist extends BasicAdmin
         LogService::write('订餐管理', '执行周菜谱编辑操作');
         if ($this->request->isGet()) {
             $sqlstr = "exec [up_canteen_week_detail] ?,?,?,?";
-            $data = Db::query($sqlstr, [session('company_id'), $_GET['canteen_no'], $_GET['week_num'], session('user.id')]);
+            $data = Db::query($sqlstr, [session('user.company_id'), $_GET['canteen_no'], $_GET['week_num'], session('user.id')]);
             if (empty($data)) {
                 $this->error('数据不存在');
             }
@@ -80,7 +80,7 @@ class CbPricelist extends BasicAdmin
             foreach ($data[0] as $val) {
                 $list[$val['week_name']][$val['dinner_name']][$val['meal_id']] = $val;
             }
-            $canteens = Db::name('canteen_base_info')->where(['canteen_no' => $_GET['canteen_no'], 'company_id' => session('company_id')])->find();
+            $canteens = Db::name('canteen_base_info')->where(['canteen_no' => $_GET['canteen_no'], 'company_id' => session('user.company_id')])->find();
             $weeks = Db::name('week_day_list')->where(['week_num' => $_GET['week_num']])->find();
             $this->assign('canteens', $canteens);
             $this->assign('weeks', $weeks);
@@ -103,22 +103,20 @@ class CbPricelist extends BasicAdmin
                 }
                 $canteen_no = $_POST['canteen_no'];
 
-                $dinner_list = Db::table('dinner_base_info')->where('company_id', session('company_id'))->select();
-                $meal_list = Db::table('cookbook_meal_type')->where(['company_id' => session('company_id'), 'meal_flag' => '0'])->select();
-
-
+                $dinner_list = Db::table('dinner_base_info')->where('company_id', session('user.company_id'))->order('dinner_flag asc')->select();
+                $meal_list = Db::table('cookbook_meal_type')->where(['company_id' => session('user.company_id'), 'meal_flag' => '0'])->select();
                 foreach ($week as $val) {
                     foreach ($dinner_list as $value) {
                         foreach ($meal_list as $meal) {
-                            if (!empty($_POST[$val . $value['dinner_name'] . $meal['meal_id']])) {
-                                $price_info = Db::table('canteen_cookbook_price')->where(['sale_datetime'=> $date_time[$val],'company_id'=>session('company_id'),'canteen_no'=>$canteen_no,'cookbook_no'=>$_POST[$val . $value['dinner_name'] . $meal['meal_id']],'status'=>'1','dinner_flag'=>$value['dinner_flag'],'meal_id'=>$meal['meal_id']])->find();
+                            if (isset($_POST[$val.$value['dinner_name'].$meal['meal_id']])) {
+                                $price_info = Db::table('canteen_cookbook_price')->where(['sale_datetime'=> $date_time[$val],'company_id'=>session('user.company_id'),'canteen_no'=>$canteen_no,'cookbook_no'=>$_POST[$val . $value['dinner_name'] . $meal['meal_id']],'status'=>'1','dinner_flag'=>$value['dinner_flag'],'meal_id'=>$meal['meal_id']])->find();
                                 if(!empty($price_info)){
-                                   Db::table('canteen_cookbook_price')->where(['sale_datetime'=> $date_time[$val],'company_id'=>session('company_id'),'canteen_no'=>$canteen_no,'cookbook_no'=>$_POST[$val . $value['dinner_name'] . $meal['meal_id']],'status'=>'1','dinner_flag'=>$value['dinner_flag'],'meal_id'=>$meal['meal_id']])->delete();
+                                   Db::table('canteen_cookbook_price')->where(['sale_datetime'=> $date_time[$val],'company_id'=>session('user.company_id'),'canteen_no'=>$canteen_no,'cookbook_no'=>$_POST[$val . $value['dinner_name'] . $meal['meal_id']],'status'=>'1','dinner_flag'=>$value['dinner_flag'],'meal_id'=>$meal['meal_id']])->delete();
                                 }
                                 $data = [];
                                 $data['canteen_no'] = $canteen_no;
-                                $data['cookbook_no'] = $_POST[$val . $value['dinner_name'] . $meal['meal_id']];
-                                $cookbook_info =  Db::table('cookbook_base_info')->where(['cookbook_no'=>$data['cookbook_no'],'company_id'=>session('company_id')])->find();
+                                $data['cookbook_no'] = $_POST[$val.$value['dinner_name'].$meal['meal_id']];
+                                $cookbook_info =  Db::table('cookbook_base_info')->where(['cookbook_no'=>$data['cookbook_no'],'company_id'=>session('user.company_id')])->find();
                                 $data['cookbook_price'] = $cookbook_info['price'];
                                 $data['sale_datetime'] = $date_time[$val];
                                 $price_id = Db::query('select dbo.a_get_datetimestrguid()');
@@ -127,11 +125,11 @@ class CbPricelist extends BasicAdmin
                                 $data['price_flag'] = $cookbook_info['price_flag'];
                                 $data['dinner_flag'] =$value['dinner_flag'];
                                 $data['cookbook_info'] = $cookbook_info['cookbook_info'];
-                                $data['company_id'] = session('company_id');
+                                $data['company_id'] = session('user.company_id');
                                 $data['meal_id'] = $meal['meal_id'];
                                 Db::table('canteen_cookbook_price')->insert($data);
                             }else{
-                                Db::table('canteen_cookbook_price')->where(['company_id'=>session('company_id'),'canteen_no'=>$canteen_no,'sale_datetime'=>$date_time[$val]
+                                Db::table('canteen_cookbook_price')->where(['company_id'=>session('user.company_id'),'canteen_no'=>$canteen_no,'sale_datetime'=>$date_time[$val]
                                     ,'dinner_flag'=>$value['dinner_flag'],'status'=>'1','meal_id'=>$meal['meal_id']])->delete();
                             }
                         }
