@@ -29,7 +29,7 @@
             {foreach $meals as $val}
             <td id="{$val.meal_id}">
                 <select name="{$a}{$c}{$val.meal_id}" lay-verify="" lay-search lay-filter="cookbook_no[]">
-                    <option value="">直接选择或搜索选择</option>
+                    <option value=""></option>
                     <?php foreach(${'cookbooks'.$val['meal_id']} as $value): ?>
                     {if !empty($d[$val.meal_id]['cookbook_no']) and $d[$val.meal_id]['cookbook_no'] == $value['cookbook_no']}
                     <option selected value="{$value.cookbook_no}">[{$value.cookbook_name}] [{$value.cookbook_info}]

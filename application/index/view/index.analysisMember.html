@@ -5,24 +5,22 @@
             <p class='f pl10'>{{sale_datetime}} [{{dept_name}}] [{{dinner_name}}]</p>
         </li>
     </ul>
-    <ul class="bgf clear SSheader W mt50">
-        <li class="hl50 F_ bbd bgf tc bgdefault cf">
-            <p class='C4'>真实姓名</p>
-            <p class='C4'>联系电话</p>
-            <p class='C4'>账户余额</p>
+    <ul class="tc bgf SSorder bgf clear bbe W mt50 SSheader">
+        <li v-for="item in mealTypeList" class="h40 lh40 C4"
+            :class="{'Spactive': meal_type == item.meal_short_name}" @click='changeSp(item.meal_short_name)'
+            value="{{item.meal_short_name}}">
+            <div>{{item.meal_short_name}}</div>
         </li>
     </ul>
-    <div class="tc pt150" v-if="memberGetCount == '0'">
+    <div class="tc pt150" v-if="mealDeptList == ''">
         <img src="__PUBLIC__/static/index/images/menu_st.png" class="h80 lh80 mb5">
-        <p class="c9 mb15">订餐人员管理空空如也！</p>
+        <p class="c9 mb15">部门分析详情空空如也！</p>
         <button class="bgdefault cf p10-20 r4" onclick="openWin('/index/index',{})">去其他日期选购订餐</button>
     </div>
     <div v-else class="W H scroll mt100 oh">
-        <ul class="bgf clear" v-for="item in memberDeptList">
-            <li class="hl50 F_ bbd bgf tc fr5" @click="deptCart(sale_datetime,item.emp_id,dinner_flag)">
-                <p class="C4">{{item.emp_name}}</p>
-                <p class="C4">{{item.default_tel}}</p>
-                <p class="C4">{{item.account_reamin_money}}</p>
+        <ul class="bgf clear">
+            <li class="hl50 F_ bbd bgf tc fr5">
+                <p class="C4 bgf bbd" v-for="item in mealDeptList">{{item.dept_name}}</p>
             </li>
         </ul>
     </div>
@@ -32,30 +30,28 @@
 <script type="text/javascript">
     window.onload = function () {
         var data = {
-            memberDeptList: [],
-            memberGetCount: '0',
+            mealDeptList: [],
             sale_datetime: getUrlParam('sale_datetime'),
             dept_name: '',
             dinner_name: '',
-            dinner_flag:getUrlParam('dinner_flag'),
+            dinner_flag: getUrlParam('dinner_flag'),
+            mealTypeList: [],
+            meal_type: '',
+            dept_id: getUrlParam('dept_id'),
         };
         new Vue({
             el: '#app',
             data: data,
             methods: {
-                deptCart: function (sale_datetime, emp_id,dinner_flag) {  //跳转函数
-                    openWin('/index/index/deptCart', {day: sale_datetime, emp_id: emp_id, dinner_flag: dinner_flag});
-                },
-                initDeptObj: function () {
+                initMealObj: function () {
                     var self = this;
                     $.ajax({
-                        url: SCapiDic.getAnalysisEmpList,
+                        url: SCapiDic.getAnalysisEmpMealList,
                         type: "POST",
                         dataType: "json",
-                        data: {
-                            sale_datetime: getUrlParam('sale_datetime'),
-                            dinner_flag: getUrlParam('dinner_flag'),
-                            dept_id: getUrlParam('dept_id')
+                        data:{
+                            dinner_flag: self.dinner_flag,
+                            dept_id: self.dept_id,
                         },
                         success: function (ret) {
                             if (ret.code == '0') {
@@ -63,18 +59,42 @@
                                     openWin(ret.url, {});
                                 });
                             } else {
-                                self.memberDeptList = ret.memberDeptList;
-                                self.memberGetCount = self.memberDeptList.length;
-                                self.dept_name = ret.dept_name;
-                                self.dinner_name = ret.dinner_name;
+                                self.mealTypeList = ret['meal_list'];
+                                self.dept_name = ret['dept_name'];
+                                self.dinner_name = ret['dinner_name'];
+                                self.meal_type = ret['meal_list'][0]['meal_short_name'];
+                                self.initDeptObj(self.meal_type);
                             }
                         }
                     });
-                }
+                },
+                initDeptObj: function (meal_type) {
+                    var self = this;
+                    $.ajax({
+                        url: SCapiDic.getAnalysisEmpList,
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            meal_short_name: meal_type,
+                            date_str: self.sale_datetime,
+                            dinner_flag: self.dinner_flag,
+                            dept_id: self.dept_id,
+                        },
+                        success: function (ret) {
+                                self.mealDeptList = ret;
+                        }
+                    });
+                },
+                changeSp: function (Sp) {
+                    var self = this;
+                    self.meal_type = Sp;
+                    self.mealDeptList = [];
+                    self.initDeptObj(Sp);
+                },
             },
             mounted: function () {
                 this.$nextTick(function () {
-                    this.initDeptObj();
+                    this.initMealObj();
                 })
             }
         });

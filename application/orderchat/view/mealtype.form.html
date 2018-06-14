@@ -28,8 +28,8 @@
     </div>
 
     <div class="layui-form-item">
-        <label class="layui-form-label">计费模式</label>
-        <div class="layui-input-inline">
+        <label class="layui-form-label label-required">计费模式</label>
+        <div class="layui-input-block">
             {if isset($vo.meal_flag) and $vo.meal_flag == '0'}
             <input type="radio" checked name="meal_flag" value="0" title="按次计费">
             <input type="radio" name="meal_flag" value="1" title="金额计费">
@@ -39,6 +39,33 @@
             {else}
             <input type="radio" name="meal_flag" value="0" title="按次计费">
             <input type="radio" name="meal_flag" value="1" title="金额计费">
+            {/if}
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label label-required">套餐分类简码</label>
+        <div class="layui-input-block">
+            {if isset($vo.meal_short_name) and $vo.meal_short_name == 'A'}
+            <input type="radio" name="meal_short_name" value="" title="无">
+            <input type="radio" checked name="meal_short_name" value="A" title="A">
+            <input type="radio" name="meal_short_name" value="B" title="B">
+            <input type="radio" name="meal_short_name" value="C" title="C">
+            {elseif isset($vo.meal_short_name) and $vo.meal_short_name == 'B'}
+            <input type="radio" name="meal_short_name" value="" title="无">
+            <input type="radio" name="meal_short_name" value="A" title="A">
+            <input type="radio" checked name="meal_short_name" value="B" title="B">
+            <input type="radio" name="meal_short_name" value="C" title="C">
+            {elseif  isset($vo.meal_short_name) and $vo.meal_short_name == 'C'}
+            <input type="radio" name="meal_short_name" value="" title="无">
+            <input type="radio" name="meal_short_name" value="A" title="A">
+            <input type="radio" name="meal_short_name" value="B" title="B">
+            <input type="radio" checked name="meal_short_name" value="C" title="C">
+            {else}
+            <input type="radio" name="meal_short_name" value="" title="无">
+            <input type="radio" name="meal_short_name" value="A" title="A">
+            <input type="radio" name="meal_short_name" value="B" title="B">
+            <input type="radio" name="meal_short_name" value="C" title="C">
             {/if}
         </div>
     </div>

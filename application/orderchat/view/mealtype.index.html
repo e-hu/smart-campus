@@ -44,6 +44,7 @@
                 <th class='text-center'>套餐名称</th>
                 <th class='text-center'>基准价格</th>
                 <th class='text-center'>计费模式</th>
+                <th class='text-center'>套餐分类简码</th>
                 <th class='text-center'>操作</th>
             </tr>
         </thead>
@@ -64,6 +65,7 @@
                 <span style="color:#ccc">无</span>
                 {/if}
                 </td>
+                <td class='text-center'>{$vo.meal_short_name|default="<span style='color:#ccc'>无</span>"}</td>
                 <td class='text-center nowrap'>
                     {if auth("$classuri/edit")}
                     <span class="text-explode">|</span>
@@ -78,7 +80,7 @@
             </tr>
             {/foreach}
             {if empty($list)}
-            <tr><td colspan="7" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            <tr><td colspan="6" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
             {/if}
         </tbody>
     </table>

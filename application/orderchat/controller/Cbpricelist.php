@@ -153,4 +153,47 @@ class CbPricelist extends BasicAdmin
         $this->assign('meals', $meals);
     }
 
+    /**
+     * 周菜谱时间
+     */
+    public function starttime()
+    {
+        LogService::write('订餐管理', '执行周菜谱时间操作');
+        if ($this->request->isAjax()) {
+            $post = $this->request->post();
+            if(empty($post['start_time'])){
+                $post['start_time'] = null;
+            }
+            $data['dinner_choose_start_datetime'] =$post['start_time'];
+            $result =  Db::table('canteen_week_cookbook_main')->where('id',$post['id'])->update($data);
+            $data = [];
+            if ($result) {
+                $data['flag'] = 1;
+            } else {
+                $data['flag'] = 0;
+            }
+            return json($data);
+        }
+    }
+
+    public function endtime()
+    {
+        LogService::write('订餐管理', '执行周菜谱时间操作');
+        if ($this->request->isAjax()) {
+            $post = $this->request->post();
+            if(empty($post['end_time'])){
+                $post['end_time'] = null;
+            }
+            $data['dinner_choose_end_datetime'] =$post['end_time'];
+            $result =  Db::table('canteen_week_cookbook_main')->where('id',$post['id'])->update($data);
+            $data = [];
+            if ($result) {
+                $data['flag'] = 1;
+            } else {
+                $data['flag'] = 0;
+            }
+            return json($data);
+        }
+    }
+
 }
