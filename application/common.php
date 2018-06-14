@@ -417,3 +417,17 @@ function patchMSC($openid)
         'remark'=>array('value'=>'点击本条信息进行操作。')
     ),Request::instance()->domain().'/index/index/patch');
 }
+
+/**
+ * 拒绝退餐发送模板信息
+ * @param $openid
+ */
+function refundNoMSC($openid)
+{
+    sendMSC($openid,'OPENTM407446439',array(
+        'first'=>array('value'=>'您好！您申请的退餐请求已被管理员拒绝','color'=>'#173177'),
+        'keyword1'=>array('value'=>'申请结果通知'),
+        'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
+        'remark'=>array('value'=>'点击本条信息进行操作。')
+    ),Request::instance()->domain().'/index/index/checkList');
+}

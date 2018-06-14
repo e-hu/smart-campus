@@ -44,13 +44,13 @@
                         return false;
                     }
                     $.confirm({
-                        title: '您确定要审核通过该笔订单?',
-                        text: '申请理由'+message,
+                        title: '审核该笔订单?(取消为拒绝此次申请)',
+                        text: '申请理由:'+message,
                         onOK: function () {
                             $.ajax({
                                 url: '/index/mallapi/checkOrder',
                                 type: "POST",
-                                data:{'id':id},
+                                data:{'id':id,'status':'2'},
                                 dataType: "json",
                                 success: function (ret) {
                                     if (ret.code == '0') {
@@ -64,6 +64,21 @@
                             });
                         },
                         onCancel: function () {
+                            $.ajax({
+                                url: '/index/mallapi/checkOrder',
+                                type: "POST",
+                                data:{'id':id,'status':'-1'},
+                                dataType: "json",
+                                success: function (ret) {
+                                    if (ret.code == '0') {
+                                        $.alert(ret.msg);
+                                    } else {
+                                        $.alert(ret.msg, function() {
+                                            openWin(ret.url,'');
+                                        });
+                                    }
+                                }
+                            });
                         }
                     });
                 },
