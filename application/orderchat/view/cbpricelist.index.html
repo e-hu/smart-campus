@@ -89,23 +89,19 @@
             <td class='text-center'>{$vo.w7}</td>
             <td class='text-center'>
                 {if !empty($vo['dinner_choose_start_datetime'])}
-                <input class="layui-input layui-input-inline title-input start"
-                       id="chooice_datetime" name="{$vo.id}"
+                <input class="layui-input layui-input-inline title-input start" name="{$vo.id}"
                        value="{:date('Y-m-d',strtotime($vo['dinner_choose_start_datetime']))}"/>
                 {else}
-                <input class="layui-input layui-input-inline title-input start"
-                       id="chooice_datetime" name="{$vo.id}"
+                <input class="layui-input layui-input-inline title-input start" name="{$vo.id}"
                        value=""/>
                 {/if}
             </td>
             <td class='text-center'>
                 {if !empty($vo['dinner_choose_end_datetime'])}
-                <input class="layui-input layui-input-inline title-input end"
-                       id="chooice_datetime" name="{$vo.id}"
+                <input class="layui-input layui-input-inline title-input end" name="{$vo.id}"
                        value="{:date('Y-m-d',strtotime($vo['dinner_choose_end_datetime']))}"/>
                 {else}
-                <input class="layui-input layui-input-inline title-input end"
-                       id="chooice_datetime" name="{$vo.id}"
+                <input class="layui-input layui-input-inline title-input end" name="{$vo.id}"
                        value=""/>
                 {/if}
             </td>
@@ -132,16 +128,7 @@
     </div>
 </form>
 <script>
-    lay('#chooice_datetime').each(function(){
-        laydate.render({
-            elem: this
-            ,trigger: 'click',
-            format: 'yyyy-MM-dd',
-            range: false
-        });
-    });
     $("#list").on('change', ".start", function () {
-        alert(1);
         var id = this.name;
         var start_time = this.value;
         $.ajax({
@@ -165,7 +152,6 @@
 
     });
     $("#list").on('change', ".end", function () {
-        alert(1);
         var id = this.name;
         var end_time = this.value;
         $.ajax({
