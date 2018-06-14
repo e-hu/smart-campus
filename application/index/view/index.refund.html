@@ -43,14 +43,17 @@
                         $.alert(status_name);
                         return false;
                     }
-                    $.confirm({
-                        title: '确认提交?',
-                        text: '您确定要退订该笔订单?',
-                        onOK: function () {
+                    $.prompt({
+                        title: '您确定要退订该笔订单?',
+                        text:'请输入退餐原因',
+                        input: '请假',
+                        empty: false, // 是否允许为空
+                        onOK: function (input) {
+                            //点击确认
                             $.ajax({
                                 url: '/index/mallapi/refundOrder',
                                 type: "POST",
-                                data:{'id':id},
+                                data:{'id':id,'input':input},
                                 dataType: "json",
                                 success: function (ret) {
                                     if (ret.code == '0') {
@@ -64,8 +67,32 @@
                             });
                         },
                         onCancel: function () {
+                            //点击取消
                         }
                     });
+                    // $.confirm({
+                    //     title: '确认提交?',
+                    //     text: '您确定要退订该笔订单?',
+                    //     onOK: function () {
+                    //         $.ajax({
+                    //             url: '/index/mallapi/refundOrder',
+                    //             type: "POST",
+                    //             data:{'id':id},
+                    //             dataType: "json",
+                    //             success: function (ret) {
+                    //                 if (ret.code == '0') {
+                    //                     $.alert(ret.msg);
+                    //                 } else {
+                    //                     $.alert(ret.msg, function() {
+                    //                         openWin(ret.url,'');
+                    //                     });
+                    //                 }
+                    //             }
+                    //         });
+                    //     },
+                    //     onCancel: function () {
+                    //     }
+                    // });
                 },
                 initrefundObj: function () {
                     var self = this;

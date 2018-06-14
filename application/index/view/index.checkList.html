@@ -16,7 +16,7 @@
     </div>
     <div v-else class="W H mt50 pb50 scroll oh">
         <ul class="bgf clear" v-for="item in orderList">
-            <li class="hl50 F_ bbd bgf tc fr6" @click="refundOrder(item.id,item.check_status,item.status_name)">
+            <li class="hl50 F_ bbd bgf tc fr6" @click="refundOrder(item.id,item.check_status,item.status_name,item.message)">
                 <p class="C2">{{item.oper_typename}}</p>
                 <p class="C2">{{item.emp_name}}</p>
                 <p class="C3">{{item.date_str}}</p>
@@ -38,14 +38,14 @@
             el: '#app',
             data: data,
             methods: {
-                refundOrder: function (id,check_status,status_name) {  //跳转函数
+                refundOrder: function (id,check_status,status_name,message) {  //跳转函数
                     if(check_status == 4){
                         $.alert(status_name);
                         return false;
                     }
                     $.confirm({
-                        title: '确认提交?',
-                        text: '您确定要审核通过该笔订单?',
+                        title: '您确定要审核通过该笔订单?',
+                        text: '申请理由'+message,
                         onOK: function () {
                             $.ajax({
                                 url: '/index/mallapi/checkOrder',
