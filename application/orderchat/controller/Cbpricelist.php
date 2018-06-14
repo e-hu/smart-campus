@@ -111,6 +111,10 @@ class CbPricelist extends BasicAdmin
                     foreach ($dinner_list as $value) {
                         foreach ($meal_list as $meal) {
                             if (!empty($_POST[$val . $value['dinner_name'] . $meal['meal_id']])) {
+                                $price_info = Db::table('canteen_cookbook_price')->where(['sale_datetime'=> $date_time[$val],'company_id'=>session('company_id'),'canteen_no'=>$canteen_no,'cookbook_no'=>$_POST[$val . $value['dinner_name'] . $meal['meal_id']],'status'=>'1','dinner_flag'=>$value['dinner_flag'],'meal_id'=>$meal['meal_id']])->find();
+                                if(!empty($price_info)){
+                                   Db::table('canteen_cookbook_price')->where(['sale_datetime'=> $date_time[$val],'company_id'=>session('company_id'),'canteen_no'=>$canteen_no,'cookbook_no'=>$_POST[$val . $value['dinner_name'] . $meal['meal_id']],'status'=>'1','dinner_flag'=>$value['dinner_flag'],'meal_id'=>$meal['meal_id']])->delete();
+                                }
                                 $data = [];
                                 $data['canteen_no'] = $canteen_no;
                                 $data['cookbook_no'] = $_POST[$val . $value['dinner_name'] . $meal['meal_id']];
@@ -128,7 +132,7 @@ class CbPricelist extends BasicAdmin
                                 Db::table('canteen_cookbook_price')->insert($data);
                             }else{
                                 Db::table('canteen_cookbook_price')->where(['company_id'=>session('company_id'),'canteen_no'=>$canteen_no,'sale_datetime'=>$date_time[$val]
-                                    ,'dinner_flag'=>$value['dinner_flag'],'meal_id'=>$meal['meal_id']])->delete();
+                                    ,'dinner_flag'=>$value['dinner_flag'],'status'=>'1','meal_id'=>$meal['meal_id']])->delete();
                             }
                         }
                     }
