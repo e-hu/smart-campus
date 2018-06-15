@@ -1,6 +1,6 @@
 {block name="button"}
 <div class="nowrap pull-right" style="margin-top:10px">
-    <button  onclick="doPrint()" class="layui-btn layui-btn-small left">打印当前菜谱</button>
+    <button onclick="doPrint()" class="layui-btn layui-btn-small left">打印当前菜谱</button>
 </div>
 
 {/block}
@@ -10,8 +10,8 @@
         第{$weeks.week_num}周（{$weeks.start_datetime}——{$weeks.end_datetime}）
     </caption>
     <colgroup>
-        <col width="100">
-        <col width="50">
+        <col width="145">
+        <col width="60">
     </colgroup>
     <thead>
     <tr>
@@ -26,7 +26,11 @@
     {foreach $list as $a=>$b}
     {foreach $b as $c=>$d}
     <tr>
-        <td>{$a}</td>
+        {foreach $date_time as $da=>$te}
+        {if $da == $a}
+        <td>{$te}  {$a}</td>
+        {/if}
+        {/foreach}
         <td>{$c}</td>
         {foreach $meals as $val}
         <td id="{$val.meal_id}">
