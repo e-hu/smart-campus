@@ -142,6 +142,37 @@ class CbPricelist extends BasicAdmin
     }
 
     /**
+     * 周菜谱编辑
+     */
+    public function view()
+    {
+        LogService::write('订餐管理', '执行周菜谱编辑操作');
+        if ($this->request->isGet()) {
+            $sqlstr = "exec [up_canteen_week_detail] ?,?,?,?";
+            $data = Db::query($sqlstr, [session('user.company_id'), $_GET['canteen_no'], $_GET['week_num'], session('user.id')]);
+            if (empty($data)) {
+                $this->error('数据不存在');
+            }
+            $list = [];
+            foreach ($data[0] as $val) {
+                $list[$val['week_name']][$val['dinner_name']][$val['meal_id']] = $val;
+            }
+            $canteens = Db::name('canteen_base_info')->where(['canteen_no' => $_GET['canteen_no'], 'company_id' => session('user.company_id')])->find();
+            $weeks = Db::name('week_day_list')->where(['week_num' => $_GET['week_num']])->find();
+            $meals = Db::name('cookbook_meal_type')->where(['company_id' => session('user.company_id'), 'meal_flag' => '0'])->select();
+            foreach ($meals as $val) {
+                $cookbooks = Db::name('cookbook_base_info')->where('meal_id', $val['meal_id'])->where('company_id', session('user.company_id'))->select();
+                $this->assign('cookbooks' . $val['meal_id'], $cookbooks);
+            }
+            $this->assign('meals', $meals);
+            $this->assign('canteens', $canteens);
+            $this->assign('weeks', $weeks);
+            $this->assign('list', $list);
+        }
+        return $this->fetch();
+    }
+
+    /**
      * 表单数据默认处理
      * @param array $data
      */

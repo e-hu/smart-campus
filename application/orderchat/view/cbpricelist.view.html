@@ -1,0 +1,41 @@
+<table class="layui-table">
+    <caption style="text-align: center;font-size: 24px;">学生菜单 {$canteens.canteen_name}
+        第{$weeks.week_num}周（{$weeks.start_datetime}——{$weeks.end_datetime}）
+    </caption>
+    <colgroup>
+        <col width="100">
+        <col width="50">
+    </colgroup>
+    <thead>
+    <tr>
+        <th>日期</th>
+        <th>餐次</th>
+        {foreach $meals as $val}
+        <th>{$val.meal_name}</th>
+        {/foreach}
+    </tr>
+    </thead>
+    <tbody>
+    {foreach $list as $a=>$b}
+    {foreach $b as $c=>$d}
+    <tr>
+        <td>{$a}</td>
+        <td>{$c}</td>
+        {foreach $meals as $val}
+        <td id="{$val.meal_id}">
+            <?php foreach(${'cookbooks'.$val['meal_id']} as $value): ?>
+            {if !empty($d[$val.meal_id]['cookbook_no']) and $d[$val.meal_id]['cookbook_no'] == $value['cookbook_no']}
+            {$value.cookbook_info}
+            {/if}
+            <?php endforeach; ?>
+        </td>
+        {/foreach}
+    </tr>
+    {/foreach}
+    {/foreach}
+    </tbody>
+</table>
+
+<div class="hr-line-dashed"></div>
+
+<script>window.form.render();</script>
