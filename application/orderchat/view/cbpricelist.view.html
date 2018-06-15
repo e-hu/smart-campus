@@ -1,4 +1,9 @@
-<button  onclick="doPrint()" class="layui-btn layui-btn-small left">打印菜谱</button>
+{block name="button"}
+<div class="nowrap pull-right" style="margin-top:10px">
+    <button  onclick="doPrint()" class="layui-btn layui-btn-small left">打印当前菜谱</button>
+</div>
+
+{/block}
 <!--startprint-->
 <table class="layui-table">
     <caption style="text-align: center;font-size: 24px;">学生菜单 {$canteens.canteen_name}
