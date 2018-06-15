@@ -100,6 +100,7 @@
             <th class='text-center'>取餐方式</th>
             <th class='text-center'>下单方式</th>
             <th class='text-center'>下单时间</th>
+            <th class='text-center'>对账状态</th>
             <!--<th class='text-center'>操作</th>-->
         </tr>
         </thead>
@@ -153,6 +154,11 @@
             <td class='text-center'>无</td>
             {/if}
             <td class='text-center'>{:date('Y-m-d H:i:s',strtotime($vo['dinner_createtime']))}</td>
+            {if $vo.third_ic_lsn != ''}
+            <td class='text-center'>已对账</td>
+            {else}
+            <span style="color:#090">未对账</span>
+            {/if}
             <!--<td class='text-center nowrap'>-->
             <!--{if auth("$classuri/edit")}-->
             <!--<span class="text-explode">|</span>-->

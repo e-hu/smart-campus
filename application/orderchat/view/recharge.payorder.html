@@ -104,7 +104,8 @@
                 <th class='text-center'>支付平台流水号</th>
                 <th class='text-center'>结算日期</th>
                 <th class='text-center'>是否对账</th>
-                <th class='text-center'>对账日期</th>
+                <th class='text-center'>对账日期
+                <th class='text-center'>IC卡对账</th>
                 <th class='text-center'>操作</th>
             </tr>
         </thead>
@@ -139,6 +140,13 @@
                     {/if}
                 </td>
                 <td class='text-center'>{$vo.synch_time|default="<span style='color:#ccc'>无</span>"}</td>
+                <td class='text-center'>
+                    {if $vo.third_ic_lsn =''}
+                    <span>已对账</span>
+                    {else}
+                    <span style="color:#090">未对账</span>
+                    {/if}
+                </td>
                 <td class='text-center nowrap'>
                     {if auth("$classuri/search")}
                     <span class="text-explode">|</span>
@@ -148,7 +156,7 @@
             </tr>
             {/foreach}
             {if empty($list)}
-            <tr><td colspan="11" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
+            <tr><td colspan="16" style="text-align:center">没 有 记 录 了 哦 !</td></tr>
             {/if}
         </tbody>
     </table>
