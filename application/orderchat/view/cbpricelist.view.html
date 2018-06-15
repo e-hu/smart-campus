@@ -1,7 +1,6 @@
 {block name="button"}
 <div class="nowrap pull-right" style="margin-top:10px">
-    <button onclick="doPrint()" class="layui-btn layui-btn-small left">打印当前菜谱</button>
-    <button type="button" id="excelBtn" class="layui-btn layui-btn-small left">导出Excel</button>
+    <button type="button" onclick="excelBtn()" class="layui-btn layui-btn-small left">导出Excel</button>
 </div>
 
 {/block}
@@ -51,22 +50,10 @@
 <div class="hr-line-dashed"></div>
 
 <script>window.form.render();</script>
-<script language=javascript>
-    function doPrint() {
-        bdhtml = window.document.body.innerHTML;
-        sprnstr = "<!--startprint-->"; //开始打印标识字符串有17个字符
-        eprnstr = "<!--endprint-->"; //结束打印标识字符串
-        prnhtml = bdhtml.substr(bdhtml.indexOf(sprnstr) + 17); //从开始打印标识之后的内容
-        prnhtml = prnhtml.substring(0, prnhtml.indexOf(eprnstr)); //截取开始标识和结束标识之间的内容
-        window.document.body.innerHTML = prnhtml; //把需要打印的指定内容赋给body.innerHTML
-        window.print(); //调用浏览器的打印功能打印指定区域
-        window.document.body.innerHTML = bdhtml; //重新给页面内容赋值；
-    }
-</script>
 <script>
-    document.getElementById('excelBtn').onclick = () => {
+    function excelBtn(){
         exportExcel.exports(tableExcel);
-    };
+    }
     class ExportExcel {
         constructor() {
             this.idTmr = null;
