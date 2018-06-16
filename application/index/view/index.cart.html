@@ -1,4 +1,7 @@
 {include file="common/header" title="菜谱详情" keywords="菜谱详情" description="" /}
+<style>
+    .shenlue{ display:block;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;}
+</style>
 <div id="app" class="f fr6 H oh" v-cloak>
     <ul class="bgf clear W SSheader">
         <li class="hl50 F_ bbd bgf">
@@ -41,7 +44,7 @@
                     </div>
                     <div class="W7 H tc ptcheckinfo_div">
                         <div class="W H ptcheckinfo">
-                            <span>{{item.canteen_name}}</span><br><span>{{item.meal_name}} {{item.cookbook_name}}</span><br/> <span
+                            <span>{{item.canteen_name}}</span><br><span class="shenlue">{{item.meal_name}} {{item.cookbook_name}}</span><br/> <span
                                 class="c9">￥<span class="SScorange">{{item.cookbook_price}}</span>元/份</span>
                         </div>
                     </div>
