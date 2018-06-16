@@ -1006,12 +1006,16 @@ class MallApi extends ApiBase
         $url = "http://food.boohee.com/fb/v1/search?page=1&order_asc=desc&q=$name";  //查询
         $html = file_get_contents($url);
         $arr_search = json_decode($html, true);
-        if(!empty($arr_search['items'])){
-            $arr = $arr_search['items'][0]['thumb_image_url'];
+        $food = $arr_search['items'][0]['code'];
+        $url = "http://food.boohee.com/fb/v1/foods/$food/mode_show"; //具体食品
+        $html = file_get_contents($url);
+        $arr = json_decode($html, true);
+        if(!empty($arr)){
+            $img_url = $arr['large_image_url'];
         }else{
-            $arr = '';
+            $img_url = '';
         }
-        return $arr;
+        return $img_url;
     }
     /**
      * 意见反馈
