@@ -978,7 +978,7 @@ class MallApi extends ApiBase
      */
     function boohee_food($name)
     {
-        $name = substr($name, 0, 10);
+        $name = substr($name, 0, 20);
         $url = "http://food.boohee.com/fb/v1/search?page=1&order_asc=desc&q=$name";  //查询
         $html = file_get_contents($url);
         $arr_search = json_decode($html, true);
@@ -1002,7 +1002,7 @@ class MallApi extends ApiBase
      */
     function boohee_food_name($name)
     {
-        $name = substr($name, 0, 10);
+        $name = substr($name, 0, 20);
         $url = "http://food.boohee.com/fb/v1/search?page=1&order_asc=desc&q=$name";  //查询
         $html = file_get_contents($url);
         $arr_search = json_decode($html, true);
