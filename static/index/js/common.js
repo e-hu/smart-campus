@@ -44,7 +44,9 @@ var SCapiDic = {
     changePw:'/index/mallapi/changePw'+ran,
     logout:'/index/mallapi/logout'+ran,
     cardBind:'/index/mallapi/cardBind'+ran,
-    login:'/index/login/login'+ran
+    login:'/index/login/login'+ran,
+    /*扫码取餐*/
+    getMealList: '/index/mallapi/getMealList'+ran,
 };
 function intoView(el) {
     setTimeout(function() {

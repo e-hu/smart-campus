@@ -1,0 +1,84 @@
+{include file="common/header" title="确认取餐" keywords="确认取餐" description="" /}
+<div id="app" v-cloak class="weui-msg">
+    <div class="weui-msg__icon-area"><i class="weui-icon-info weui-icon_msg"></i></div>
+    <div class="weui-msg__text-area">
+        <h2 class="weui-msg__title">请核对取餐信息</h2>
+        <div class="tc">
+            <div class="cf f18 mt20" style="color: #0C0C0C">{{msg}}</div>
+        </div>
+    </div>
+    <div class="weui-msg__opr-area">
+        <p class="weui-btn-area">
+            <a href="javascript:void(0);" class="weui-btn weui-btn_primary" @click="mealBind">确认取餐</a>
+        </p>
+    </div>
+    <div class="weui-msg__extra-area">
+        <div class="weui-footer">
+            <p class="weui-footer__links">
+                <a href="javascript:void(0);" class="weui-footer__link">浙农茂阳配送有限公司</a>
+            </p>
+            <p class="weui-footer__text">Copyright © 2017-2020 浙农茂阳配送有限公司</p>
+        </div>
+    </div>
+</div>
+{include file="common/footer" /}
+
+<script type="text/javascript">
+    window.onload = function () {
+        var data = {
+            msg:'',
+            machine_sn: getUrlParam('machine_sn')
+        };
+        new Vue({
+            el: '#app',
+            data: data,
+            methods: {
+                configInfo: function () {
+                    var self = this;
+                    if(!self.machine_sn){
+                        $.alert('设备号参数错误,请重新扫码!', function() {
+                            openWin('index/index/me',{});
+                        });
+                    }
+                    $.ajax({
+                        url: SCapiDic.getMealList,
+                        type: "POST",
+                        dataType: "json",
+                        data:{machine_sn:self.machine_sn},
+                        success: function (ret) {
+                            if (ret.code == '0') {
+                                $.alert(ret.msg);
+                            } else {
+                                self.msg = ret;
+                            }
+                        }
+                    });
+                },
+                mealBind: function () {
+                    var self = this;
+                    $.ajax({
+                        url: '/index/mallapi/mealBind',
+                        type: "POST",
+                        data:{machine_sn:self.machine_sn},
+                        dataType: "json",
+                        success: function (ret) {
+                            if (ret.code == '0') {
+                                $.alert(ret.msg);
+                            } else {
+                                $.alert(ret.msg, function() {
+                                    openWin(ret.url,{});
+                                });
+                            }
+                        }
+                    });
+                }
+            },
+            mounted: function () {
+                this.$nextTick(function () {
+                    this.configInfo();
+                })
+            }
+        });
+    }
+
+</script>

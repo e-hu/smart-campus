@@ -1563,4 +1563,39 @@ class MallApi extends ApiBase
         }
         return json($data[0]);
     }
+
+    /**
+     * 扫码取餐
+     * @param $count
+     * @return string
+     */
+    function getMealList($machine_sn)
+    {
+        $user_id = $this->getClientUserId();
+        $company_id = $this->getClientCompanyId();
+        $sqlStr = "exec [up_machine_info] ?";
+        $data = Db::query($sqlStr, ['03'.'||'.$machine_sn.'||||'.$user_id.'||'.$company_id]);
+        if (empty($data)) {
+            $data[0][0]['return_msg'] = [];
+        }
+        $return = explode("||",$data[0][0]['return_msg']);
+        if($return['4'] != '88'){
+            $this->error($return['10'],'index/index');
+        }else{
+            $this->success($return['10']);
+        }
+    }
+
+    /*确认取餐*/
+    function mealBind($machine_sn)
+    {
+        $user_id = $this->getClientUserId();
+        $company_id = $this->getClientCompanyId();
+        $sqlStr = "exec [up_machine_info] ?";
+        $data = Db::query($sqlStr, ['04'+'||'+$machine_sn+'||||'+$user_id+'||'+$company_id]);
+        if (empty($data)) {
+            $data[0] = [];
+        }
+        return json($data[0]);
+    }
 }
