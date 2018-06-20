@@ -37,8 +37,9 @@
                     var self = this;
                     if(!self.machine_sn){
                         $.alert('设备号参数错误,请重新扫码!', function() {
-                            openWin('index/index/me',{});
+                            openWin('/index/index/me',{});
                         });
+                        return false;
                     }
                     $.ajax({
                         url: SCapiDic.getMealList,
@@ -47,30 +48,41 @@
                         data:{machine_sn:self.machine_sn},
                         success: function (ret) {
                             if (ret.code == '0') {
-                                $.alert(ret.msg);
+                                $.alert(ret.msg, function() {
+                                    openWin(ret.url,{});
+                                });
                             } else {
-                                self.msg = ret;
+                                self.msg = ret.msg;
                             }
                         }
                     });
                 },
                 mealBind: function () {
                     var self = this;
-                    $.ajax({
-                        url: '/index/mallapi/mealBind',
-                        type: "POST",
-                        data:{machine_sn:self.machine_sn},
-                        dataType: "json",
-                        success: function (ret) {
-                            if (ret.code == '0') {
-                                $.alert(ret.msg);
-                            } else {
-                                $.alert(ret.msg, function() {
-                                    openWin(ret.url,{});
-                                });
-                            }
+                    $.confirm({
+                        title: '确认取餐？',
+                        text: '确认取餐前,请出示给食堂管理人员确认,方可领取菜品!!',
+                        onOK: function () {
+                            //点击确认
+                            $.ajax({
+                                url: '/index/mallapi/mealBind',
+                                type: "POST",
+                                data: {machine_sn: self.machine_sn},
+                                dataType: "json",
+                                success: function (ret) {
+                                    if (ret.code == '0') {
+                                        $.alert(ret.msg);
+                                    } else {
+                                        $.alert(ret.msg, function () {
+                                            openWin(ret.url, {});
+                                        });
+                                    }
+                                }
+                            });
+                        },
+                        onCancel: function () {
                         }
-                    });
+                    })
                 }
             },
             mounted: function () {

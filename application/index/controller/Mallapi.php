@@ -158,7 +158,7 @@ class MallApi extends ApiBase
             ->join('canteen_base_info c', 'p.canteen_no = c.canteen_no and p.company_id = c.company_id', 'left')
             ->join('cookbook_base_info b', 'p.cookbook_no = b.cookbook_no and p.company_id = b.company_id', 'left')
             ->join('emp_cookbook_dinner_info d', 'p.canteen_no=d.canteen_no and p.cookbook_no=d.cookbook_no and d.emp_id= :emp_id and d.company_id = p.company_id and d.dinner_status = 1 and d.dinner_datetime = p.sale_datetime and d.dinner_flag = p.dinner_flag', 'left')
-            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id', 'left')
+            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id and p.company_id = e.company_id', 'left')
             ->bind(['emp_id' => $user_id])
             ->field('p.*,meal_name,cookbook_name,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
             ->order('order_index desc')
@@ -176,7 +176,7 @@ class MallApi extends ApiBase
             ->join('canteen_base_info c', 'p.canteen_no = c.canteen_no and p.company_id = c.company_id', 'left')
             ->join('cookbook_base_info b', 'p.cookbook_no = b.cookbook_no and p.company_id = b.company_id', 'left')
             ->join('emp_cookbook_dinner_info d', 'p.canteen_no=d.canteen_no and p.cookbook_no=d.cookbook_no and d.emp_id= :emp_id and d.company_id = p.company_id and d.dinner_status = 1 and d.dinner_datetime = p.sale_datetime and d.dinner_flag = p.dinner_flag', 'left')
-            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id', 'left')
+            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id and p.company_id = e.company_id', 'left')
             ->bind(['emp_id' => $user_id])
             ->field('p.*,meal_name,cookbook_name,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
             ->order('order_index desc')
@@ -742,7 +742,7 @@ class MallApi extends ApiBase
             ->join('canteen_base_info c', 'p.canteen_no = c.canteen_no and p.company_id = c.company_id', 'left')
             ->join('cookbook_base_info b', 'p.cookbook_no = b.cookbook_no and p.company_id = b.company_id', 'left')
             ->join('emp_cookbook_dinner_info d', 'p.canteen_no=d.canteen_no and p.cookbook_no=d.cookbook_no and d.emp_id= :emp_id and d.company_id = p.company_id and d.dinner_status = 1 and d.dinner_datetime = p.sale_datetime and d.dinner_flag = p.dinner_flag', 'left')
-            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id', 'left')
+            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id and p.company_id = e.company_id', 'left')
             ->bind(['emp_id' => $user_id])
             ->field('p.*,meal_name,cookbook_name,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
             ->order('order_index desc')
@@ -761,7 +761,7 @@ class MallApi extends ApiBase
             ->join('canteen_base_info c', 'p.canteen_no = c.canteen_no and p.company_id = c.company_id', 'left')
             ->join('cookbook_base_info b', 'p.cookbook_no = b.cookbook_no and p.company_id = b.company_id', 'left')
             ->join('emp_cookbook_dinner_info d', 'p.canteen_no=d.canteen_no and p.cookbook_no=d.cookbook_no and d.emp_id= :emp_id and d.company_id = p.company_id and d.dinner_status = 1 and d.dinner_datetime = p.sale_datetime and d.dinner_flag = p.dinner_flag', 'left')
-            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id', 'left')
+            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id and p.company_id = e.company_id', 'left')
             ->bind(['emp_id' => $user_id])
             ->field('p.*,meal_name,cookbook_name,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
             ->order('order_index desc')
@@ -1194,6 +1194,9 @@ class MallApi extends ApiBase
         $company_id = $this->getClientCompanyId();
         $sqlStr = "exec [up_emp_dept_dinner_no_detail_for_create] ?,?";
         $data = Db::query($sqlStr, [$company_id, $user_id]);
+        if(empty($data)){
+            $data[0] = '';
+        }
         return json($data[0]);
     }
 
@@ -1300,7 +1303,7 @@ class MallApi extends ApiBase
             ->join('canteen_base_info c', 'p.canteen_no = c.canteen_no and p.company_id = c.company_id', 'left')
             ->join('cookbook_base_info b', 'p.cookbook_no = b.cookbook_no and p.company_id = b.company_id', 'left')
             ->join('emp_cookbook_dinner_info_modi d', 'p.canteen_no=d.canteen_no and p.cookbook_no=d.cookbook_no and d.emp_id= :emp_id and d.company_id = p.company_id and d.dinner_status = 1 and d.dinner_datetime = p.sale_datetime and d.dinner_flag = p.dinner_flag', 'left')
-            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id', 'left')
+            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id and p.company_id = e.company_id', 'left')
             ->bind(['emp_id' => $user_id])
             ->field('p.*,meal_name,cookbook_name,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
             ->order('order_index desc')
@@ -1318,7 +1321,7 @@ class MallApi extends ApiBase
             ->join('canteen_base_info c', 'p.canteen_no = c.canteen_no and p.company_id = c.company_id', 'left')
             ->join('cookbook_base_info b', 'p.cookbook_no = b.cookbook_no and p.company_id = b.company_id', 'left')
             ->join('emp_cookbook_dinner_info_modi d', 'p.canteen_no=d.canteen_no and p.cookbook_no=d.cookbook_no and d.emp_id= :emp_id and d.company_id = p.company_id and d.dinner_status = 1 and d.dinner_datetime = p.sale_datetime and d.dinner_flag = p.dinner_flag', 'left')
-            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id', 'left')
+            ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id and p.company_id = e.company_id', 'left')
             ->bind(['emp_id' => $user_id])
             ->field('p.*,meal_name,cookbook_name,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
             ->order('order_index desc')
@@ -1576,11 +1579,11 @@ class MallApi extends ApiBase
         $sqlStr = "exec [up_machine_info] ?";
         $data = Db::query($sqlStr, ['03'.'||'.$machine_sn.'||||'.$user_id.'||'.$company_id]);
         if (empty($data)) {
-            $data[0][0]['return_msg'] = [];
+            $this->error('获取餐厅菜品数据失败,请稍后重试','index/index/index');
         }
         $return = explode("||",$data[0][0]['return_msg']);
         if($return['4'] != '88'){
-            $this->error($return['10'],'index/index');
+            $this->error($return['10'],'index/index/index');
         }else{
             $this->success($return['10']);
         }
@@ -1592,10 +1595,8 @@ class MallApi extends ApiBase
         $user_id = $this->getClientUserId();
         $company_id = $this->getClientCompanyId();
         $sqlStr = "exec [up_machine_info] ?";
-        $data = Db::query($sqlStr, ['04'+'||'+$machine_sn+'||||'+$user_id+'||'+$company_id]);
-        if (empty($data)) {
-            $data[0] = [];
-        }
-        return json($data[0]);
+        $data = Db::query($sqlStr, ['04'.'||'.$machine_sn.'||'.$user_id.'||'.$company_id]);
+        $return = explode("||",$data[0][0]['return_msg']);
+        $this->success($return['5']);
     }
 }
