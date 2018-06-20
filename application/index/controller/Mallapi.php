@@ -49,7 +49,6 @@ class MallApi extends ApiBase
             $dinner_flag = implode(",", $dinner_flag);
             $where['dinner_flag'] = ['in', $dinner_flag];
         }
-
         $data['dinnerBaseList'] = Db::name('dinner_base_info')->where(['company_id' => $company_id])->where($where)->order('dinner_flag asc')->select();
         $count = Db::name('dinner_base_info')->where(['company_id' => $company_id])->where($where)->count();
         $data['dinnerBaseCount'] = $this->canteen_W($count);
@@ -87,8 +86,14 @@ class MallApi extends ApiBase
             $where['dinner_flag'] = ['in', $dinner_flag];
         }
 
-        $data['dinnerBaseList'] = Db::name('dinner_base_info')->where($where)->where(['company_id' => $company_id])->order('dinner_flag asc')->select();
-        $count = Db::name('dinner_base_info')->where($where)->where(['company_id' => $company_id])->count();
+        $dinnerBaseList = Db::name('dinner_base_info')->where($where)->where(['company_id' => $company_id])->order('dinner_flag asc')->select();
+        foreach ($dinnerBaseList as $key=>$val){
+            $list = Db::name('canteen_cookbook_price')->where(['company_id'=>$company_id,'dinner_flag'=>$val['dinner_flag'],'sale_datetime'=>$day])->select();
+            if(!empty($list)){
+                $data['dinnerBaseList'][] = $dinnerBaseList[$key];
+            }
+        }
+        $count = count($data['dinnerBaseList']);
         $data['dinnerBaseCount'] = $this->canteen_W($count);
         if (empty($data['dinnerBaseList']))
             $this->error("餐次信息获取失败，请稍候再试！");
@@ -664,8 +669,14 @@ class MallApi extends ApiBase
             $where['dinner_flag'] = ['in', $dinner_flag];
         }
 
-        $data['dinnerBaseList'] = Db::name('dinner_base_info')->where($where)->where(['company_id' => $company_id])->order('dinner_flag asc')->select();
-        $count = Db::name('dinner_base_info')->where($where)->where(['company_id' => $company_id])->count();
+        $dinnerBaseList = Db::name('dinner_base_info')->where($where)->where(['company_id' => $company_id])->order('dinner_flag asc')->select();
+        foreach ($dinnerBaseList as $key=>$val){
+            $list = Db::name('canteen_cookbook_price')->where(['company_id'=>$company_id,'dinner_flag'=>$val['dinner_flag'],'sale_datetime'=>$day])->select();
+            if(!empty($list)){
+                $data['dinnerBaseList'][] = $dinnerBaseList[$key];
+            }
+        }
+        $count = count($data['dinnerBaseList']);
         $data['dinnerBaseCount'] = $this->canteen_W($count);
         if (empty($data['dinnerBaseList']))
             $this->error("餐次信息获取失败，请稍候再试！");
@@ -1230,8 +1241,14 @@ class MallApi extends ApiBase
             $where['dinner_flag'] = ['in', $dinner_flag];
         }
 
-        $data['dinnerBaseList'] = Db::name('dinner_base_info')->where($where)->where(['company_id' => $company_id])->order('dinner_flag asc')->select();
-        $count = Db::name('dinner_base_info')->where($where)->where(['company_id' => $company_id])->count();
+        $dinnerBaseList = Db::name('dinner_base_info')->where($where)->where(['company_id' => $company_id])->order('dinner_flag asc')->select();
+        foreach ($dinnerBaseList as $key=>$val){
+            $list = Db::name('canteen_cookbook_price')->where(['company_id'=>$company_id,'dinner_flag'=>$val['dinner_flag'],'sale_datetime'=>$day])->select();
+            if(!empty($list)){
+                $data['dinnerBaseList'][] = $dinnerBaseList[$key];
+            }
+        }
+        $count = count($data['dinnerBaseList']);
         $data['dinnerBaseCount'] = $this->canteen_W($count);
         if (empty($data['dinnerBaseList']))
             $this->error("餐次信息获取失败，请稍候再试！");
