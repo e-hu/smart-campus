@@ -90,19 +90,19 @@
             <td class='text-center'>
                 {if !empty($vo['dinner_choose_start_datetime'])}
                 <input class="layui-input layui-input-inline title-input start" name="{$vo.id}"
-                       value="{:date('Y-m-d',strtotime($vo['dinner_choose_start_datetime']))}"/>
+                       value="{:date('Y-m-d',strtotime($vo['dinner_choose_start_datetime']))}" placeholder="默认格式为2018-06-20 10:00"/>
                 {else}
                 <input class="layui-input layui-input-inline title-input start" name="{$vo.id}"
-                       value=""/>
+                       value="" placeholder="默认格式为2018-06-20 10:00"/>
                 {/if}
             </td>
             <td class='text-center'>
                 {if !empty($vo['dinner_choose_end_datetime'])}
                 <input class="layui-input layui-input-inline title-input end" name="{$vo.id}"
-                       value="{:date('Y-m-d',strtotime($vo['dinner_choose_end_datetime']))}"/>
+                       value="{:date('Y-m-d',strtotime($vo['dinner_choose_end_datetime']))}"  placeholder="默认格式为2018-06-20 10:00"/>
                 {else}
                 <input class="layui-input layui-input-inline title-input end" name="{$vo.id}"
-                       value=""/>
+                       value=""  placeholder="默认格式为2018-06-20 10:00"/>
                 {/if}
             </td>
             <td class='text-center nowrap'>

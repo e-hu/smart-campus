@@ -5,25 +5,34 @@
     <input name="sale_datetime" value="{$data.sale_datetime}" type="hidden">
     <div class="layui-form-item">
         <label class="layui-form-label label-required">窗口选择</label>
+        {foreach $windowbases as $windowbase}
         <div class="layui-input-block">
-            {foreach $windowbases as $windowbase}
             {if !empty($info)}
             {if in_array($windowbase['sale_window_no'],$info['windows_no'])}
-            <input type="checkbox" checked name="windows_no[]" value="{$windowbase.sale_window_no}" title="{$windowbase.sale_window_name}">
-            <input type="text" name="position_id[<?php echo $windowbase['sale_window_no']?>]" value='<?php echo $info['position_id'][$windowbase['sale_window_no']]?>' pattern="^([1-9]{1,1}[0-9]{0,})$"
-                   title="请输入1位及以上的数量值" placeholder="请输入餐台位置号" class="layui-input disabled" style="width:70%;display: initial;">
+            <input type="checkbox" checked name="windows_no[]" value="{$windowbase.sale_window_no}"
+                   title="{$windowbase.sale_window_name}">
+            <input type="text" name="position_id[<?php echo $windowbase['sale_window_no']?>]" value='<?php echo $info['
+                   position_id'][$windowbase['sale_window_no']]?>' pattern="^([1-9]{1,1}[0-9]{0,})$"
+            title="请输入1位及以上的数量值" placeholder="请输入餐台位置号" class="layui-input disabled" style="width:70%;display:
+            initial;">
             {else}
-            <input type="checkbox" name="windows_no[]" value="{$windowbase.sale_window_no}" title="{$windowbase.sale_window_name}">
-            <input type="text" name="position_id[<?php echo $windowbase['sale_window_no']?>]" value='' pattern="^([1-9]{1,1}[0-9]{0,})$"
-                   title="请输入1位及以上的数量值" placeholder="请输入餐台位置号" class="layui-input" style="width:70%;display: initial;;margin-top: 4px;">
+            <input type="checkbox" name="windows_no[]" value="{$windowbase.sale_window_no}"
+                   title="{$windowbase.sale_window_name}">
+            <input type="text" name="position_id[<?php echo $windowbase['sale_window_no']?>]" value=''
+                   pattern="^([1-9]{1,1}[0-9]{0,})$"
+                   title="请输入1位及以上的数量值" placeholder="请输入餐台位置号" class="layui-input"
+                   style="width:70%;display: initial;;margin-top: 4px;">
             {/if}
             {else}
-            <input type="checkbox" name="windows_no[]" value="{$windowbase.sale_window_no}" title="{$windowbase.sale_window_name}">
-            <input type="text" name="position_id[<?php echo $windowbase['sale_window_no']?>]" value='' pattern="^([1-9]{1,1}[0-9]{0,})$"
-                   title="请输入1位及以上的数量值" placeholder="请输入餐台位置号" class="layui-input" style="width:70%;display: initial;;margin-top: 4px;">
+            <input type="checkbox" name="windows_no[]" value="{$windowbase.sale_window_no}"
+                   title="{$windowbase.sale_window_name}">
+            <input type="text" name="position_id[<?php echo $windowbase['sale_window_no']?>]" value=''
+                   pattern="^([1-9]{1,1}[0-9]{0,})$"
+                   title="请输入1位及以上的数量值" placeholder="请输入餐台位置号" class="layui-input"
+                   style="width:70%;display: initial;;margin-top: 4px;">
             {/if}
-            {/foreach}
         </div>
+        {/foreach}
     </div>
     <div class="hr-line-dashed"></div>
 
