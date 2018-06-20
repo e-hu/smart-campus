@@ -369,8 +369,10 @@
                                     $event.target.checked = true;
                                     vm.price_total = ret.data.price_total;
                                     vm.price_num = ret.data.price_num;
-                                    if (ret.data.dinner_name !== 'null') {
+                                    if (ret.data.dinner_name !== null) {
                                         vm.now_num = '1';
+                                    }else {
+                                        vm.now_num = '0';
                                     }
                                     vm.now_flag = ret.data.dinner_name;
                                     vm.now_name = ret.data.cookbook_name;
@@ -401,8 +403,10 @@
                                     $event.target.checked = false;
                                     vm.price_total = ret.data.price_total;
                                     vm.price_num = ret.data.price_num;
-                                    if (ret.data.dinner_name !== 'null') {
+                                    if (ret.data.dinner_name !== null) {
                                         vm.now_num = '1';
+                                    }else {
+                                        vm.now_num = '0';
                                     }
                                     vm.now_flag = ret.data.dinner_name;
                                     vm.now_name = ret.data.cookbook_name;
@@ -436,8 +440,10 @@
                                     $event.target.checked = true;
                                     vm.price_total = ret.data.price_total;
                                     vm.price_num = ret.data.price_num;
-                                    if (ret.data.dinner_name !== 'null') {
+                                    if (ret.data.dinner_name !== null) {
                                         vm.now_num = '1';
+                                    }else {
+                                        vm.now_num = '0';
                                     }
                                     vm.now_flag = ret.data.dinner_name;
                                     vm.now_name = ret.data.cookbook_name;
@@ -467,8 +473,10 @@
                                     $event.target.checked = false;
                                     vm.price_total = ret.data.price_total;
                                     vm.price_num = ret.data.price_num;
-                                    if (ret.data.dinner_name !== 'null') {
+                                    if (ret.data.dinner_name !== null) {
                                         vm.now_num = '1';
+                                    }else {
+                                        vm.now_num = '0';
                                     }
                                     vm.now_flag = ret.data.dinner_name;
                                     vm.now_name = ret.data.cookbook_name;
