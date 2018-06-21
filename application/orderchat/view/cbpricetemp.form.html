@@ -1,0 +1,63 @@
+<form class="layui-form layui-box" style='padding:20px 30px 20px 30px' action="__SELF__" data-auto="true" method="post">
+    <input type="hidden" name="canteen_no" value="{$canteens.canteen_no}">
+    <input type="hidden" name="week_num" value="{$weeks.week_num}">
+    <input type="hidden" name="start_datetime" value="{$weeks.start_datetime}">
+    <input type="hidden" name="end_datetime" value="{$weeks.end_datetime}">
+    <table class="layui-table" lay-size="sm">
+        <caption style="text-align: center;font-size: 24px;">学生菜单 {$canteens.canteen_name}
+            第{$weeks.week_num}周（{$weeks.start_datetime}——{$weeks.end_datetime}）
+        </caption>
+        <colgroup>
+            <col width="120">
+            <col width="45">
+        </colgroup>
+        <thead>
+        <tr>
+            <th>日期</th>
+            <th>餐次</th>
+            {foreach $meals as $val}
+            <th>{$val.meal_name}</th>
+            {/foreach}
+        </tr>
+        </thead>
+        <tbody>
+        {foreach $list as $a=>$b}
+        {foreach $b as $c=>$d}
+        <tr>
+            {foreach $date_time as $da=>$te}
+            {if $da == $a}
+            <td>{$te} {$a}</td>
+            {/if}
+            {/foreach}
+            <td>{$c}</td>
+            {foreach $d as $e=>$f}
+            <td>
+                {foreach $f as $g=>$h}
+                <select name="{$a}{$c}{$e}[]" lay-verify="" lay-search lay-filter="cookbook_no[]">
+                    <option value=""></option>
+                    {foreach $cookbooks as $value}
+                    {if !empty($h['cookbook_no']) and $h['cookbook_no'] == $value['cookbook_no']}
+                    <option selected value="{$value.cookbook_no}">[{$value.cookbook_name}]</option>
+                    {else}
+                    <option value="{$value.cookbook_no}">[{$value.cookbook_name}</option>
+                    {/if}
+                    {/foreach}
+                </select>
+                {/foreach}
+            </td>
+            {/foreach}
+        </tr>
+        {/foreach}
+        {/foreach}
+        </tbody>
+    </table>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>
