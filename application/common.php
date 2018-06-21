@@ -431,3 +431,19 @@ function refundNoMSC($openid)
         'remark'=>array('value'=>'点击本条信息进行操作。')
     ),Request::instance()->domain().'/index/index/checkList');
 }
+
+function search_food($name)
+{
+    $name = substr($name, 0, 20);
+    $url = "http://food.boohee.com/fb/v1/search?page=1&order_asc=desc&q=$name";  //查询
+    $html = file_get_contents($url);
+    $arr_search = json_decode($html, true);
+    $arr = [];
+    foreach($arr_search['items'] as $val){
+        $food_url = 'http://food.boohee.com/fb/v1/foods/'.$val['code'].'/mode_show'; //具体食品
+        $html = file_get_contents($food_url);
+        $arr_img = json_decode($html, true);
+        $arr[] = $arr_img['large_image_url'];
+    }
+    return json($arr);
+}

@@ -168,7 +168,7 @@ class CookBook extends BasicAdmin
             $sqlstr = "exec [up_get_max_id] ?,?,?,?";
             $data = Db::query($sqlstr, ['', 'cookbook', 'COBOK', 0]);
             $cookbook_info['cookbook_no'] = $data[0][0]['id'];
-            foreach ($cookbook_detail as $val){
+            foreach ($cookbook_detail as $val) {
                 unset($val['ROW_NUMBER']);
                 unset($val['id']);
                 $val['cookbook_no'] = $cookbook_info['cookbook_no'];
@@ -180,5 +180,13 @@ class CookBook extends BasicAdmin
         $this->error("菜品套餐复制失败，请稍候再试！");
     }
 
+    /*
+     * 菜品图片查询
+     * */
+    public function searchCook()
+    {
+        $data = search_food($_POST['cookbook_name']);
+        return $data;
+    }
 
 }
