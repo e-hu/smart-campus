@@ -5,7 +5,8 @@
 
 {/block}
 <!--startprint-->
-<table class="layui-table" id="tableExcel">
+<form class="layui-form layui-box" style='padding:20px 30px 20px 30px' action="__SELF__" data-auto="true" method="post">
+<table class="layui-table" id="tableExcel" lay-size="sm">
     <caption style="text-align: center;font-size: 24px;">学生菜单 {$canteens.canteen_name}
         第{$weeks.week_num}周（{$weeks.start_datetime}——{$weeks.end_datetime}）
     </caption>
@@ -46,6 +47,7 @@
     {/foreach}
     </tbody>
 </table>
+</form>
 <!--endprint-->
 <div class="hr-line-dashed"></div>
 

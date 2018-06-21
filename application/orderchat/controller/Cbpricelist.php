@@ -157,7 +157,7 @@ class CbPricelist extends BasicAdmin
     }
 
     /**
-     * 周菜谱编辑
+     * 周菜谱查看
      */
     public function view()
     {
