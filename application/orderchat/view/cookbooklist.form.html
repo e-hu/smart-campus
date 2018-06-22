@@ -3,10 +3,10 @@
         <label class="layui-form-label">菜品名称</label>
         <div class="layui-input-block">
             {if $vo and isset($vo.cookbook_name)}
-            <input type="text"  name="cookbook_name" value='{$vo.cookbook_name|default=""}'
+            <input type="text" id="cookbook_name" name="cookbook_name" value='{$vo.cookbook_name|default=""}'
                    required="required" title="请输入2位及以上的字符" placeholder="请输入菜品名称" class="layui-input disabled">
             {else}
-            <input type="text" name="cookbook_name" value='' pattern="^\S{2,}$"
+            <input type="text" id="cookbook_name" name="cookbook_name" value='' pattern="^\S{2,}$"
                    title="请输入2位及以上的字符" required="required" placeholder="请输入菜品名称" class="layui-input">
             {/if}
         </div>
@@ -51,4 +51,10 @@
     </div>
 
     <script>window.form.render();</script>
+    <script>
+        $(".layui-form").on('change', "#cookbook_name", function () {
+            var info = this.value;
+            $("#cook_img").attr("data-img",info);
+        });
+    </script>
 </form>
