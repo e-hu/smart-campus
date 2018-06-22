@@ -50,6 +50,7 @@
                 <th class='text-center'>窗口号</th>
                 <th class='text-center'>设备用途</th>
                 <th class='text-center'>设备状态</th>
+                <th class='text-center'>设备二维码</th>
                 <th class='text-center'>操作</th>
             </tr>
         </thead>
@@ -83,6 +84,7 @@
                     <span style="color:#090">使用中</span>
                     {/if}
                 </td>
+                <th class='text-center'><img data-tips-image src='{:url("$classuri/qrcode")}?machine_id={$vo.machine_id}' style="height: 60px;width: 60px;"></th>
                 <td class='text-center nowrap'>
                     {if $Think.session.company_id == '0'}
                     <span class="text-explode">|</span>

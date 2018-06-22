@@ -104,4 +104,27 @@ class Equipment extends BasicAdmin
         $this->error("设备启用失败，请稍候再试！");
     }
 
+    /**
+     * 查看二维码
+     */
+    public function qrcode($machine_id)
+    {
+        LogService::write('订餐管理', '执行查看设备二维码操作');
+         //生成当前的二维码
+        $qrCode = new \Endroid\QrCode\QrCode();
+        if($machine_id) {
+            //想显示在二维码中的文字内容，这里设置了一个查看文章的地址
+            $url = url('index/index/device.html?$machine_id='.$machine_id,'',true,true);
+            $qrCode->setText($url)
+                ->setSize(300)
+                ->setPadding(10)
+                ->setErrorCorrection('high')
+                ->setForegroundColor(array('r' => 0, 'g' => 0, 'b' => 0, 'a' => 0))
+                ->setBackgroundColor(array('r' => 255, 'g' => 255, 'b' => 255, 'a' => 0))
+                ->setLabel($machine_id)
+                ->setLabelFontSize(16)
+                ->setImageType(\Endroid\QrCode\QrCode::IMAGE_TYPE_PNG);
+            $qrCode->render();
+        }
+    }
 }
