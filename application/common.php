@@ -445,5 +445,5 @@ function search_food($name)
         $arr_img = json_decode($html, true);
         $arr[] = $arr_img['large_image_url'];
     }
-    return json($arr);
+    return $arr;
 }

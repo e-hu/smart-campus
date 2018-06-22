@@ -150,6 +150,7 @@
             <input type="hidden" name="cookbook_image" onchange="$(this).prev('img').attr('src', this.value)"
                    value="{$vo.cookbook_image|default=''}" class="layui-input">
             <a class="btn btn-link" data-file="one" data-type="jpg,jpeg,png" data-field="cookbook_image">上传图片</a>
+            <button id="cook_img" data-img='{$vo.cookbook_name|default=""}' type='button' class='layui-btn layui-btn-primary'>选择图片</button>
         </div>
     </div>
     <!--<div class="layui-form-item">-->
@@ -183,27 +184,8 @@
         newTextBoxDiv.appendTo("#cookbook");
         form.render('select');
     }
-
-    // function searchCook() {
-    //     $cookbook_name =  $("#cookbook_name").attr("value");
-    //     if($cookbook_name == ''){
-    //         alert('请输入菜品名称');
-    //         return false
-    //     }
-    //     $.ajax({
-    //         type: 'POST',
-    //         url: "{:url('cookbook/searchCook')}",  //保存
-    //         data: {
-    //             'cookbook_name': $cookbook_name
-    //         },
-    //         async: false,
-    //         success: function (data) {
-    //             for (var i=0;i<data.length;i++)
-    //             {
-    //                 var source = data[i];
-    //                     $("#cookbook_img").append('<img src="'+source+'" data-tips-image style="height:auto;max-height:100px;min-width:100px">');
-    //             }
-    //         }
-    //     });
-    // }
+    $(".layui-form").on('change', "#cookbook_name", function () {
+        var info = this.value;
+       $("#cook_img").attr("data-img",info);
+    });
 </script>

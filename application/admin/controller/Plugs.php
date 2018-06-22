@@ -140,4 +140,16 @@ class Plugs extends BasicAdmin {
         return view();
     }
 
+    /**
+     * 菜品图片
+     */
+    public function img() {
+        $data = search_food($this->request->get('img', ''));
+        if(empty($data)){
+            $this->error('菜品名称不能为空','');
+        }
+        $this->assign('field', $this->request->get('field', 'cookbook_image'));
+        $this->assign('data', $data);
+        return view();
+    }
 }

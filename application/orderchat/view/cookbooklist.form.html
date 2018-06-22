@@ -38,6 +38,7 @@
             <input type="hidden" name="cookbook_image" onchange="$(this).prev('img').attr('src', this.value)"
                    value="{$vo.cookbook_image|default=''}" class="layui-input">
             <a class="btn btn-link" data-file="one" data-type="jpg,jpeg,png" data-field="cookbook_image">上传图片</a>
+            <button id="cook_img" data-img='{$vo.cookbook_name|default=""}' type='button' class='layui-btn layui-btn-primary'>选择图片</button>
         </div>
     </div>
 

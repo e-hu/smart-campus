@@ -115,6 +115,14 @@ define(['jquery', 'admin.plugs'], function () {
         $.form.iframe(url, '图标选择');
     });
 
+    /*! 注册 data-img 事件行为 */
+    this.$body.on('click', '[data-img]', function () {
+        var img = $(this).attr('data-img');
+        var field = $(this).attr('data-field') || 'cookbook_image';
+        var url = window.ROOT_URL + '/index.php/admin/plugs/img.html?img=' + img+'&field'+field;
+        $.form.iframe(url, '图片选择——'+field+'数据来源自食物库APP');
+    });
+
     /*! 注册 data-tips-image 事件行为 */
     this.$body.on('click', '[data-tips-image]', function () {
         var src = this.getAttribute('data-tips-image') || this.src, img = new Image();

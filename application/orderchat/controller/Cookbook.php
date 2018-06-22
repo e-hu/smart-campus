@@ -180,13 +180,4 @@ class CookBook extends BasicAdmin
         $this->error("菜品套餐复制失败，请稍候再试！");
     }
 
-    /*
-     * 菜品图片查询
-     * */
-    public function searchCook()
-    {
-        $data = search_food($_POST['cookbook_name']);
-        return $data;
-    }
-
 }
