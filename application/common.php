@@ -377,21 +377,21 @@ function sendMSC($userOpenId,$shortId=null,$data=null,$url=null){
 }
 
 /**
- * 生成退补餐审核记录发送模板信息
+ * 生成退餐审核记录发送模板信息
  * @param $openid
  */
 function refundMSC($openid)
 {
     sendMSC($openid,'OPENTM407446439',array(
-        'first'=>array('value'=>'您好！有新发布的退补餐需要您审核','color'=>'#173177'),
+        'first'=>array('value'=>'您好！有新发布的退餐需要您审核','color'=>'#173177'),
         'keyword1'=>array('value'=>'管理员审核'),
         'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
         'remark'=>array('value'=>'点击本条信息进行操作。')
-    ),Request::instance()->domain().'/index/index/checkList');
+    ),url('/index/index/checkList'));
 }
 
 /**
- * 退补餐审核记录解过发送模板信息
+ * 退餐审核记录解过发送模板信息
  * @param $openid
  */
 function returnMSC($openid)
@@ -401,7 +401,7 @@ function returnMSC($openid)
         'keyword1'=>array('value'=>'申请结果通知'),
         'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
         'remark'=>array('value'=>'点击本条信息进行操作。')
-    ),Request::instance()->domain().'/index/index/refund');
+    ),url('/index/index/refund'));
 }
 
 /**
@@ -415,7 +415,7 @@ function patchMSC($openid)
         'keyword1'=>array('value'=>'申请结果通知'),
         'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
         'remark'=>array('value'=>'点击本条信息进行操作。')
-    ),Request::instance()->domain().'/index/index/patch');
+    ),url('/index/index/patch'));
 }
 
 /**
@@ -429,7 +429,7 @@ function refundNoMSC($openid)
         'keyword1'=>array('value'=>'申请结果通知'),
         'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
         'remark'=>array('value'=>'点击本条信息进行操作。')
-    ),Request::instance()->domain().'/index/index/checkList');
+    ),url('/index/index/checkList'));
 }
 
 function search_food($name)
