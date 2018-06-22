@@ -120,7 +120,7 @@ define(['jquery', 'admin.plugs'], function () {
         var img = $(this).attr('data-img');
         var field = $(this).attr('data-field') || 'cookbook_image';
         var url = window.ROOT_URL + '/index.php/admin/plugs/img.html?img=' + img+'&field'+field;
-        $.form.iframe(url, '图片选择——'+field+'数据来源自食物库APP');
+        $.form.iframe(url, '图片选择——'+img+'数据来源自食物库APP');
     });
 
     /*! 注册 data-tips-image 事件行为 */
