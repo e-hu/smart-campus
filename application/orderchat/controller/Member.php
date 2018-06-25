@@ -35,10 +35,10 @@ class Member extends BasicAdmin
         // 实例Query对象
         $db = Db::name($this->table)
             ->alias('a')
-            ->field('a.*,dept_name,dinner_name,grant_money')
-            ->join('t_user_manager_dept_id t', 't.company_id = a.company_id  and t.u_id = a.Emp_Id and t.dept_type = :dinner_type', 'left')
-            ->bind('dinner_type', 'userdinner')
-            ->join('dinner_base_info i', 'i.company_id = a.company_id and i.dinner_no = t.dept_id', 'left')
+            ->field('a.*,dept_name,grant_money')
+//            ->join('t_user_manager_dept_id t', 't.company_id = a.company_id  and t.u_id = a.Emp_Id and t.dept_type = :dinner_type', 'left')
+//            ->bind('dinner_type', 'userdinner')
+//            ->join('dinner_base_info i', 'i.company_id = a.company_id and i.dinner_no = t.dept_id', 'left')
             ->join('dept_info c', 'a.Dept_Id = c.dept_no and a.company_id = c.company_id', 'left')
             ->join('v_grant_type v', 'v.company_id = a.company_id and v.grant_type = a.grant_type', 'left')
             ->where('a.company_id', session('user.company_id'));

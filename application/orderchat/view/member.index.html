@@ -68,7 +68,7 @@
                 <th class='text-center'>账号名称</th>
                 <th class='text-center'>入职日期</th>
                 <th class='text-center'>补贴金额</th>
-                <th class='text-center'>餐次授权</th>
+                <!--<th class='text-center'>餐次授权</th>-->
                 <th class='text-center'>状态</th>
                 <th class='text-center'>操作</th>
             </tr>
@@ -90,7 +90,7 @@
                 <td class='text-center'><span style='color:#ccc'>无</span></td>
                 {/if}
                 <td class='text-center'>{$vo.grant_money|default="<span style='color:#ccc'>无</span>"}</td>
-                <td class='text-center'>{$vo.dinner_name|default="<span style='color:#ccc'>无</span>"}</td>
+                <!--<td class='text-center'>{$vo.dinner_name|default="<span style='color:#ccc'>无</span>"}</td>-->
                 <td class='text-center'>
                     {if $vo.Emp_Status eq 0}
                     <span>已禁用</span>
