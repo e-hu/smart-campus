@@ -412,7 +412,7 @@ class MallApi extends ApiBase
             ->join('canteen_base_info c', 'p.canteen_no = c.canteen_no and p.company_id = c.company_id', 'left')
             ->join('dinner_base_info i', 'p.dinner_flag = i.dinner_flag and p.company_id = i.company_id', 'left')
             ->join('cookbook_meal_type e', 'b.meal_id = e.meal_id', 'left')
-            ->field('p.*,meal_name,cookbook_name,b.cookbook_info,cookbook_image,canteen_name,dinner_name')
+            ->field('p.*,meal_name,cookbook_name,cookbook_info,cookbook_image,canteen_name,dinner_name')
             ->order('dinner_flag asc')
             ->where($where)->select();
         $data['cartCount'] = Db::name('emp_cookbook_dinner_info')
