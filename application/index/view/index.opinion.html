@@ -27,7 +27,7 @@
                     var data = {};
                     data.content = self.content;
                     if(data.content == ''){
-                        layer.msg("提交内容不能为空");
+                        $.alert("提交内容不能为空");
                         return false;
                     }
                     //提交反馈

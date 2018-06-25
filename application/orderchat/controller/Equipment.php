@@ -114,7 +114,7 @@ class Equipment extends BasicAdmin
         $qrCode = new \Endroid\QrCode\QrCode();
         if($machine_id) {
             //想显示在二维码中的文字内容，这里设置了一个查看文章的地址
-            $url = url('index/index/device.html?machine_id='.$machine_id,'',true,true);
+            $url = url('index/index/device?machine_id='.$machine_id,'',true,true);
             $qrCode->setText($url)
                 ->setSize(300)
                 ->setPadding(10)

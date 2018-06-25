@@ -7,7 +7,7 @@
             <div class="dib r f0 p7 Sbgf">
                 <img :src="image" class="max r h80 w80"/>
             </div>
-            <div class="cf f18 mt20" style="color: #0C0C0C">{{name}}    绑定卡号  {{card}}</div>
+            <div class="cf f18 mt20" style="color: #0C0C0C"></div>
         </div>
     </div>
     <div class="weui-msg__opr-area">
@@ -31,7 +31,7 @@
         var data = {
             name: '',
             image:'',
-            card: getUrlParam('card')
+            machine_id: getUrlParam('machine_id')
         };
         new Vue({
             el: '#app',
@@ -39,7 +39,7 @@
             methods: {
                 configInfo: function () {
                     var self = this;
-                    if(!self.card){
+                    if(!self.machine_id){
                         $.alert('设备号参数错误,请重新扫码!', function() {
                             openWin('index/index/me',{});
                         });
