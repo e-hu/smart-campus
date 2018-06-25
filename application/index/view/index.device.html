@@ -1,75 +1,220 @@
 {include file="common/header" title="设备注册" keywords="设备注册" description="" /}
-<div id="app" v-cloak class="weui-msg">
-    <div class="weui-msg__icon-area"><i class="weui-icon-info weui-icon_msg"></i></div>
-    <div class="weui-msg__text-area">
-        <h2 class="weui-msg__title">请确认是否绑定此IC卡</h2>
-        <div class="tc">
-            <div class="dib r f0 p7 Sbgf">
-                <img :src="image" class="max r h80 w80"/>
-            </div>
-            <div class="cf f18 mt20" style="color: #0C0C0C"></div>
-        </div>
-    </div>
-    <div class="weui-msg__opr-area">
-        <p class="weui-btn-area">
-            <a href="javascript:void(0);" class="weui-btn weui-btn_primary" @click="cardBing">确定</a>
-        </p>
-    </div>
-    <div class="weui-msg__extra-area">
-        <div class="weui-footer">
-            <p class="weui-footer__links">
-                <a href="javascript:void(0);" class="weui-footer__link">浙农茂阳配送有限公司</a>
-            </p>
-            <p class="weui-footer__text">Copyright © 2017-2020 浙农茂阳配送有限公司</p>
-        </div>
-    </div>
+<!-- 引入样式 -->
+<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+<!-- 引入组件库 -->
+<div id="app" class="f H scroll bgf " v-cloak>
+    <ul class="bgf clear SSheader W">
+        <li class="hl50 F_ bbd bgf tc bgdefault cf fr6">
+            <p class='W'>设备注册</p>
+        </li>
+    </ul>
+    <el-form ref="form" :model="form" label-width="80px" class="pt50">
+        <el-form-item label="活动名称">
+            <el-input v-model="form.name"></el-input>
+        </el-form-item>
+        <el-form-item label="活动区域">
+            <el-select v-model="form.region" placeholder="请选择活动区域">
+                <el-option label="区域一" value="shanghai"></el-option>
+                <el-option label="区域二" value="beijing"></el-option>
+            </el-select>
+        </el-form-item>
+        <el-form-item label="即时配送">
+            <el-switch v-model="form.delivery"></el-switch>
+        </el-form-item>
+        <el-form-item label="活动性质">
+            <el-checkbox-group v-model="form.type">
+                <el-checkbox label="美食/餐厅线上活动" name="type"></el-checkbox>
+                <el-checkbox label="地推活动" name="type"></el-checkbox>
+                <el-checkbox label="线下主题活动" name="type"></el-checkbox>
+                <el-checkbox label="单纯品牌曝光" name="type"></el-checkbox>
+            </el-checkbox-group>
+        </el-form-item>
+        <el-form-item label="特殊资源">
+            <el-radio-group v-model="form.resource">
+                <el-radio label="线上品牌商赞助"></el-radio>
+                <el-radio label="线下场地免费"></el-radio>
+            </el-radio-group>
+        </el-form-item>
+        <el-form-item label="活动形式">
+            <el-input type="textarea" v-model="form.desc"></el-input>
+        </el-form-item>
+        <el-form-item>
+            <el-button type="primary" @click="onSubmit">立即创建</el-button>
+            <el-button>取消</el-button>
+        </el-form-item>
+    </el-form>
+
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>设备序列号：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="text" class="W bn" readonly v-model="machine_id"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>设备类别：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>应用服务器地址：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>餐厅：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>窗口：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>指纹识别方式：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>数据交互方式：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>指纹模版版本：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>指纹验证最低评分：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>指纹验证直接通过评分：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>指纹质量最低通过评分：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>串口参数：</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>串口号：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>串口波特率：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>奇偶校验方式：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>数据位长度：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="bgf p20-10 bbe F_">-->
+        <!--<span>停止位长度：</span>-->
+        <!--<span class="f ml20">-->
+				<!--<input type="password" class="W bn" readonly value="11111"/>-->
+			<!--</span>-->
+    <!--</div>-->
+    <!--<div class="pt40">-->
+        <!--<button class="bgdefault W9 r2 cf p10 f16 Ml5" @click="cardBing">确定</button>-->
+    <!--</div>-->
 </div>
 {include file="common/footer" /}
+<!--<script type="text/javascript">-->
+    <!--window.onload = function () {-->
+        <!--var data = {-->
+            <!--machine_id: getUrlParam('machine_id')-->
+        <!--};-->
+        <!--new Vue({-->
+            <!--el: '#app',-->
+            <!--data: data,-->
+            <!--methods: {-->
+                <!--configInfo: function () {-->
+                    <!--var self = this;-->
+                    <!--if(!self.machine_id){-->
+                        <!--$.alert('设备号参数错误,请重新扫码!', function() {-->
+                            <!--openWin('index/index/me',{});-->
+                        <!--});-->
+                    <!--}-->
+                <!--},-->
+                <!--cardBing: function () {-->
+                    <!--var self = this;-->
+                    <!--$.ajax({-->
+                        <!--url: '/index/mallapi/cardBind',-->
+                        <!--type: "POST",-->
+                        <!--data:{card:self.card},-->
+                        <!--dataType: "json",-->
+                        <!--success: function (ret) {-->
+                            <!--if (ret.code == '0') {-->
+                                <!--$.alert(ret.msg);-->
+                            <!--} else {-->
+                                <!--$.alert(ret.msg, function() {-->
+                                    <!--openWin(ret.url,{});-->
+                                <!--});-->
+                            <!--}-->
+                        <!--}-->
+                    <!--});-->
+                <!--}-->
+            <!--},-->
+            <!--mounted: function () {-->
+                <!--this.$nextTick(function () {-->
+                    <!--this.configInfo();-->
+                <!--})-->
+            <!--}-->
+        <!--});-->
+    <!--}-->
 
-<script type="text/javascript">
-    window.onload = function () {
-        var data = {
-            name: '',
-            image:'',
-            machine_id: getUrlParam('machine_id')
-        };
-        new Vue({
-            el: '#app',
-            data: data,
-            methods: {
-                configInfo: function () {
-                    var self = this;
-                    if(!self.machine_id){
-                        $.alert('设备号参数错误,请重新扫码!', function() {
-                            openWin('index/index/me',{});
-                        });
-                    }
-                },
-                cardBing: function () {
-                    var self = this;
-                    $.ajax({
-                        url: '/index/mallapi/cardBind',
-                        type: "POST",
-                        data:{card:self.card},
-                        dataType: "json",
-                        success: function (ret) {
-                            if (ret.code == '0') {
-                                $.alert(ret.msg);
-                            } else {
-                                $.alert(ret.msg, function() {
-                                    openWin(ret.url,{});
-                                });
-                            }
-                        }
-                    });
+<!--</script>-->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data() {
+            return {
+                form: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
                 }
-            },
-            mounted: function () {
-                this.$nextTick(function () {
-                    this.configInfo();
-                })
             }
-        });
-    }
-
+        },
+        methods: {
+            onSubmit() {
+                console.log('submit!');
+            }
+        }
+    })
 </script>
