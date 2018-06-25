@@ -203,8 +203,8 @@ class MallApi extends ApiBase
             ->where($where)->count();
         $select_cookbook = Db::name('emp_cookbook_dinner_info')
             ->alias('d')
-            ->join('cookbook_base_info b', 'b.cookbook_no = d.cookbook_no', 'left')
-            ->join('dinner_base_info i', 'i.dinner_flag = d.dinner_flag', 'left')
+            ->join('cookbook_base_info b', 'b.cookbook_no = d.cookbook_no and b.company_id = d.company_id', 'left')
+            ->join('dinner_base_info i', 'i.dinner_flag = d.dinner_flag and i.company_id = d.company_id', 'left')
             ->where(['d.company_id' => $company_id, 'd.emp_id' => $user_id, 'd.dinner_datetime' => $day, 'd.dinner_flag' => $dinner])
             ->field('d.*,cookbook_name,dinner_name')
             ->find();
@@ -239,7 +239,7 @@ class MallApi extends ApiBase
         }
 
         $price_info = Db::name('canteen_cookbook_price')
-            ->where(['price_id' => $param['price_id'], 'sale_datetime' => $param['day'], 'dinner_flag' => $param['dinner_flag']])
+            ->where(['price_id' => $param['price_id'], 'sale_datetime' => $param['day'], 'dinner_flag' => $param['dinner_flag'],'company_id' => $company_id])
             ->find();
         if (!empty($price_info)) {
             if (floatval($price_info['cookbook_remain_quantity']) < 1)
@@ -323,8 +323,8 @@ class MallApi extends ApiBase
 
         $select_cookbook = Db::name('emp_cookbook_dinner_info')
             ->alias('d')
-            ->join('cookbook_base_info b', 'b.cookbook_no = d.cookbook_no', 'left')
-            ->join('dinner_base_info i', 'i.dinner_flag = d.dinner_flag', 'left')
+            ->join('cookbook_base_info b', 'b.cookbook_no = d.cookbook_no and b.company_id = d.comoany_id', 'left')
+            ->join('dinner_base_info i', 'i.dinner_flag = d.dinner_flag and i.company_id = d.comoany_id', 'left')
             ->where(['d.company_id' => $company_id, 'd.emp_id' => $user_id, 'd.dinner_datetime' => $param['day'], 'd.dinner_flag' => $param['dinner_flag']])
             ->field('d.*,cookbook_name,dinner_name')
             ->find();
@@ -411,7 +411,7 @@ class MallApi extends ApiBase
             ->join('cookbook_base_info b', 'p.cookbook_no = b.cookbook_no and p.company_id = b.company_id', 'left')
             ->join('canteen_base_info c', 'p.canteen_no = c.canteen_no and p.company_id = c.company_id', 'left')
             ->join('dinner_base_info i', 'p.dinner_flag = i.dinner_flag and p.company_id = i.company_id', 'left')
-            ->join('cookbook_meal_type e', 'b.meal_id = e.meal_id', 'left')
+            ->join('cookbook_meal_type e', 'b.meal_id = e.meal_id and p.company_id = e.company_id', 'left')
             ->field('p.*,meal_name,cookbook_name,cookbook_info,cookbook_image,canteen_name,dinner_name')
             ->order('dinner_flag asc')
             ->where($where)->select();
@@ -476,7 +476,7 @@ class MallApi extends ApiBase
         if (empty($_POST)) {
             $this->error('参数为空', '/index/index/me');
         }
-        $info = Db::table("recharge_order_list")->where('OrderId', $_POST['OrderId'])->find();
+        $info = Db::table("recharge_order_list")->where(['OrderId'=>$_POST['OrderId'],'company_id'=>$this->getClientCompanyId()])->find();
         if ($info) {
             $this->error('请不要重复提交!', '/index/index/me');
         }
@@ -523,7 +523,7 @@ class MallApi extends ApiBase
         $where['i.flag'] = '1';
         $type_list = Db::name('company_list_third_interface')
             ->alias('i')
-            ->join('v_third_pay_list p', 'i.third_interface_id = p.third_ic_id', 'left')
+            ->join('v_third_pay_list p', 'i.third_interface_id = p.third_ic_id and p.company_id = i.company_id', 'left')
             ->field('i.*,third_company,third_url')
             ->where($where)->select();
         return json($type_list);
@@ -536,7 +536,7 @@ class MallApi extends ApiBase
     {
 
         $data['list'] = Db::table("emp_account_get_money_detail")
-            ->join('cookbook_meal_type m', 'emp_account_get_money_detail.account_typeid = m.meal_id', 'left')
+            ->join('cookbook_meal_type m', 'emp_account_get_money_detail.account_typeid = m.meal_id and emp_account_get_money_detail.company_id = m.company_id', 'left')
             ->field('get_account_degree,get_account_money,case_date,meal_name')
             ->where('emp_account_get_money_detail.Emp_Id=:Emp_Id and emp_account_get_money_detail.company_id=:company_id',
                 ['Emp_Id' => $this->getClientUserId(),
@@ -693,7 +693,7 @@ class MallApi extends ApiBase
             ->where(['emp_id' => $user_id, 'company_id' => $company_id, 'dinner_status' => '1', 'dinner_datetime' => $day])
             ->count();
 
-        $user_info = Db::name('employee_list')->where(['emp_id' => $user_id])->find();
+        $user_info = Db::name('employee_list')->where(['emp_id' => $user_id,'company_id'=>$company_id])->find();
         $data['emp_name'] = $user_info['Emp_MircoMsg_Uid'];
         $data['user_name'] = $user_info['Emp_Name'];
 
@@ -795,8 +795,8 @@ class MallApi extends ApiBase
 
         $select_cookbook = Db::name('emp_cookbook_dinner_info')
             ->alias('d')
-            ->join('cookbook_base_info b', 'b.cookbook_no = d.cookbook_no', 'left')
-            ->join('dinner_base_info i', 'i.dinner_flag = d.dinner_flag', 'left')
+            ->join('cookbook_base_info b', 'b.cookbook_no = d.cookbook_no and b.company_id = d.company_id', 'left')
+            ->join('dinner_base_info i', 'i.dinner_flag = d.dinner_flag and i.company_id = d.company_id', 'left')
             ->where(['d.company_id' => $company_id, 'd.emp_id' => $user_id, 'd.dinner_datetime' => $day, 'd.dinner_flag' => $dinner])
             ->field('d.*,cookbook_name,dinner_name')
             ->find();
@@ -833,7 +833,7 @@ class MallApi extends ApiBase
                 ->delete();
         }
         $price_info = Db::name('canteen_cookbook_price')
-            ->where(['price_id' => $param['price_id'], 'sale_datetime' => $param['day'], 'dinner_flag' => $param['dinner_flag']])
+            ->where(['price_id' => $param['price_id'], 'sale_datetime' => $param['day'], 'dinner_flag' => $param['dinner_flag'],'company_id'=>$company_id])
             ->find();
         if (!empty($price_info)) {
 
@@ -924,8 +924,8 @@ class MallApi extends ApiBase
 
         $select_cookbook = Db::name('emp_cookbook_dinner_info')
             ->alias('d')
-            ->join('cookbook_base_info b', 'b.cookbook_no = d.cookbook_no', 'left')
-            ->join('dinner_base_info i', 'i.dinner_flag = d.dinner_flag', 'left')
+            ->join('cookbook_base_info b', 'b.cookbook_no = d.cookbook_no and b.company_id = d.company_id', 'left')
+            ->join('dinner_base_info i', 'i.dinner_flag = d.dinner_flag and i.company_id = d.company_id', 'left')
             ->where(['d.company_id' => $company_id, 'd.emp_id' => $user_id, 'd.dinner_datetime' => $param['day'], 'd.dinner_flag' => $param['dinner_flag']])
             ->field('d.*,cookbook_name,dinner_name')
             ->find();
@@ -1625,5 +1625,27 @@ class MallApi extends ApiBase
         $data = Db::query($sqlStr, ['04'.'||'.$machine_sn.'||'.$user_id.'||'.$company_id]);
         $return = explode("||",$data[0][0]['return_msg']);
         $this->success($return['5']);
+    }
+
+    /*查看取餐窗口*/
+    function getWindowsList($day)
+    {
+        $user_id = $this->getClientUserId();
+        $company_id = $this->getClientCompanyId();
+        $where['p.company_id'] = $company_id;
+        $where['p.emp_id'] = $user_id;
+        $where['p.dinner_datetime'] = $day;
+        $data['cartList'] = Db::name('emp_cookbook_dinner_info')
+            ->alias('p')
+            ->join('cookbook_base_info b', 'p.cookbook_no = b.cookbook_no and p.company_id = b.company_id', 'left')
+            ->join('canteen_base_info c', 'p.canteen_no = c.canteen_no and p.company_id = c.company_id', 'left')
+            ->join('dinner_base_info i', 'p.dinner_flag = i.dinner_flag and p.company_id = i.company_id', 'left')
+            ->join('cookbook_meal_type e', 'b.meal_id = e.meal_id and e.company_id = p.company_id', 'left')
+            ->join('canteen_cookbook_window_position f','p.company_id = f.company_id and p.cookbook_no = f.cookbook_no and f.sale_datetime = p.dinner_datetime and f.canteen_no = p.canteen_no and f.dinner_flag = p.dinner_flag','left')
+            ->join('canteen_sale_window_base_info g','f.windows_no = g.sale_window_no and f.company_id = p.company_id and g.canteen_no = f.canteen_no')
+            ->field('p.*,meal_name,cookbook_name,cookbook_info,cookbook_image,canteen_name,dinner_name,sale_window_name')
+            ->order('dinner_flag asc')
+            ->where($where)->select();
+        return json($data);
     }
 }

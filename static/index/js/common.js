@@ -47,6 +47,8 @@ var SCapiDic = {
     login:'/index/login/login'+ran,
     /*扫码取餐*/
     getMealList: '/index/mallapi/getMealList'+ran,
+    /*手机查看取餐窗口*/
+    getWindowsList: '/index/mallapi/getWindowsList'+ran,
 };
 function intoView(el) {
     setTimeout(function() {

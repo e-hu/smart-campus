@@ -72,13 +72,24 @@
             },
             methods: {
                 takeus: function () {
-                    $.alert('快点快点,可以去取餐了!')
+                    var self = this;
+                    $.ajax({
+                        url: SCapiDic.getWindowsList,
+                        type: "POST",
+                        dataType: "json",
+                        data: {
+                            day: getUrlParam('day'),
+                        },
+                        success: function (ret) {
+                                $.alert('请前往指定窗口取餐!')
+                        }
+                    });
                 },
                 historyus: function () {
-                    $.alert('不用看了,这笔订单已经过期了!')
+                    $.alert('订单已经过期了!')
                 },
                 waitus: function () {
-                    $.alert('慢慢等吧，还没到可以取餐的时间!')
+                    $.alert('还没到可以取餐的时间!')
                 }
             }
         });
