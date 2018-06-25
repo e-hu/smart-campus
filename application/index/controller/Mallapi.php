@@ -1325,7 +1325,7 @@ class MallApi extends ApiBase
             ->join('emp_cookbook_dinner_info_modi d', 'p.canteen_no=d.canteen_no and p.cookbook_no=d.cookbook_no and d.emp_id= :emp_id and d.company_id = p.company_id and d.dinner_status = 1 and d.dinner_datetime = p.sale_datetime and d.dinner_flag = p.dinner_flag and d.check_status = 2 and isnull(d.source_id,0)=0', 'left')
             ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id and p.company_id = e.company_id', 'left')
             ->bind(['emp_id' => $user_id])
-            ->field('p.*,meal_name,cookbook_name,b.cookbook_info,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
+            ->field('p.*,meal_name,cookbook_name,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
             ->order('order_index desc')
             ->where($where)->where('p.choice_flag=0')->select();
         foreach ($data['cartList'] as $key => $val) {
@@ -1343,7 +1343,7 @@ class MallApi extends ApiBase
             ->join('emp_cookbook_dinner_info_modi d', 'p.canteen_no=d.canteen_no and p.cookbook_no=d.cookbook_no and d.emp_id= :emp_id and d.company_id = p.company_id and d.dinner_status = 1 and d.dinner_datetime = p.sale_datetime and d.dinner_flag = p.dinner_flag and d.check_status = 2 and isnull(d.source_id,0)=0', 'left')
             ->join('cookbook_meal_type e', 'p.meal_id = e.meal_id and p.company_id = e.company_id', 'left')
             ->bind(['emp_id' => $user_id])
-            ->field('p.*,meal_name,cookbook_name,b.cookbook_info,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
+            ->field('p.*,meal_name,cookbook_name,cookbook_image,canteen_name,case when isnull(emp_id,\'\')=\'\' then 0 else 1 end as order_index ')
             ->order('order_index desc')
             ->where($where)->where('p.choice_flag=1')->select();
         foreach ($data['cartChoiceList'] as $key => $val) {
