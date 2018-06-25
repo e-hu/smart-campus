@@ -523,7 +523,7 @@ class MallApi extends ApiBase
         $where['i.flag'] = '1';
         $type_list = Db::name('company_list_third_interface')
             ->alias('i')
-            ->join('v_third_pay_list p', 'i.third_interface_id = p.third_ic_id and p.company_id = i.company_id', 'left')
+            ->join('v_third_pay_list p', 'i.third_interface_id = p.third_ic_id', 'left')
             ->field('i.*,third_company,third_url')
             ->where($where)->select();
         return json($type_list);
