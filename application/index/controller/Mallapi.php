@@ -424,6 +424,12 @@ class MallApi extends ApiBase
             ->where($where)->count();
         foreach ($data['cartList'] as $key => $val) {
             $data['cartList'][$key]['cook_money'] = number_format($val['cook_money'], 2);
+            if (empty($val['cookbook_image'])) {
+                $cookbook_img = $this->boohee_food_name($val['cookbook_name']);
+                Db::name('cookbook_base_info')->where(['cookbook_no'=>$val['cookbook_no'],'company_id'=>$company_id])->update(['cookbook_image'=>$cookbook_img]);
+                $data['cartList'][$key]['cookbook_image'] = $cookbook_img;
+            }
+
         }
         return json($data);
     }
@@ -755,6 +761,11 @@ class MallApi extends ApiBase
             ->where($where)->where('p.choice_flag=0')->select();
         foreach ($data['cartList'] as $key => $val) {
             $data['cartList'][$key]['cookbook_price'] = number_format($val['cookbook_price'], 2);
+            if (empty($val['cookbook_image'])) {
+                $cookbook_img = $this->boohee_food_name($val['cookbook_name']);
+                Db::name('cookbook_base_info')->where(['cookbook_no'=>$val['cookbook_no'],'company_id'=>$company_id])->update(['cookbook_image'=>$cookbook_img]);
+                $data['cartList'][$key]['cookbook_image'] = $cookbook_img;
+            }
         }
 
         $data['cartChoiceList'] = Db::name('canteen_cookbook_price')//多选列表
@@ -769,6 +780,11 @@ class MallApi extends ApiBase
             ->where($where)->where('p.choice_flag=1')->select();
         foreach ($data['cartChoiceList'] as $key => $val) {
             $data['cartChoiceList'][$key]['cookbook_price'] = number_format($val['cookbook_price'], 2);
+            if (empty($val['cookbook_image'])) {
+                $cookbook_img = $this->boohee_food_name($val['cookbook_name']);
+                Db::name('cookbook_base_info')->where(['cookbook_no'=>$val['cookbook_no'],'company_id'=>$company_id])->update(['cookbook_image'=>$cookbook_img]);
+                $data['cartChoiceList'][$key]['cookbook_image'] = $cookbook_img;
+            }
         }
 
         $data['cartCount'] = Db::name('canteen_cookbook_price')
@@ -1314,6 +1330,11 @@ class MallApi extends ApiBase
             ->where($where)->where('p.choice_flag=0')->select();
         foreach ($data['cartList'] as $key => $val) {
             $data['cartList'][$key]['cookbook_price'] = number_format($val['cookbook_price'], 2);
+            if (empty($val['cookbook_image'])) {
+                $cookbook_img = $this->boohee_food_name($val['cookbook_name']);
+                Db::name('cookbook_base_info')->where(['cookbook_no'=>$val['cookbook_no'],'company_id'=>$company_id])->update(['cookbook_image'=>$cookbook_img]);
+                $data['cartList'][$key]['cookbook_image'] = $cookbook_img;
+            }
         }
         $data['cartChoiceList'] = Db::name('canteen_cookbook_price')//多选列表
         ->alias('p')
@@ -1327,6 +1348,11 @@ class MallApi extends ApiBase
             ->where($where)->where('p.choice_flag=1')->select();
         foreach ($data['cartChoiceList'] as $key => $val) {
             $data['cartChoiceList'][$key]['cookbook_price'] = number_format($val['cookbook_price'], 2);
+            if (empty($val['cookbook_image'])) {
+                $cookbook_img = $this->boohee_food_name($val['cookbook_name']);
+                Db::name('cookbook_base_info')->where(['cookbook_no'=>$val['cookbook_no'],'company_id'=>$company_id])->update(['cookbook_image'=>$cookbook_img]);
+                $data['cartChoiceList'][$key]['cookbook_image'] = $cookbook_img;
+            }
         }
 
         $data['cartCount'] = Db::name('canteen_cookbook_price')
