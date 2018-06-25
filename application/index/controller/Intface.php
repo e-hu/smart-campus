@@ -49,4 +49,13 @@ class Intface extends ApiBase
         }
     }
 
+    /**
+     * pC端微信调用退餐接口
+     * @param $openid
+     */
+    public function wechatRefund($openid)
+    {
+       refundMSC($openid);
+    }
+
 }
