@@ -44,28 +44,6 @@
                             openWin('index/index/me',{});
                         });
                     }
-                    $.ajax({
-                        url: SCapiDic.getmyinfo,
-                        type: "POST",
-                        dataType: "json",
-                        success: function (ret) {
-                            if (ret.code == '0') {
-                                $.alert(ret.msg);
-                            } else {
-                                self.name = ret.Emp_Name;
-                                if(ret.Emp_image){
-                                    self.image = ret.Emp_image;
-                                }else{
-                                    self.image = '__PUBLIC__/static/index/images/header.jpg';
-                                }
-                                if (ret.Ic_Card !== null && ret.Ic_Card !== ''){
-                                    $.alert('该账号已经绑定IC卡了', function() {
-                                        openWin('index/index/me',{});
-                                    });
-                                }
-                            }
-                        }
-                    });
                 },
                 cardBing: function () {
                     var self = this;
