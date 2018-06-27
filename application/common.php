@@ -387,7 +387,7 @@ function refundMSC($openid)
         'keyword1'=>array('value'=>'管理员审核'),
         'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
         'remark'=>array('value'=>'点击本条信息进行操作。')
-    ),Request::instance()->domain().'/index/index/checkList.html?company_id'.session('company_id'));
+    ),Request::instance()->domain().'/index/index/checkList.html?company_id='.session('company_id'));
 }
 
 /**
@@ -401,7 +401,7 @@ function returnMSC($openid)
         'keyword1'=>array('value'=>'申请结果通知'),
         'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
         'remark'=>array('value'=>'点击本条信息进行操作。')
-    ),Request::instance()->domain().'/index/index/refund.html?company_id'.session('company_id'));
+    ),Request::instance()->domain().'/index/index/refund.html?company_id='.session('company_id'));
 }
 
 /**
@@ -415,7 +415,7 @@ function patchMSC($openid)
         'keyword1'=>array('value'=>'申请结果通知'),
         'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
         'remark'=>array('value'=>'点击本条信息进行操作。')
-    ),Request::instance()->domain().'/index/index/patch.html?company_id'.session('company_id'));
+    ),Request::instance()->domain().'/index/index/patch.html?company_id='.session('company_id'));
 }
 
 /**
