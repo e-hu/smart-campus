@@ -444,7 +444,7 @@ function loginMSC($openid)
         'keyword2'=>array('value'=>'微信账号'),
         'keyword3'=>array('value'=>'异常登录通知'),
         'keyword4'=>array('value'=>date('Y-m-d H:m:i')),
-        'remark'=>array('value'=>'点击本条信息进行操作。')
+        'remark'=>array('value'=>'请确认是否本人操作，如有疑问，请联系食堂管理员。')
     ),Request::instance()->domain().'/index/index/me.html?company_id='.session('company_id'));
 }
 
