@@ -438,7 +438,7 @@ function refundNoMSC($openid)
  */
 function loginMSC($openid)
 {
-    sendMSC($openid,'OPENTM407446439',array(
+    sendMSC($openid,'OPENTM204805905',array(
         'first'=>array('value'=>'您好！您登录的账号在其他手机微信上登录!','color'=>'#173177'),
         'keyword1'=>array('value'=>'异常登录通知'),
         'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
