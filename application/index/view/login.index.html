@@ -49,9 +49,9 @@
                                     openWin(ret.url, {});
                                 });
                             } else {
-                                $.alert(ret.msg);
-                                self.username = '';
-                                self.password = '';
+                                $.alert(ret.msg, function() {
+                                    self.password = '';
+                                });
                             }
                         }
                     });
