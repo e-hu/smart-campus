@@ -107,14 +107,14 @@ class Equipment extends BasicAdmin
     /**
      * 查看二维码
      */
-    public function qrcode($machine_id)
+    public function qrcode($machine_sn)
     {
         LogService::write('订餐管理', '执行查看设备二维码操作');
          //生成当前的二维码
         $qrCode = new \Endroid\QrCode\QrCode();
-        if($machine_id) {
+        if($machine_sn) {
             //想显示在二维码中的文字内容，这里设置了一个查看文章的地址
-            $url = url('index/index/device?machine_id='.$machine_id.'&company_id='.session('company_id'),'',true,true);
+            $url = url('index/index/device?machine_sn='.$machine_sn.'&company_id='.session('company_id'),'',true,true);
             $qrCode->setText($url)
                 ->setSize(300)
                 ->setPadding(10)

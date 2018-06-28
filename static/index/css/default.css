@@ -82,13 +82,13 @@ input[type="button"], input[type="submit"], input[type="reset"] ,textarea{-webki
 input,button,select{outline:none}
 
 /*清除默认样式*/
-select {
-  border: solid 1px #000;
-  appearance:none; -moz-appearance:none; -webkit-appearance:none; /*很关键：将默认的select选择框样式清除*/
-  background:url("../image/default/arrow.png") no-repeat scroll right center transparent;padding-right: 23px !important;
-}
-/*清除ie的默认选择框样式清除，隐藏下拉箭头*/
-select::-ms-expand { display: none; }
+/*select {*/
+  /*border: solid 1px #000;*/
+  /*appearance:none; -moz-appearance:none; -webkit-appearance:none; !*很关键：将默认的select选择框样式清除*!*/
+  /*background:url("../image/default/arrow.png") no-repeat scroll right center transparent;padding-right: 23px !important;*/
+/*}*/
+/*!*清除ie的默认选择框样式清除，隐藏下拉箭头*!*/
+/*select::-ms-expand { display: none; }*/
 
 /* table */
 .T{display:table;width:100%;float:none}

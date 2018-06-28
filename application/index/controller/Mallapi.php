@@ -1648,4 +1648,19 @@ class MallApi extends ApiBase
             ->where($where)->select();
         return json($data);
     }
+
+    /*获取设备信息*/
+    function device($machine_sn)
+    {
+        $user_id = $this->getClientUserId();
+        $company_id = $this->getClientCompanyId();
+        $machine_info = Db::name('machine_list')->where(['company_id'=>$company_id,'machine_sn'=>$machine_sn])->find();
+        if(!$machine_info){
+            $this->error('设备信息不存在!','/index/index/me');
+        }
+        $data['canteen_list'] = Db::name('canteen_base_info')->where(['company_id'=>$company_id])->select();
+        $data['windows_list'] = Db::name('canteen_sale_window_base_info')->where(['company_id'=>$company_id])->order('sale_window_name desc')->select();
+        //$info = Db::name('canteen_sale_window_base_info')->where(['company_id'=>$company_id,'machine_sn'=>$machine_sn])->find();
+        return json($data);
+    }
 }

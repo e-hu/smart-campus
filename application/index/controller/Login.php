@@ -56,7 +56,11 @@ class Login extends ApiBase
         }
         Session::set('company_id', $employee['company_id']);
         Session::set('client_user_id', $employee['Emp_Id']);
-        $this->success("登录成功！", '@index/index');
+        if(session('last_url')){
+            $this->success("登录成功！", session('last_url'));
+        }else{
+            $this->success("登录成功！", '@index/index');
+        }
     }
 
 

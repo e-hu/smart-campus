@@ -1,15 +1,14 @@
 {include file="common/header" title="设备注册" keywords="设备注册" description="" /}
-<link rel="stylesheet" href="__PUBLIC__/static/plugs/layui/css/layui.mobile.css">
 <ul class="bgf clear SSheader W">
     <li class="hl50 F_ bbd bgf tc bgdefault cf fr6">
         <p class='W'>设备注册</p>
     </li>
 </ul>
-<div id="app" class="f H scroll bgf pt50" v-cloak>
+<div id="app" class="f H scroll bgf mt50" v-cloak>
     <div class="bgf p20-10 bbe F_">
         <span>设备序列号：</span>
         <span class="f ml20">
-				<input type="text" class="W bn" readonly placeholder="请输入设备序列号" v-model="machine_id"/>
+				<input type="text" class="W bn" readonly placeholder="请输入设备序列号" v-model="machine_sn"/>
 			</span>
     </div>
     <div class="bgf p20-10 bbe F_">
@@ -31,20 +30,16 @@
     <div class="bgf p20-10 bbe F_">
         <span>餐厅：</span>
         <span class="f ml20">
-     <select class="weui-select H lh" name="select2">
-            <option value="1">一餐厅</option>
-            <option value="2">二餐厅</option>
-            <option value="3">三餐厅</option>
+     <select class="weui-select H lh" name="canteen_no">
+            <option v-for="item in canteen_list" value="item.canteen_no">{{item.canteen_name}}</option>
             </select>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>窗口：</span>
         <span class="f ml20">
-    <select class="weui-select H lh" name="select2">
-            <option value="1">一号窗口</option>
-            <option value="2">二号窗口</option>
-            <option value="3">三号窗口</option>
+    <select class="weui-select H lh" name="sale_window_no">
+               <option v-for="item in windows_list" value="item.sale_window_no">{{item.sale_window_name}}</option>
             </select>
     </span>
     </div>
@@ -58,78 +53,82 @@
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-    <span>数据交互方式：</span>
-    <span class="f ml20">
+        <span>数据交互方式：</span>
+        <span class="f ml20">
+    <select class="weui-select H lh" name="select2">
+            <option value="1">函数识别</option>
+            <option value="2">控件识别</option>
+            </select>
+    </span>
+    </div>
+    <div class="bgf p20-10 bbe F_">
+        <span>指纹模版版本：</span>
+        <span class="f ml20">
     <input type="password" class="W bn" readonly value="11111"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-    <span>指纹模版版本：</span>
-    <span class="f ml20">
+        <span>指纹验证最低评分：</span>
+        <span class="f ml20">
     <input type="password" class="W bn" readonly value="11111"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-    <span>指纹验证最低评分：</span>
-    <span class="f ml20">
+        <span>指纹验证直接通过评分：</span>
+        <span class="f ml20">
     <input type="password" class="W bn" readonly value="11111"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-    <span>指纹验证直接通过评分：</span>
-    <span class="f ml20">
+        <span>指纹质量最低通过评分：</span>
+        <span class="f ml20">
     <input type="password" class="W bn" readonly value="11111"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-    <span>指纹质量最低通过评分：</span>
-    <span class="f ml20">
+        <span>串口参数：</span>
+    </div>
+    <div class="bgf p20-10 bbe F_">
+        <span>串口号：</span>
+        <span class="f ml20">
     <input type="password" class="W bn" readonly value="11111"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-    <span>串口参数：</span>
-    </div>
-    <div class="bgf p20-10 bbe F_">
-    <span>串口号：</span>
-    <span class="f ml20">
+        <span>串口波特率：</span>
+        <span class="f ml20">
     <input type="password" class="W bn" readonly value="11111"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-    <span>串口波特率：</span>
-    <span class="f ml20">
+        <span>奇偶校验方式：</span>
+        <span class="f ml20">
     <input type="password" class="W bn" readonly value="11111"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-    <span>奇偶校验方式：</span>
-    <span class="f ml20">
+        <span>数据位长度：</span>
+        <span class="f ml20">
     <input type="password" class="W bn" readonly value="11111"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-    <span>数据位长度：</span>
-    <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
-    </span>
-    </div>
-    <div class="bgf p20-10 bbe F_">
-    <span>停止位长度：</span>
-    <span class="f ml20">
+        <span>停止位长度：</span>
+        <span class="f ml20">
     <input type="password" class="W bn" readonly value="11111"/>
     </span>
     </div>
     <div class="pt40">
-    <button class="bgdefault W9 r2 cf p10 f16 Ml5" @click="cardBing">确定</button>
+        <button class="bgdefault W9 r2 cf p10 f16 Ml5" @click="cardBing">确定</button>
     </div>
 </div>
 {include file="common/footer" /}
-<link rel="stylesheet" href="__PUBLIC__/static/plugs/layui/layui.js">
 <script type="text/javascript">
     window.onload = function () {
         var data = {
-            machine_id: getUrlParam('machine_id')
+            machine_sn: getUrlParam('machine_sn'),
+            windows_list: [],
+            canteen_list: [],
         };
         new Vue({
             el: '#app',
@@ -137,18 +136,35 @@
             methods: {
                 configInfo: function () {
                     var self = this;
-                    if (!self.machine_id) {
+                    if (!self.machine_sn) {
                         $.alert('设备号参数错误,请重新扫码!', function () {
                             openWin('index/index/me', {});
                         });
                     }
+                    $.ajax({
+                        url: '/index/mallapi/device',
+                        type: "POST",
+                        data: {machine_sn: self.machine_sn},
+                        dataType: "json",
+                        success: function (ret) {
+                             console.log(ret);
+                            if (ret.code == '0') {
+                                $.alert(ret.msg, function () {
+                                    openWin(ret.url, {});
+                                });
+                            } else {
+                                self.canteen_list = ret.canteen_list;
+                                self.windows_list = ret.windows_list;
+                            }
+                        }
+                    });
                 },
                 cardBing: function () {
                     var self = this;
                     $.ajax({
                         url: '/index/mallapi/cardBind',
                         type: "POST",
-                        data: {card: self.card},
+                        data: {machine_sn: self.machine_sn},
                         dataType: "json",
                         success: function (ret) {
                             if (ret.code == '0') {
