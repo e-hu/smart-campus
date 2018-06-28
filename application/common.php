@@ -440,8 +440,10 @@ function loginMSC($openid)
 {
     sendMSC($openid,'OPENTM204805905',array(
         'first'=>array('value'=>'您好！您登录的账号在其他手机微信上登录!','color'=>'#173177'),
-        'keyword1'=>array('value'=>'异常登录通知'),
-        'keyword2'=>array('value'=>date('Y-m-d H:m:i')),
+        'keyword1'=>array('value'=>'无'),
+        'keyword2'=>array('value'=>'微信账号'),
+        'keyword3'=>array('value'=>'异常登录通知'),
+        'keyword4'=>array('value'=>date('Y-m-d H:m:i')),
         'remark'=>array('value'=>'点击本条信息进行操作。')
     ),Request::instance()->domain().'/index/index/me.html?company_id='.session('company_id'));
 }
