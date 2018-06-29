@@ -14,39 +14,56 @@
     <div class="bgf p20-10 bbe F_">
         <span>设备类别：</span>
         <span class="f ml20">
-				 <select class="weui-select H lh" name="select2">
-            <option value="1">套餐取餐</option>
-            <option value="2">自动查询机</option>
-                      <option value="2">现金取餐</option>
+				 <select class="weui-select H lh" name="machine_type" v-model="machine_type">
+            <option value="1">订餐取餐</option>
+            <option value="2">现金取餐</option>
+            <option value="3">订餐</option>
+            <option value="4">人脸识别设备</option>
             </select>
 			</span>
     </div>
     <div class="bgf p20-10 bbe F_">
-        <span>应用服务器地址：</span>
-        <span class="f ml20">
-    <input type="text" class="W bn" placeholder="请输入应用服务器地址" value=""/>
-    </span>
-    </div>
-    <div class="bgf p20-10 bbe F_">
         <span>餐厅：</span>
         <span class="f ml20">
-     <select class="weui-select H lh" name="canteen_no">
-            <option v-for="item in canteen_list" value="item.canteen_no">{{item.canteen_name}}</option>
+     <select class="weui-select H lh" name="canteen_no" v-model="canteen_no">
+            <option v-for="item in canteen_list" :value="item.canteen_no">{{item.canteen_name}}</option>
             </select>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>窗口：</span>
         <span class="f ml20">
-    <select class="weui-select H lh" name="sale_window_no">
-               <option v-for="item in windows_list" value="item.sale_window_no">{{item.sale_window_name}}</option>
+    <select class="weui-select H lh" name="sale_window_no" v-model="window_no">
+               <option v-for="item in windows_list" :value="item.sale_window_no">{{item.sale_window_name}}</option>
             </select>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
+        <span>取餐是否自动确认：</span>
+        <span class="f ml20">
+				 <select class="weui-select H lh" name="autocheck" v-model="autocheck">
+            <option value="0">否</option>
+            <option value="1">是</option>
+            </select>
+			</span>
+    </div>
+    <div class="bgf p20-10 bbe F_">
+        <span>显示设备控制：</span>
+        <span class="f ml20">
+				 <select class="weui-select H lh" name="displaymode" v-model="displaymode">
+            <option value="0">单屏</option>
+            <option value="1">双屏复制</option>
+            <option value="2">双屏扩展</option>
+            </select>
+			</span>
+    </div>
+    <div class="bgf p20-10 bbe F_">
+        <span>指纹仪参数</span>
+    </div>
+    <div class="bgf p20-10 bbe F_">
         <span>指纹识别方式：</span>
         <span class="f ml20">
-    <select class="weui-select H lh" name="select2">
+    <select class="weui-select H lh" name="Fingerprint" v-model="Fingerprint">
             <option value="1">函数识别</option>
             <option value="2">控件识别</option>
             </select>
@@ -55,71 +72,96 @@
     <div class="bgf p20-10 bbe F_">
         <span>数据交互方式：</span>
         <span class="f ml20">
-    <select class="weui-select H lh" name="select2">
-            <option value="1">函数识别</option>
-            <option value="2">控件识别</option>
+    <select class="weui-select H lh" name="interaction" v-model="interaction">
+            <option value="1">HTTP</option>
+            <option value="2">直联</option>
             </select>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>指纹模版版本：</span>
         <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
+      <select class="weui-select H lh" name="Fingerprint_version" v-model="Fingerprint_version">
+            <option value="1">9.0</option>
+            <option value="2">10.0</option>
+            </select>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>指纹验证最低评分：</span>
         <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
+    <input type="number" class="W bn" v-model="Fingerprint_last" name="Fingerprint_last"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>指纹验证直接通过评分：</span>
         <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
+    <input type="number" class="W bn" v-model="Fingerprint_pass" name="Fingerprint_pass"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>指纹质量最低通过评分：</span>
         <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
+    <input type="number" class="W bn" v-model="Fingerprint_lastpass" name="Fingerprint_lastpass"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-        <span>串口参数：</span>
+        <span>IC读卡器</span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>串口号：</span>
         <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
+    <select class="weui-select H lh" name="port_number" v-model="port_number">
+            <option value="COM1">COM1</option>
+            <option value="COM2">COM2</option>
+        <option value="COM3">COM3</option>
+        <option value="COM4">COM4</option>
+        <option value="COM5">COM5</option>
+        <option value="COM6">COM6</option>
+        <option value="COM7">COM7</option>
+        <option value="COM8">COM8</option>
+        <option value="COM9">COM9</option>
+        <option value="COM10">COM10</option>
+            </select>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
-        <span>串口波特率：</span>
+        <span>波特率：</span>
         <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
+            <select class="weui-select H lh" name="Baud_rate" v-model="Baud_rate">
+       <option value="2400">2400</option>
+        <option value="4800">4800</option>
+        <option value="9600">9600</option>
+        <option value="19200">19200</option>
+        <option value="38400">38400</option>
+             <option value="115200">115200</option>
+                 </select>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>奇偶校验方式：</span>
         <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
+     <select class="weui-select H lh" name="Parity_method" v-model="Parity_method">
+       <option value="1">无校验</option>
+        <option value="2">奇校验</option>
+        <option value="3">偶校验</option>
+                 </select>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>数据位长度：</span>
         <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
+    <input type="number" class="W bn" v-model="Data_bit_length" name="Data_bit_length"/>
     </span>
     </div>
     <div class="bgf p20-10 bbe F_">
         <span>停止位长度：</span>
         <span class="f ml20">
-    <input type="password" class="W bn" readonly value="11111"/>
+    <input type="number" class="W bn" v-model="Stop_bit_length" name="Stop_bit_length"/>
     </span>
     </div>
-    <div class="pt40">
-        <button class="bgdefault W9 r2 cf p10 f16 Ml5" @click="cardBing">确定</button>
+    <div class="bgf p20-10 bbe F_">
+        <button class="bgdefault W9 r2 cf p10 f16 Ml5" @click="deviceRegister">确定</button>
     </div>
 </div>
 {include file="common/footer" /}
@@ -129,6 +171,22 @@
             machine_sn: getUrlParam('machine_sn'),
             windows_list: [],
             canteen_list: [],
+            canteen_no: '',
+            window_no: '',
+            machine_type: '1',
+            Fingerprint: '2',
+            interaction: '2',
+            Fingerprint_version: '2',
+            Fingerprint_last: '8',
+            Fingerprint_pass: '10',
+            Fingerprint_lastpass: '30',
+            port_number: 'COM3',
+            Baud_rate: '115200',
+            Parity_method: '1',
+            Data_bit_length: '8',
+            Stop_bit_length: '1',
+            autocheck: '0',
+            displaymode: '1',
         };
         new Vue({
             el: '#app',
@@ -147,7 +205,7 @@
                         data: {machine_sn: self.machine_sn},
                         dataType: "json",
                         success: function (ret) {
-                             console.log(ret);
+                            console.log(ret);
                             if (ret.code == '0') {
                                 $.alert(ret.msg, function () {
                                     openWin(ret.url, {});
@@ -155,23 +213,72 @@
                             } else {
                                 self.canteen_list = ret.canteen_list;
                                 self.windows_list = ret.windows_list;
+                                if (ret.select_info.canteen_no !='') {
+                                    self.canteen_no = ret.select_info.canteen_no;
+                                }
+                                if (ret.select_info.window_no !='') {
+                                    self.window_no = ret.select_info.window_no;
+                                }
+                                if (ret.select_info.machine_type !='') {
+                                    self.machine_type = ret.select_info.machine_type;
+                                }
+                                if (ret.param_info !='') {
+                                    self.Fingerprint = ret.param_info.Fingerprint;
+                                    self.interaction = ret.param_info.interaction;
+                                    self.Fingerprint_version = ret.param_info.Fingerprint_version;
+                                    self.Fingerprint_last = ret.param_info.Fingerprint_last;
+                                    self.Fingerprint_pass = ret.param_info.Fingerprint_pass;
+                                    self.Fingerprint_lastpass = ret.param_info.Fingerprint_pass;
+                                    self.port_number = ret.param_info.port_number;
+                                    self.Baud_rate = ret.param_info.Baud_rate;
+                                    self.Parity_method = ret.param_info.Parity_method;
+                                    self.Data_bit_length = ret.param_info.Data_bit_length;
+                                    self.Stop_bit_length = ret.param_info.Stop_bit_length;
+                                    self.autocheck = ret.param_info.autocheck;
+                                    self.displaymode = ret.param_info.displaymode;
+                                }
+
                             }
                         }
                     });
                 },
-                cardBing: function () {
+                deviceRegister: function () {
                     var self = this;
+                    if (!self.canteen_no) {
+                        $.alert('餐厅不能选择为空');
+                    }
+                    if (!self.window_no) {
+                        $.alert('窗口不能选择为空');
+                    }
                     $.ajax({
-                        url: '/index/mallapi/cardBind',
+                        url: '/index/mallapi/deviceRegister',
                         type: "POST",
-                        data: {machine_sn: self.machine_sn},
+                        data: {
+                            machine_sn: self.machine_sn,
+                            canteen_no: self.canteen_no,
+                            window_no: self.window_no,
+                            machine_type: self.machine_type,
+                            Fingerprint: self.Fingerprint,
+                            interaction: self.interaction,
+                            Fingerprint_version: self.Fingerprint_version,
+                            Fingerprint_last: self.Fingerprint_last,
+                            Fingerprint_pass: self.Fingerprint_pass,
+                            Fingerprint_lastpass: self.Fingerprint_pass,
+                            port_number: self.port_number,
+                            Baud_rate: self.Baud_rate,
+                            Parity_method: self.Parity_method,
+                            Data_bit_length: self.Data_bit_length,
+                            Stop_bit_length: self.Stop_bit_length,
+                            autocheck: self.autocheck,
+                            displaymode: self.displaymode,
+                        },
                         dataType: "json",
                         success: function (ret) {
                             if (ret.code == '0') {
                                 $.alert(ret.msg);
                             } else {
                                 $.alert(ret.msg, function () {
-                                    openWin(ret.url, {});
+                                    // openWin(ret.url, {});
                                 });
                             }
                         }

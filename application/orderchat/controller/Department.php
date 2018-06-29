@@ -132,9 +132,7 @@ class Department extends BasicAdmin
                 Db::name('t_user_manager_dept_id')->where(['company_id' => session('user.company_id'), 'u_id' => $data['dept_no'], 'dept_type' => 'deptcanteen'])->delete();
             }
 
-            if (Db::name($this->table)->where('company_id', session('user.company_id'))->where('dept_no', $data['dept_no'])->find()) {
-                unset($data['dept_name']);
-            } elseif (isset($data['dept_name']) and Db::name($this->table)->where('dept_name', $data['dept_name'])->where('company_id', session('user.company_id'))->find()) {
+            if(isset($data['dept_name']) and Db::name($this->table)->where('dept_name', $data['dept_name'])->where('company_id', session('user.company_id'))->find()) {
                 $this->error('部门名称已经存在，请使用其它部门名称！');
             }
         }else {

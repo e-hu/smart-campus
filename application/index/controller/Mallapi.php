@@ -1652,15 +1652,53 @@ class MallApi extends ApiBase
     /*获取设备信息*/
     function device($machine_sn)
     {
-        $user_id = $this->getClientUserId();
         $company_id = $this->getClientCompanyId();
         $machine_info = Db::name('machine_list')->where(['company_id'=>$company_id,'machine_sn'=>$machine_sn])->find();
         if(!$machine_info){
             $this->error('设备信息不存在!','/index/index/me');
         }
         $data['canteen_list'] = Db::name('canteen_base_info')->where(['company_id'=>$company_id])->select();
-        $data['windows_list'] = Db::name('canteen_sale_window_base_info')->where(['company_id'=>$company_id])->order('sale_window_name desc')->select();
-        //$info = Db::name('canteen_sale_window_base_info')->where(['company_id'=>$company_id,'machine_sn'=>$machine_sn])->find();
+        $data['windows_list'] = Db::name('canteen_sale_window_base_info')->where(['company_id'=>$company_id])->order('sale_window_no asc,sale_window_name desc')->select();
+        $param_list = Db::name('machine_param_list')->where(['machine_sn'=>$machine_sn])->select();
+        if(!empty($param_list)){
+            foreach ($param_list as $key=>$val){
+                $data['param_info'][$val['param_name']] = $val['param_value'];
+            }
+        }else{
+            $data['param_info'] = [];
+        }
+        $data['select_info'] = Db::name('machine_list')->where(['company_id'=>$company_id,'machine_sn'=>$machine_sn])->find();
+        if(!empty($data['select_info'])&&$data['select_info']['machine_status'] != 1){
+            $this->error('设备被禁用，请联系管理员!','/index/index/me');
+        }
         return json($data);
+    }
+
+    /*设备注册*/
+    function deviceRegister($machine_sn)
+    {
+        $company_id = $this->getClientCompanyId();
+        $machine_info = Db::name('machine_list')->where(['company_id'=>$company_id,'machine_sn'=>$_POST['machine_sn']])->find();
+        if(!empty($machine_info)){
+            Db::name('machine_list')->where(['company_id'=>$company_id,'machine_sn'=>$_POST['machine_sn']])->update(['canteen_no'=>$_POST['canteen_no'],'window_no'=>$_POST['window_no'],'machine_type'=>$_POST['machine_type']]);
+        }else{
+            $sqlstr = "exec [up_get_max_id] ?,?,?,?";
+            $data = Db::query($sqlstr, ['', 'machine', 'MACH', 0]);
+            $machine_id = $data[0][0]['id'];
+            Db::name('machine_list')->insert(['company_id'=>$company_id,'machine_id'=>$machine_id,'machine_sn'=>$_POST['machine_sn'],'canteen_no'=>$_POST['canteen_no'],'window_no'=>$_POST['window_no'],'machine_type'=>$_POST['machine_type'],'machine_status'=>'1']);
+        }
+        Db::name('canteen_sale_window_base_info')->where(['company_id'=>$company_id,'sale_window_no'=>$_POST['window_no'],'canteen_no'=>$_POST['canteen_no']])->update(['machine_sn'=>$_POST['machine_sn']]);
+        unset($_POST['canteen_no']);
+        unset($_POST['window_no']);
+        unset($_POST['machine_sn']);
+        foreach ($_POST as $key=>$val){
+            $info = Db::name('machine_param_list')->where(['machine_sn'=>$machine_sn,'param_name'=>$key])->find();
+            if(empty($info)){
+                Db::name('machine_param_list')->insert(['machine_sn'=>$machine_sn,'param_name'=>$key,'param_value'=>$val]);
+            }else{
+                Db::name('machine_param_list')->where(['machine_sn'=>$machine_sn,'param_name'=>$key])->update(['param_value'=>$val]);
+            }
+        }
+        $this->success('设备注册成功','/index/index/me');
     }
 }
