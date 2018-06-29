@@ -6,6 +6,8 @@ use controller\BasicAdmin;
 use service\DataService;
 use service\LogService;
 use think\Db;
+use service\NodeService;
+use service\ToolsService;
 
 /**
  * 部门信息管理控制器
@@ -37,7 +39,7 @@ class Department extends BasicAdmin
             ->join('t_user_manager_dept_id t','t.company_id = dept_info.company_id  and t.u_id = dept_info.dept_no and t.dept_type = :dept_type','left')
             ->bind('dept_type','deptcanteen')
             ->join('canteen_base_info i','i.company_id = dept_info.company_id and i.canteen_no = t.dept_id','left')
-            ->where('dept_info.company_id', session('user.company_id'))->where('dept_info.parent_dept_no', 'Null')
+            ->where('dept_info.company_id', session('user.company_id'))
             ->field('dept_info.*,canteen_name');
         // 应用搜索条件
         foreach (['dept_name'] as $key) {
@@ -46,7 +48,18 @@ class Department extends BasicAdmin
             }
         }
         // 实例化并显示
-        return parent::_list($db);
+        return parent::_list($db,false);
+    }
+
+    /**
+     * 列表数据处理
+     * @param array $data
+     */
+    protected function _index_data_filter(&$data) {
+        foreach ($data as &$vo) {
+            $vo['dept_nos'] = join(',', ToolsService::getArrSubIds($data, $vo['dept_no'],'dept_no','parent_dept_no'));
+        }
+        $data = ToolsService::arr2table($data,'dept_no','parent_dept_no');
     }
 
     /**
@@ -155,10 +168,6 @@ class Department extends BasicAdmin
     public function del()
     {
         LogService::write('订餐管理', '执行删除部门操作');
-        $depart_info = Db::name($this->table)->where("parent_dept_no",$_POST['id'])->find();
-        if($depart_info){
-            $this->error("部门删除失败，请查看是否有下级部门！");
-        }
         if (DataService::update($this->table,'','dept_no')) {
             $this->success("部门删除成功！", '');
         }
