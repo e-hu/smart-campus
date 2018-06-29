@@ -1,6 +1,6 @@
 <form class="layui-form layui-box" style='padding:20px 30px 20px 30px' action="__SELF__" data-auto="true" method="post">
     <input type="hidden" name="canteen_no" value="{$canteens.canteen_no}">
-    <input type="hidden" name="week_num" value="{$weeks.week_num}">
+    <input type="hidden" name="week_id" value="{$weeks.id}">
     <input type="hidden" name="start_datetime" value="{$weeks.start_datetime}">
     <input type="hidden" name="end_datetime" value="{$weeks.end_datetime}">
     <table class="layui-table" lay-size="sm">
@@ -39,7 +39,7 @@
                     {if !empty($h['cookbook_no']) and $h['cookbook_no'] == $value['cookbook_no']}
                     <option selected value="{$value.cookbook_no}">[{$value.cookbook_name}]</option>
                     {else}
-                    <option value="{$value.cookbook_no}">[{$value.cookbook_name}</option>
+                    <option value="{$value.cookbook_no}">[{$value.cookbook_name}]</option>
                     {/if}
                     {/foreach}
                 </select>

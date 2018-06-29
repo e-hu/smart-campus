@@ -1,0 +1,24 @@
+<form class="layui-form layui-box" style='padding:20px 30px 20px 30px' action="__SELF__" data-auto="true" method="post">
+    <input type="hidden" name="copy_canteen_no" value="{$copy_canteen_no}">
+    <input type="hidden" name="week_id" value="{$week_id}">
+    <div class="layui-form-item">
+        <label class="layui-form-label">复制指定餐厅</label>
+        <div class="layui-input-block">
+            <select name="canteen_no" id="canteen_no" required title="请选择餐厅">
+                <option value="0">请选择</option>
+                {foreach $canteens as $canteen}
+                <option value="{$canteen.canteen_no}">{$canteen.canteen_name}</option>
+                {/foreach}
+            </select>
+        </div>
+    </div>
+
+    <div class="hr-line-dashed"></div>
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>保存数据</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="确定要取消编辑吗？" data-close>取消编辑</button>
+    </div>
+
+    <script>window.form.render();</script>
+</form>

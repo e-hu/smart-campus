@@ -1,14 +1,5 @@
 {extend name='extra@admin/content'}
 
-{block name="button"}
-<div class="nowrap pull-right" style="margin-top:10px">
-    <button data-modal='{:url("$classuri/generate")}' data-title="生成周菜谱" class='layui-btn layui-btn-small'><i
-            class="layui-icon">&#xe608;</i>生成周菜谱
-    </button>
-</div>
-
-{/block}
-
 {block name="content"}
 
 <!-- 表单搜索 开始-->
@@ -21,11 +12,11 @@
                     <option value="">- 周数列表 -</option>
                     <!--{foreach $weeks as $key=>$week}-->
                     <!--{if $Think.get.week_id eq $key}-->
-                    <option selected value="{$week.week_num}">第{$week.week_num}周 {$week.start_datetime} -
+                    <option selected value="{$week.id}">第{$week.week_num}周 {$week.start_datetime} -
                         {$week.end_datetime}
                     </option>
                     <!--{else}-->
-                    <option value="{$week.week_num}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}
+                    <option value="{$week.id}">第{$week.week_num}周 {$week.start_datetime} - {$week.end_datetime}
                     </option>
                     <!--{/if}-->
                     <!--{/foreach}-->
@@ -90,7 +81,7 @@
             <td class='text-center'>
                 {if !empty($vo['dinner_choose_start_datetime'])}
                 <input class="layui-input layui-input-inline title-input start" name="{$vo.id}"
-                       value="{:date('Y-m-d',strtotime($vo['dinner_choose_start_datetime']))}" placeholder="默认格式为2018-06-20 10:00"/>
+                       value="{:date('Y-m-d H:i',strtotime($vo['dinner_choose_start_datetime']))}" placeholder="默认格式为2018-06-20 10:00"/>
                 {else}
                 <input class="layui-input layui-input-inline title-input start" name="{$vo.id}"
                        value="" placeholder="默认格式为2018-06-20 10:00"/>
@@ -99,7 +90,7 @@
             <td class='text-center'>
                 {if !empty($vo['dinner_choose_end_datetime'])}
                 <input class="layui-input layui-input-inline title-input end" name="{$vo.id}"
-                       value="{:date('Y-m-d',strtotime($vo['dinner_choose_end_datetime']))}"  placeholder="默认格式为2018-06-20 10:00"/>
+                       value="{:date('Y-m-d H:i',strtotime($vo['dinner_choose_end_datetime']))}"  placeholder="默认格式为2018-06-20 10:00"/>
                 {else}
                 <input class="layui-input layui-input-inline title-input end" name="{$vo.id}"
                        value=""  placeholder="默认格式为2018-06-20 10:00"/>
@@ -108,18 +99,18 @@
             <td class='text-center nowrap'>
                 {if auth("$classuri/edit")}
                 <span class="text-explode">|</span>
-                <a data-open='{:url("$classuri/edit")}?week_num={$vo.week_num}&canteen_no={$vo.canteen_no}'
+                <a data-open='{:url("$classuri/edit")}?week_id={$vo.week_id}&canteen_no={$vo.canteen_no}'
                    href="javascript:void(0)">编辑</a>
                 {/if}
                 {if auth("$classuri/view")}
                 <span class="text-explode">|</span>
-                <a data-open='{:url("$classuri/view")}?week_num={$vo.week_num}&canteen_no={$vo.canteen_no}'
+                <a data-open='{:url("$classuri/view")}?week_id={$vo.week_id}&canteen_no={$vo.canteen_no}'
                    href="javascript:void(0)" target="_blank">查看</a>
                 {/if}
-                <!--{if auth("$classuri/copy")}-->
-                <!--<span class="text-explode">|</span>-->
-                <!--<a data-open='{:url("$classuri/copy")}?week_num={$vo.week_num}&canteen_no={$vo.canteen_no}' href="javascript:void(0)">复制</a>-->
-                <!--{/if}-->
+                {if auth("$classuri/copy")}
+                <span class="text-explode">|</span>
+                <a data-modal='{:url("$classuri/copy")}?week_id={$vo.week_id}&canteen_no={$vo.canteen_no}' href="javascript:void(0)">复制</a>
+                {/if}
             </td>
         </tr>
         {/foreach}

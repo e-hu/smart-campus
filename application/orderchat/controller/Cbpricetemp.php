@@ -26,7 +26,7 @@ class CbPricetemp extends BasicAdmin
     public $table = 'canteen_cookbook_price_temp';
 
     /**
-     * 周菜谱列表
+     * 临时周菜谱列表
      */
     public function index()
     {
@@ -65,14 +65,14 @@ class CbPricetemp extends BasicAdmin
 
 
     /**
-     * 周菜谱编辑
+     * 临时周菜谱编辑
      */
     public function edit()
     {
         LogService::write('订餐管理', '执行周菜谱编辑操作');
         if ($this->request->isGet()) {
             $sqlstr = "exec [up_canteen_week_detail_temp] ?,?,?,?";
-            $data = Db::query($sqlstr, [session('user.company_id'), $_GET['canteen_no'], $_GET['week_num'], session('user.id')]);
+            $data = Db::query($sqlstr, [session('user.company_id'), $_GET['canteen_no'], $_GET['week_id'], session('user.id')]);
             if (empty($data)) {
                 $this->error('数据不存在');
             }
@@ -81,7 +81,7 @@ class CbPricetemp extends BasicAdmin
                 $list[$val['week_name']][$val['dinner_name']][$val['meal_id']][] = $val;
             }
             $canteens = Db::name('canteen_base_info')->where(['canteen_no' => $_GET['canteen_no'], 'company_id' => session('user.company_id')])->find();
-            $weeks = Db::name('week_day_list')->where(['week_num' => $_GET['week_num']])->find();
+            $weeks = Db::name('week_day_list')->where(['id' => $_GET['week_id']])->find();
             $dt_start = strtotime($weeks['start_datetime']);
             $dt_end = strtotime($weeks['end_datetime']);
             while ($dt_start <= $dt_end) {
@@ -126,7 +126,7 @@ class CbPricetemp extends BasicAdmin
                         foreach ($meal_list as $meal) {
                             if (count($_POST[$val . $value['dinner_name'] . $meal['meal_id']]) != 0 ) {
                                 foreach ($_POST[$val . $value['dinner_name'] . $meal['meal_id']] as $va) {
-                                    if($va !=''){
+                                    if($va != ''){
                                         $data = [];
                                         $data['canteen_no'] = $canteen_no;
                                         $data['cookbook_list_no'] = $va;
@@ -148,52 +148,6 @@ class CbPricetemp extends BasicAdmin
     }
 
     /**
-     * 周菜谱查看
-     */
-    public function view()
-    {
-        LogService::write('订餐管理', '执行周菜谱编辑操作');
-        if ($this->request->isGet()) {
-            $sqlstr = "exec [up_canteen_week_detail] ?,?,?,?";
-            $data = Db::query($sqlstr, [session('user.company_id'), $_GET['canteen_no'], $_GET['week_num'], session('user.id')]);
-            if (empty($data)) {
-                $this->error('数据不存在');
-            }
-            $list = [];
-            foreach ($data[0] as $val) {
-                $list[$val['week_name']][$val['dinner_name']][$val['meal_id']] = $val;
-            }
-            $canteens = Db::name('canteen_base_info')->where(['canteen_no' => $_GET['canteen_no'], 'company_id' => session('user.company_id')])->find();
-            $weeks = Db::name('week_day_list')->where(['week_num' => $_GET['week_num']])->find();
-            $meals = Db::name('cookbook_meal_type')->where(['company_id' => session('user.company_id'), 'meal_flag' => '0'])->select();
-            foreach ($meals as $val) {
-                $cookbooks = Db::name('cookbook_base_info')->where('meal_id', $val['meal_id'])->where('company_id', session('user.company_id'))->select();
-                $this->assign('cookbooks' . $val['meal_id'], $cookbooks);
-            }
-            $dt_start = strtotime($weeks['start_datetime']);
-            $dt_end = strtotime($weeks['end_datetime']);
-            while ($dt_start <= $dt_end) {
-                $date[] = date('Y-m-d', $dt_start);
-                $dt_start = strtotime('+1 day', $dt_start);
-            }
-            $weekarray = array("日", "一", "二", "三", "四", "五", "六");
-            foreach ($date as $val) {
-                $week[] = '周' . $weekarray[date("w", strtotime($val))];
-            }
-            $date_time = [];
-            foreach ($date as $val) {
-                $date_time['周' . $weekarray[date("w", strtotime($val))]] = $val;
-            }
-            $this->assign('meals', $meals);
-            $this->assign('canteens', $canteens);
-            $this->assign('weeks', $weeks);
-            $this->assign('date_time', $date_time);
-            $this->assign('list', $list);
-        }
-        return $this->fetch();
-    }
-
-    /**
      * 表单数据默认处理
      * @param array $data
      */
@@ -203,49 +157,6 @@ class CbPricetemp extends BasicAdmin
         $cookbooks = Db::name('cookbook_base_info_list')->where('company_id', session('user.company_id'))->select();
         $this->assign('cookbooks', $cookbooks);
         $this->assign('meals', $meals);
-    }
-
-    /**
-     * 周菜谱时间
-     */
-    public function starttime()
-    {
-        LogService::write('订餐管理', '执行周菜谱时间操作');
-        if ($this->request->isAjax()) {
-            $post = $this->request->post();
-            if (empty($post['start_time'])) {
-                $post['start_time'] = null;
-            }
-            $data['dinner_choose_start_datetime'] = $post['start_time'];
-            $result = Db::table('canteen_week_cookbook_main')->where('id', $post['id'])->update($data);
-            $data = [];
-            if ($result) {
-                $data['flag'] = 1;
-            } else {
-                $data['flag'] = 0;
-            }
-            return json($data);
-        }
-    }
-
-    public function endtime()
-    {
-        LogService::write('订餐管理', '执行周菜谱时间操作');
-        if ($this->request->isAjax()) {
-            $post = $this->request->post();
-            if (empty($post['end_time'])) {
-                $post['end_time'] = null;
-            }
-            $data['dinner_choose_end_datetime'] = $post['end_time'];
-            $result = Db::table('canteen_week_cookbook_main')->where('id', $post['id'])->update($data);
-            $data = [];
-            if ($result) {
-                $data['flag'] = 1;
-            } else {
-                $data['flag'] = 0;
-            }
-            return json($data);
-        }
     }
 
 }

@@ -37,7 +37,7 @@
         <td id="{$val.meal_id}">
             <?php foreach(${'cookbooks'.$val['meal_id']} as $value): ?>
             {if !empty($d[$val.meal_id]['cookbook_no']) and $d[$val.meal_id]['cookbook_no'] == $value['cookbook_no']}
-            {$value.cookbook_info}
+            [{$value.cookbook_name}]  {$value.cookbook_info}
             {/if}
             <?php endforeach; ?>
         </td>
