@@ -61,7 +61,7 @@ class Cbdinnerinfo extends BasicAdmin
 
         foreach (['cookbook_name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
-                $db->where('i.cookbook_name', $get[$key]);
+                $db->where('i.cookbook_name','like', "%{$get[$key]}%");
             }
         }
 

@@ -44,7 +44,7 @@ class Department extends BasicAdmin
         // 应用搜索条件
         foreach (['dept_name'] as $key) {
             if (isset($get[$key]) && $get[$key] !== '') {
-                $db->where('dept_info'.$key, 'like', "%{$get[$key]}%");
+                $db->where('dept_info.dept_name', 'like', "%{$get[$key]}%");
             }
         }
         // 实例化并显示
