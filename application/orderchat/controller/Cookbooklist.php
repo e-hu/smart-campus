@@ -67,7 +67,7 @@ class CookBooklist extends BasicAdmin {
         $extendData = [];
         if ($this->request->isPost()) {
             $sqlstr = "exec [up_get_max_id] ?,?,?,?";
-            $data = Db::query($sqlstr, ['', 'cookbook', 'COBOK', 0]);
+            $data = Db::query($sqlstr, ['', 'cookbook', 'COBOL', 0]);
             $extendData['cookbook_no'] = $data[0][0]['id'];
             $extendData['company_id'] = session('user.company_id');
         }
