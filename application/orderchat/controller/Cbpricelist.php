@@ -124,7 +124,7 @@ class CbPricelist extends BasicAdmin
                 foreach ($week as $val) {
                     foreach ($dinner_list as $value) {
                         foreach ($meal_list as $meal) {
-                            if (count($_POST[$val . $value['dinner_name'] . $meal['meal_id']])!= 0) {
+                            if ($_POST[$val . $value['dinner_name'] . $meal['meal_id']]) {
                                 $data = [];
                                 $data['canteen_no'] = $canteen_no;
                                 $data['cookbook_no'] = $_POST[$val . $value['dinner_name'] . $meal['meal_id']];
