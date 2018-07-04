@@ -68,6 +68,10 @@
                 <a data-open='{:url("$classuri/edit")}?week_id={$vo.week_id}&canteen_no={$vo.canteen_no}'
                    href="javascript:void(0)">编辑</a>
                 {/if}
+                {if auth("$classuri/release")}
+                <span class="text-explode">|</span>
+                <a href="javascript:void(0)" onclick="release('{$vo.week_id}','{$vo.canteen_no}')">发布</a>
+                {/if}
             </td>
         </tr>
         {/foreach}
@@ -80,4 +84,26 @@
     </table>
     </div>
 </form>
+<script>
+    function release(week_id,canteen_no) {
+        // 确认对话框
+        var index = $.msg.confirm('请确认发布临时菜谱到周菜谱', function () {
+            $.ajax({
+                type: 'POST',
+                url: "{:url('cbpricetemp/release')}",  //发布
+                data: {
+                    'week_id': week_id,
+                    'canteen_no': canteen_no
+                },
+                async: false,
+                success: function (data) {
+                    layer.msg(data.msg);
+                }
+            });
+        }, function () {
+            $.msg.close(index);
+        });
+    }
+</script>
 {/block}
+

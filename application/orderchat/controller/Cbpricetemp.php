@@ -126,7 +126,7 @@ class CbPricetemp extends BasicAdmin
                         foreach ($meal_list as $meal) {
                             if ($_POST[$val . $value['dinner_name'] . $meal['meal_id']]) {
                                 foreach ($_POST[$val . $value['dinner_name'] . $meal['meal_id']] as $va) {
-                                    if($va != ''){
+                                    if ($va != '') {
                                         $data = [];
                                         $data['canteen_no'] = $canteen_no;
                                         $data['cookbook_list_no'] = $va;
@@ -141,10 +141,27 @@ class CbPricetemp extends BasicAdmin
                         }
                     }
                 }
-                $this->success('发布周菜谱成功', '');
+                $this->success('编辑临时菜谱成功', '');
             }
         }
         return $this->_form($this->table, 'form', 'id');
+    }
+
+    /*
+     * 发布临时菜谱
+     * */
+    public function release($week_id,$canteen_no)
+    {
+        $sqlstr = "exec [up_create_canteen_cookbook_price_from_temp] ?,?,?";
+        $data = Db::query($sqlstr, [session('user.company_id'), $week_id, $canteen_no]);
+        if (empty($data)) {
+            $this->error('发布失败');
+        }
+        if($data[0][0]['code']=='1'){
+            $this->success('发布成功');
+        }else{
+            $this->error($data[0][0]['msg']);
+        }
     }
 
     /**
